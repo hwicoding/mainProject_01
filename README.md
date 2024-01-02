@@ -1,7 +1,7 @@
 # mainProject_01
 2조 메인 프로젝트
 
-제목
+제목 /n
 Book Store(가제)
 
 팀 구성
