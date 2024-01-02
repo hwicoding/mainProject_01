@@ -1,6 +1,6 @@
 # 2조 메인 프로젝트
 <h2>제목</h2>
-ON-LIne Book app Store(가제)
+Online Book App Store(가제)
 
 <h2>팀 구성</h2>
 팀장 : 이 휘<br>
