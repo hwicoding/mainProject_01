@@ -8,7 +8,7 @@ Online Book App Store(가제)
 
 <h2>역할 분담</h2>
 
-공  통 : ERD 구성
+공  통 : ERD 구성<br>
 이  휘 : 발표, EER 제작<br>
 신나라 : UI/디자인, 발표, PT 제작<br>
 심현빈 : UI/디자인<br>
