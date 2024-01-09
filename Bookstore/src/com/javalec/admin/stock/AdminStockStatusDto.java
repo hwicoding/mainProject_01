@@ -1,4 +1,4 @@
-package com.javalec.admin.genre;
+package com.javalec.admin.stock;
 
 public class AdminStockStatusDto {
 
@@ -13,11 +13,26 @@ public class AdminStockStatusDto {
 	int stockCount;
 	String pressDate;
 	int booknum;
+	int publishernum;
+	String authorname;
+	String publishername;
 	
-	public AdminStockStatusDto(int booknum, String bookName, int pressPrice, int pressCount, int stockCount, String pressDate) {
+	//wkBookName, wkAuthorName, wkTranslatorName, wkPublisherName, wkPressPrice, wkPressCount, wkStockCount, wkPressDate
+
+
+	
+	
+	public AdminStockStatusDto(String publishername) {
 		super();
-		this.booknum = booknum;
+		this.publishername = publishername;
+	}
+
+	
+	public AdminStockStatusDto(String bookName, String authorname,String publishername, int pressPrice, int pressCount, int stockCount, String pressDate) {
+		super();
 		this.bookName = bookName;
+		this.authorname = authorname;
+		this.publishername = publishername;
 		this.pressPrice = pressPrice;
 		this.pressCount = pressCount;
 		this.stockCount = stockCount;
@@ -25,6 +40,41 @@ public class AdminStockStatusDto {
 	}
 
 
+	public String getAuthorname() {
+		return authorname;
+	}
+
+
+	public void setAuthorname(String authorname) {
+		this.authorname = authorname;
+	}
+
+
+	public AdminStockStatusDto(int booknum, int publishernum) {
+		super();
+		this.booknum = booknum;
+		this.publishernum = publishernum;
+	}
+
+
+	public int getPublishernum() {
+		return publishernum;
+	}
+
+
+	public void setPublishernum(int publishernum) {
+		this.publishernum = publishernum;
+	}
+
+
+	public String getPublishername() {
+		return publishername;
+	}
+
+
+	public void setPublishername(String publishername) {
+		this.publishername = publishername;
+	}
 
 
 	public int getBooknum() {
