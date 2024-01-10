@@ -40,7 +40,7 @@ public class Sample_name extends JDialog {
 	 */
 	public Sample_name() {
 		setTitle("logo");
-		setBounds(0, 0, 400, 760);
+		setBounds(0, 0, 401, 760);
 		getContentPane().setLayout(null);
 		getContentPane().add(getLblBack());
 		getContentPane().add(getLblTitle());
