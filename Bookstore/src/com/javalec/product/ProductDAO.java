@@ -1,5 +1,8 @@
 package com.javalec.product;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,18 +18,41 @@ public class ProductDAO {
 	private final String id_mysql = ShareVar.dbUser;
 	private final String ps_mysql = ShareVar.dbPass;
 	
+	String bookname, bookfilename, genrekind, genreseckind, genrethirdkind, authorname, translatorname, publishername;
+	int pressprice;
+	File bookimg;
+	
 //	constructor
 	public ProductDAO() {
 		// TODO Auto-generated constructor stub
 	}
 	
+	
+	
+public ProductDAO(String bookname, String bookfilename, String genrekind, String genreseckind, String genrethirdkind,
+		String authorname, String translatorname, String publishername, int pressprice, File bookimg) {
+	super();
+	this.bookname = bookname;
+	this.bookfilename = bookfilename;
+	this.genrekind = genrekind;
+	this.genreseckind = genreseckind;
+	this.genrethirdkind = genrethirdkind;
+	this.authorname = authorname;
+	this.translatorname = translatorname;
+	this.publishername = publishername;
+	this.pressprice = pressprice;
+	this.bookimg = bookimg;
+}
+
+
+
 //	Method
 
 //	검색 결과를 Table 로 보내자
 	public ArrayList<ProductDTO> selecList(){
 		ArrayList<ProductDTO> dtoList = new ArrayList<ProductDTO>();
 		
-		String select_01 = "select bookname, genrekind, genreseckind, ";
+		String select_01 = "select bookimage, bookname, bookfilename, booktitle, bookcontents, genrekind, genreseckind, ";
 		String select_02 = "genrethirdkind, authorname, translatorname, publishername, pressprice ";
 		String from_01 = "from book b, press p, publisher pub, bookstore.write w, ";
 		String from_02 = "author a, translator ttor, translate tte, genre g, register r ";
@@ -45,18 +71,32 @@ public class ProductDAO {
 					 														where_01 + where_02 + 
 					 														where_03 +where_04);
 			while(rs.next()) {
-				
-				String bookname = rs.getString(1);
-				String genrekind = rs.getString(2);
-				String genreseckind = rs.getString(3);
-				String genrethirdkind = rs.getString(4);
-				String authorname = rs.getString(5);
-				String translatorname = rs.getString(6);
-				String publishername = rs.getString(7);
-				int pressprice = rs.getInt(8);
 
-				ProductDTO dto = new ProductDTO(bookname, genrekind, genreseckind,
-						genrethirdkind, authorname, translatorname, publishername, pressprice);
+				String bookname = rs.getString(2);
+				String bookfilename = rs.getString(3);
+				String booktitle = rs.getString(4);
+				String bookcontents = rs.getString(5);
+				String genrekind = rs.getString(6);
+				String genreseckind = rs.getString(7);
+				String genrethirdkind = rs.getString(8);
+				String authorname = rs.getString(9);
+				String translatorname = rs.getString(10);
+				String publishername = rs.getString(11);
+				int pressprice = rs.getInt(12);
+				
+//				file
+				File file = new File("./" + bookfilename);
+				FileOutputStream output = new FileOutputStream(file);
+				InputStream input = rs.getBinaryStream(1);
+				byte[] buffer = new byte[1024];
+				while (input.read(buffer) > 0) {
+					output.write(buffer);
+				}
+
+				ProductDTO dto = new ProductDTO(bookname, bookfilename, booktitle,
+						                                                  bookcontents, genrekind, genreseckind,
+						                                                  genrethirdkind, authorname,
+						                                                  translatorname, publishername, pressprice);
 				dtoList.add(dto);
 
 				

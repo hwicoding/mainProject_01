@@ -10,6 +10,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainPage extends JDialog {
 
@@ -18,6 +20,7 @@ public class MainPage extends JDialog {
 	private JLabel lblBack;
 	private JLabel lblHome;
 	private JLabel lblMypage;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -47,6 +50,7 @@ public class MainPage extends JDialog {
 		getContentPane().add(getLblBack());
 		getContentPane().add(getLblHome());
 		getContentPane().add(getLblMypage());
+		getContentPane().add(getBtnNewButton());
 
 	}
 
@@ -90,6 +94,15 @@ public class MainPage extends JDialog {
 			lblHome.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					 if(e.getClickCount()==2) {
+						 
+//							창 종료
+							dispose();
+							
+//							열기
+							MainPage MainPage = new MainPage();
+							MainPage.setVisible(true);
+					 }
 				}
 			});
 			lblHome.setBounds(129, 650, 128, 60);
@@ -114,6 +127,28 @@ public class MainPage extends JDialog {
 		return lblMypage;
 	}
 	
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("New button");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+//					창 종료
+					dispose();
+					
+//					열기
+					SearchPage SearchPage = new SearchPage();
+					SearchPage.setVisible(true);
+					
+				}
+			});
+			btnNewButton.setBounds(279, 438, 95, 23);
+		}
+		return btnNewButton;
+	}
+	
+	
+	
 	
 //	--- Function ---
 	
@@ -124,4 +159,5 @@ public class MainPage extends JDialog {
 		return xyimg;
 		
 	}
+
 }

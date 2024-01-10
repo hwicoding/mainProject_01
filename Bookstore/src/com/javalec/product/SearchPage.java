@@ -3,6 +3,7 @@ package com.javalec.product;
 import java.awt.EventQueue;
 import java.awt.Image;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -21,11 +22,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
+import javax.swing.ListSelectionModel;
 
 public class SearchPage extends JDialog {
 
@@ -39,10 +41,12 @@ public class SearchPage extends JDialog {
 	private JLabel lblSearchbtn;
 	private JScrollPane scrollPane;
 	private JTable inner_table;
-	private JButton btnNewButton;
 	
 //	outerTable 생성
 	private final DefaultTableModel outerTable = new DefaultTableModel();
+	
+//	file 정리
+	ArrayList<ProductDTO> dtoList = null;
 
 
 	/**
@@ -72,6 +76,10 @@ public class SearchPage extends JDialog {
 				tableInit();
 				searchAction();
 			}
+			@Override
+			public void windowClosing(WindowEvent e) {
+				closingAction(); 
+			}
 		});
 		setTitle("logo");
 		setBounds(0, 0, 400, 760);
@@ -82,7 +90,6 @@ public class SearchPage extends JDialog {
 		getContentPane().add(getLblMypage());
 		getContentPane().add(getGroupSearch());
 		getContentPane().add(getScrollPane());
-		getContentPane().add(getBtnNewButton());
 
 	}
 
@@ -150,7 +157,22 @@ public class SearchPage extends JDialog {
 	}
 	private JTable getInner_table() {
 		if (inner_table == null) {
-			inner_table = new JTable();
+			inner_table = new JTable() {
+				public Class getColumnClass(int column) { 				// <--****************
+			        return (column == 0) ? Icon.class : Object.class; 	// <--****************
+			      }
+			};
+			inner_table.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+					if(e.getClickCount()==2) {
+						tableClick();
+					}
+				}
+			});
+			inner_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			inner_table.setRowHeight(150);
 			inner_table.setModel(outerTable);
 		}
 		return inner_table;
@@ -187,6 +209,17 @@ public class SearchPage extends JDialog {
 			lblHome.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					 if(e.getClickCount()==2) {
+						 
+//							창 종료
+							dispose();
+							
+//							열기
+							MainPage MainPage = new MainPage();
+							MainPage.setVisible(true);
+					 }
+					
+					
 				}
 			});
 			lblHome.setBounds(129, 650, 128, 60);
@@ -228,55 +261,55 @@ public class SearchPage extends JDialog {
 	private void tableInit() {
 		outerTable.addColumn("브랜드");
 		outerTable.addColumn("상품명");
-		outerTable.addColumn("상품명");
-		outerTable.addColumn("상품명");
-		outerTable.addColumn("상품명");
-		outerTable.addColumn("상품명");
-		outerTable.addColumn("상품명");
-		outerTable.addColumn("상품명");
-		outerTable.setColumnCount(8);
+//		outerTable.addColumn("상품명");
+//		outerTable.addColumn("상품명");
+//		outerTable.addColumn("상품명");
+//		outerTable.addColumn("상품명");
+//		outerTable.addColumn("상품명");
+//		outerTable.addColumn("상품명");
+		outerTable.setColumnCount(2);
 		
 //		Table Column 크기 정하기
 		
 		int colNo = 0;
 		TableColumn col = inner_table.getColumnModel().getColumn(colNo);
-		int width = 200;
+		int width = 70;
 		col.setPreferredWidth(width);
 		
 		colNo = 1;
 		col = inner_table.getColumnModel().getColumn(colNo);
-		width = 200;
+		width = 280;
 		col.setPreferredWidth(width);
 		
-		colNo =2;
-		col = inner_table.getColumnModel().getColumn(colNo);
-		width = 200;
-		col.setPreferredWidth(width);
-		
-		colNo = 3;
-		col = inner_table.getColumnModel().getColumn(colNo);
-		width = 200;
-		col.setPreferredWidth(width);
-		
-		colNo = 4;
-		col = inner_table.getColumnModel().getColumn(colNo);
-		width = 200;
-		col.setPreferredWidth(width);
-		
-		colNo = 5;
-		col = inner_table.getColumnModel().getColumn(colNo);
-		width = 200;
-		col.setPreferredWidth(width);
-		
-		colNo = 6;
-		col = inner_table.getColumnModel().getColumn(colNo);
-		width = 200;
-		col.setPreferredWidth(width);
-		
-		colNo = 7;
-		col = inner_table.getColumnModel().getColumn(colNo);
-		width = 200;
-		col.setPreferredWidth(width);
+//		colNo =2;
+//		col = inner_table.getColumnModel().getColumn(colNo);
+//		width = 200;
+//		col.setPreferredWidth(width);
+//		
+//		colNo = 3;
+//		col = inner_table.getColumnModel().getColumn(colNo);
+//		width = 200;
+//		col.setPreferredWidth(width);
+//		
+//		colNo = 4;
+//		col = inner_table.getColumnModel().getColumn(colNo);
+//		width = 200;
+//		col.setPreferredWidth(width);
+//		
+//		colNo = 5;
+//		col = inner_table.getColumnModel().getColumn(colNo);
+//		width = 200;
+//		col.setPreferredWidth(width);
+//		
+//		colNo = 6;
+//		col = inner_table.getColumnModel().getColumn(colNo);
+//		width = 200;
+//		col.setPreferredWidth(width);
+//		
+//		colNo = 7;
+//		col = inner_table.getColumnModel().getColumn(colNo);
+//		width = 200;
+//		col.setPreferredWidth(width);
 		
 		
 		inner_table.setAutoResizeMode(inner_table.AUTO_RESIZE_OFF);
@@ -292,42 +325,85 @@ public class SearchPage extends JDialog {
 //	검색	
 	private void searchAction() {
 		ProductDAO dao = new ProductDAO();
-		ArrayList<ProductDTO> dtoList = dao.selecList();
-		
-		int listCount = dtoList.size();
-		
-		for(int i = 0; i < listCount; i++) {
+		dtoList = dao.selecList();
 
-			String[] qTxt = {dtoList.get(i).getBookname(),
-									 dtoList.get(i).getGenrekind(),
-									 dtoList.get(i).getGenreseckind(),
-									 dtoList.get(i).getGenrethirdkind(),
-									 dtoList.get(i).getAuthorname(),
-									 dtoList.get(i).getTranslatorname(),
-									 dtoList.get(i).getPublishername(),
-									 Integer.toString(dtoList.get(i).getPressprice())};
-			outerTable.addRow(qTxt);
+		int listCount = dtoList.size();
+
+		for(int index = 0; index < listCount; index++) {
+//			ProductDTO dto = dtoList.get(i);
+			
+			ImageIcon icon = new ImageIcon("./" +dtoList.get(index).getBookfilename());
+			icon = imageSetSize(icon, 50, 100);
+			Object[] qTxt1 = {icon, dtoList.get(index).getBookname()};
+			
+//			String productInfo = String.format("%s",
+//					dto.getGenrekind()
+//					dto.getGenreseckind(),
+//					dto.getGenrethirdkind(),
+// 				dto.getAuthorname(),
+//					dto.getTranslatorname(),
+//					dto.getPublishername(),
+//					dto.getPressprice()
+//					);
+//
+//			String[] qTxt = {fileImage, productInfo};
+			
+			outerTable.addRow(qTxt1);
+			
 		}
 	}
 	
+//	Table 에서 Row 를 click 했을 경우
+	private List<Object> tableClick() {
+		int i = inner_table.getSelectedRow();	
+		List<Object> array = new ArrayList<>();
+		
+		
+		ImageIcon icon = new ImageIcon("./" +dtoList.get(i).getBookfilename());
+		icon = imageSetSize(icon, 100, 200);
+		String qTxt1 = dtoList.get(i).getBookname();
+		String qTxt2 = dtoList.get(i).getBooktitle();
+		String qTxt3 = dtoList.get(i).getAuthorname();
+		String qTxt4 = dtoList.get(i).getTranslatorname();
+		String qTxt5 = dtoList.get(i).getPublishername();
+		int qTxt6 = dtoList.get(i).getPressprice();
+		String qTxt7 = dtoList.get(i).getGenrekind();
+		String qTxt8 = dtoList.get(i).getGenreseckind();
+		String qTxt9 = dtoList.get(i).getGenrethirdkind();
+		String qTxt10 = dtoList.get(i).getBookcontents();
+		
+		array.add(icon);
+		array.add(qTxt1);
+		array.add(qTxt2);
+		array.add(qTxt3);
+		array.add(qTxt4);
+		array.add(qTxt5);
+		array.add(qTxt6);
+		array.add(qTxt7);
+		array.add(qTxt8);
+		array.add(qTxt9);
+		array.add(qTxt10);
+		
+		
+		dispose();
+		
+//		Buy Page 로 정보 보내기
+		InformationPage InformationPage = new InformationPage();
+		InformationPage.setVisible(true);
+		InformationPage.selectByinfo(array);
+		
+		return array;
+		
+	}
+
 	
-//	버튼 눌렀을 떄 다음 폐이지 이동
-	
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("New button");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-//					창 종료
-					dispose();
-					
-//					열기
-					InformationPage informationPage = new InformationPage();
-					informationPage.setVisible(true);
-				}
-			});
-			btnNewButton.setBounds(258, 627, 95, 23);
+	private void closingAction() {
+		
+		for(int index=0; index < dtoList.size(); index++) {
+			File file = new File("./" + dtoList.get(index).getBookfilename());
+			file.delete();
+			
 		}
-		return btnNewButton;
+		
 	}
 }
