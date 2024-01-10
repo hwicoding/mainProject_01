@@ -18,6 +18,9 @@ import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UserRegistration extends JDialog {
 
@@ -41,6 +44,7 @@ public class UserRegistration extends JDialog {
 	private JTextField tfPhone;
 	private JButton btnconfirm;
 	private JComboBox comboBox;
+	private JLabel lblNewLabel_8;
 
 	/**
 	 * Launch the application.
@@ -66,7 +70,7 @@ public class UserRegistration extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			tfId = new JTextField();
-			tfId.setBounds(85, 195, 170, 25);
+			tfId.setBounds(85, 195, 120, 25);
 			contentPanel.add(tfId);
 			tfId.setColumns(10);
 		}
@@ -154,8 +158,10 @@ public class UserRegistration extends JDialog {
 			contentPanel.add(lblNewLabel_6);
 		}
 		{
-			lblNewLabel_7 = new JLabel("New label");
-			lblNewLabel_7.setBounds(0, 0, 386, 110);
+			lblNewLabel_7 = new JLabel("");
+			lblNewLabel_7.setIcon(new ImageIcon(UserRegistration.class.getResource("/com/javalec/image/회원가입창.png")));
+			lblNewLabel_7.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_7.setBounds(0, 0, 386, 97);
 			contentPanel.add(lblNewLabel_7);
 		}
 		{
@@ -167,12 +173,14 @@ public class UserRegistration extends JDialog {
 		}
 		{
 			tfPhone = new JTextField();
+			tfPhone.setEditable(false);
 			tfPhone.setColumns(10);
 			tfPhone.setBounds(85, 415, 200, 25);
 			contentPanel.add(tfPhone);
 		}
 		{
 			btnconfirm = new JButton("비밀번호 확인");
+			btnconfirm.setEnabled(false);
 			btnconfirm.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					pwcheck();
@@ -192,6 +200,17 @@ public class UserRegistration extends JDialog {
 			comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하세요", "naver.com", "daum.net", "gmail.com", "직접입력"}));
 			comboBox.setBounds(276, 471, 95, 25);
 			contentPanel.add(comboBox);
+		}
+		{
+			lblNewLabel_8 = new JLabel("New label");
+			lblNewLabel_8.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					dispose();
+				}
+			});
+			lblNewLabel_8.setBounds(0, 55, 30, 20);
+			contentPanel.add(lblNewLabel_8);
 		}
 	}
 	private void check() {

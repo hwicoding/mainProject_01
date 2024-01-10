@@ -1,5 +1,6 @@
 package com.javalec.user;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -7,11 +8,17 @@ import java.awt.EventQueue;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class Spalsh extends JFrame {
 	private static final long serialVersionUID=1L;
 
 	private JFrame frame;
+	private JProgressBar progressBar;
 
 	/**
 	 * Launch the application.
@@ -25,17 +32,48 @@ public class Spalsh extends JFrame {
 		getContentPane().setLayout(null);
 		
 		JLabel label = new JLabel(new ImageIcon(Spalsh.class.getResource("/com/javalec/image/스플래시3.gif")));
-		label.setBounds(0, 0, 400, 760);
+		label.setBounds(93, 200, 200, 191);
 		label.setPreferredSize(new Dimension(400,760));
 		label.setBackground(Color.white);
 		getContentPane().add(label);
+		
+		progressBar =  new JProgressBar(0,100);
+		progressBar.setFont(new Font("Gulim", Font.PLAIN, 13));
+		progressBar.setBounds(83, 570, 220, 20);
+		progressBar.setStringPainted(true);
+		progressBar.setVisible(true);
+		
+		getContentPane().add(progressBar,BorderLayout.CENTER);
+		
+		Timer timer = new Timer(100, e ->{
+			int value = progressBar.getValue()+4;
+			progressBar.setValue(value);
+			
+			if(value ==100) {
+				Login login = new Login();
+				login.setVisible(true);
+				dispose();
+			}
+		});
+		
+		timer.start();
 		
 	}
 	
 	
 	public static void main(String[] args) {
 		
-		Spalsh splash1 = new Spalsh();
+		SwingUtilities.invokeLater(() -> {
+			Spalsh splash = new Spalsh();
+
+			splash.setVisible(true);
+		
+		});
+		
+		
+	}
+		
+		/*Spalsh splash1 = new Spalsh();
 		splash1.setVisible(true);
 		try {
 			Thread.sleep(4000);

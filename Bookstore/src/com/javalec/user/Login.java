@@ -200,10 +200,10 @@ public class Login extends JDialog {
 					clearcolumn();
 					//Lobby();
 				} else {
-					JOptionPane.showMessageDialog(null, "로그인 실패1");	
+					JOptionPane.showMessageDialog(null, "로그인 실패");	
 					clearcolumn();}
 			}else {
-				JOptionPane.showMessageDialog(null, "로그인 실패2");
+				JOptionPane.showMessageDialog(null, "로그인 실패");
 				clearcolumn();}
 		}else {if(dtolist1.size()!=0) {
 				if(inputID.equals(dtolist1.get(0).getUserid()) && inputPW.equals(dtolist1.get(0).getUserpw())) {
@@ -215,12 +215,11 @@ public class Login extends JDialog {
 					ShareVar.email= dtolist1.get(0).getUseremail();
 					ShareVar.phone=dtolist1.get(0).getUserphone();
 					clearcolumn();
-					//Lobby();
 					Mypage();
 				} else {
-					JOptionPane.showMessageDialog(null, "로그인 실패3");	}
+					JOptionPane.showMessageDialog(null, "로그인 실패");	}
 			}else {
-				JOptionPane.showMessageDialog(null, "탈퇴한 아이디입니다.");	}}}
+				JOptionPane.showMessageDialog(null, "로그인 실패");	}}}
 	
 	private void clearcolumn() {
 		tfId.setText("");
@@ -232,17 +231,11 @@ public class Login extends JDialog {
 		UserRegistration user = new UserRegistration();
 		user.setVisible(true);}
 	
-	
-	private void Lobby() {
-		Lobby user = new Lobby();
-		user.setVisible(true);
-		Login login = new Login();}
-	
 	private void Mypage() {
-		Mypage user = new Mypage();
-		user.setVisible(true);
+		Mypage mypage = new Mypage();
+		mypage.setVisible(true);
+		dispose();
 	}
 	
-		
-	
+
 }
