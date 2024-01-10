@@ -138,7 +138,7 @@ public class AdminStockReqPage extends JPanel {
 			Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 			ImageIcon changeIcon = new ImageIcon(changeImg);
 			btnSearch.setIcon(changeIcon);
-			btnSearch.setBounds(342, 122, 30, 30);
+			btnSearch.setBounds(342, 116, 40, 40);
 		}
 		return btnSearch;
 	}
@@ -221,6 +221,7 @@ public class AdminStockReqPage extends JPanel {
 	private JTextField getTfOrderCount() {
 		if (tfOrderCount == null) {
 			tfOrderCount = new JTextField();
+			tfOrderCount.setHorizontalAlignment(SwingConstants.TRAILING);
 			tfOrderCount.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyPressed(KeyEvent e) {
@@ -230,7 +231,7 @@ public class AdminStockReqPage extends JPanel {
 					} else {
 						JOptionPane.showMessageDialog(null, "숫자만 입력하세요!");
 						tfOrderCount.setText("");
-						tfOrderCount.requestDefaultFocus();
+						tfOrderCount.requestFocus(true);
 					}
 				}
 			});
@@ -252,6 +253,11 @@ public class AdminStockReqPage extends JPanel {
 			});
 			btnRequest.setBounds(652, 120, 117, 35);
 			btnRequest.setBackground(new Color(130, 179, 235));
+			LineBorder line = new LineBorder(Color.gray, 1, true);
+			btnRequest.setBorder(line);
+			btnRequest.setOpaque(true);
+			btnRequest.setBorderPainted(false);
+			
 			
 		}
 		return btnRequest;

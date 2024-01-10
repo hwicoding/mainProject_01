@@ -107,7 +107,7 @@ public class AdminStockPage extends JPanel {
 			Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 			ImageIcon changeIcon = new ImageIcon(changeImg);
 			btnSearch.setIcon(changeIcon);
-			btnSearch.setBounds(342, 122, 30, 30);
+			btnSearch.setBounds(342, 116, 40, 40);
 		}
 		return btnSearch;
 	}
