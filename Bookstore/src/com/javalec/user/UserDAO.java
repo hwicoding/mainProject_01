@@ -1,5 +1,8 @@
 package com.javalec.user;
 
+import java.security.Key;
+import java.security.MessageDigest;
+import java.security.spec.KeySpec;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,7 +10,14 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import com.javalec.util.ShareVar;
 
@@ -16,6 +26,8 @@ public class UserDAO {
 	private final String url_mysql = ShareVar.dbName;
 	private final String id_mysql=ShareVar.dbUser;
 	private final String pw_mysql=ShareVar.dbPass;
+	private static final String SECRET_KEY = "mysecretkey1234";
+    private static final String SALT = "mysalt";
 	
 	String userid;
 	String userpw;
@@ -93,6 +105,15 @@ public UserDAO(){
 			ResultSet rs =stmt_mysql.executeQuery(query+query1);
 			
 			while(rs.next()) {
+				/*SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+	            KeySpec spec = new PBEKeySpec(SECRET_KEY.toCharArray(), SALT.getBytes(), 65536, 256);
+	            SecretKey tmp = factory.generateSecret(spec);
+	            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+	            Cipher cipher = Cipher.getInstance("AES");
+	            cipher.init(Cipher.DECRYPT_MODE, secret);
+
+				byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(pw));
+				pw =  new String(decryptedBytes);*/
 				String wkid = rs.getString(1);
 				String wkpw=rs.getString(2);
 				String wkname = rs.getString(3);
@@ -165,7 +186,29 @@ public UserDAO(){
 			
 			ps = conn_mysql.prepareStatement(A+B);
 			ps.setString(1, userid);
-			ps.setString(2, userpw);
+			
+			/*SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            KeySpec spec = new PBEKeySpec(userpw.toCharArray(), SALT.getBytes(), 65536, 256);
+            SecretKey tmp = factory.generateSecret(spec);
+            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secret);
+
+            byte[] encryptedBytes = cipher.doFinal(userpw.getBytes());
+            userpw =  Base64.getEncoder().encodeToString(encryptedBytes);*/
+			
+			/* Cipher cipher = Cipher.getInstance("AES");
+	            /*SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), "AES");
+	            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+			/*MessageDigest md = MessageDigest.getInstance("SHA-256");
+			byte[] hash = md.digest(userpw.getBytes());
+			StringBuilder sb = new StringBuilder();
+			for(byte b :hash) {
+				sb.append(String.format("%02X", b));
+				userpw = sb.toString();*/
+				ps.setString(2, userpw);
+			
 			ps.setString(3, username);
 			ps.setString(4, useremail);
 			ps.setString(5, userphone);

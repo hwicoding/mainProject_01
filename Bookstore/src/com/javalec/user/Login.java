@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.javalec.product.SearchPage;
 import com.javalec.util.ShareVar;
 
 import javax.swing.JTextField;
@@ -71,7 +72,7 @@ public class Login extends JDialog {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("");
 			lblNewLabel.setIcon(new ImageIcon(Login.class.getResource("/com/javalec/image/스플래시 (1).png")));
-			lblNewLabel.setBounds(93, 113, 200, 191);
+			lblNewLabel.setBounds(100, 113, 200, 191);
 		}
 		return lblNewLabel;
 	}
@@ -81,7 +82,7 @@ public class Login extends JDialog {
 			lblNewLabel_1.setIcon(new ImageIcon(Login.class.getResource("/com/javalec/image/아이디1.png")));
 			//ImageIcon img = new ImageIcon(Login.class.getResource("/com/javalec/image/아이디1.png"));
 			//img = Imagesetsize(img,50,25);
-			lblNewLabel_1.setBounds(86, 350, 50, 25);
+			lblNewLabel_1.setBounds(90, 350, 50, 25);
 		}
 		return lblNewLabel_1;
 	}
@@ -89,7 +90,7 @@ public class Login extends JDialog {
 		if (lblNewLabel_2 == null) {
 			lblNewLabel_2 = new JLabel("");
 			lblNewLabel_2.setIcon(new ImageIcon(Login.class.getResource("/com/javalec/image/비밀번호1.png")));
-			lblNewLabel_2.setBounds(83, 403, 50, 25);
+			lblNewLabel_2.setBounds(90, 403, 50, 25);
 		}
 		return lblNewLabel_2;
 	}
@@ -111,7 +112,7 @@ public class Login extends JDialog {
 					}
 				}
 			});
-			tfId.setBounds(83, 350, 220, 25);
+			tfId.setBounds(90, 350, 220, 25);
 			tfId.setColumns(10);
 		}
 		return tfId;
@@ -127,7 +128,7 @@ public class Login extends JDialog {
 					}
 				}
 			});
-			pfPw.setBounds(83, 403, 220, 25);
+			pfPw.setBounds(90, 403, 220, 25);
 		}
 		return pfPw;
 	}
@@ -139,7 +140,7 @@ public class Login extends JDialog {
 					login();
 				}
 			});
-			btnNewButton.setBounds(83, 485, 85, 23);
+			btnNewButton.setBounds(90, 485, 85, 23);
 		}
 		return btnNewButton;
 	}
@@ -151,7 +152,7 @@ public class Login extends JDialog {
 					regi();
 				}
 			});
-			btnNewButton_1.setBounds(218, 485, 85, 23);
+			btnNewButton_1.setBounds(225, 485, 85, 23);
 		}
 		return btnNewButton_1;
 	}
@@ -215,7 +216,7 @@ public class Login extends JDialog {
 					ShareVar.email= dtolist1.get(0).getUseremail();
 					ShareVar.phone=dtolist1.get(0).getUserphone();
 					clearcolumn();
-					Mypage();
+					searchpage();
 				} else {
 					JOptionPane.showMessageDialog(null, "로그인 실패");	}
 			}else {
@@ -230,6 +231,12 @@ public class Login extends JDialog {
 	private void regi() {
 		UserRegistration user = new UserRegistration();
 		user.setVisible(true);}
+	
+	private void searchpage() {
+		SearchPage searchpage = new SearchPage();
+		searchpage.setVisible(true);
+		
+	}
 	
 	private void Mypage() {
 		Mypage mypage = new Mypage();
