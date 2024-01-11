@@ -14,6 +14,8 @@ public class AdminBookDto {
 	int presscount;
 	int publishernum;
 	int booknum;
+	String booktitle;
+	String bookstatus;
 
 	public AdminBookDto() {
 
@@ -26,6 +28,47 @@ public class AdminBookDto {
 		this.authorname = authorname;
 		this.publishername = publishername;
 		this.presspirce = presspirce;
+	}
+
+
+	public AdminBookDto(String bookname, String booktitle, String publishername, int presscount, int presspirce, String bookstatus ) {
+		super();
+		this.bookname = bookname;
+		this.booktitle = booktitle;
+		this.publishername = publishername;
+		this.presscount = presscount;
+		this.presspirce = presspirce;
+		this.bookstatus = bookstatus;
+	}
+	
+	public AdminBookDto(String bookname, String booktitle, int presscount, int presspirce, String bookstatus, String bookcontent) {
+		super();
+		this.bookname = bookname;
+		this.booktitle = booktitle;
+		this.presscount = presscount;
+		this.presspirce = presspirce;
+		this.bookstatus = bookstatus;
+		this.bookcontent = bookcontent;
+	}
+	
+	
+	public String getBookstatus() {
+		return bookstatus;
+	}
+
+
+	public void setBookstatus(String bookstatus) {
+		this.bookstatus = bookstatus;
+	}
+
+
+	public String getBooktitle() {
+		return booktitle;
+	}
+
+
+	public void setBooktitle(String booktitle) {
+		this.booktitle = booktitle;
 	}
 
 
