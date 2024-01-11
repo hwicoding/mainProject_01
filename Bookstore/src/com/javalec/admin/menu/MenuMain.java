@@ -177,6 +177,12 @@ public class MenuMain extends JFrame {
 	private JLabel getLblLogout() {
 		if (lblLogout == null) {
 			lblLogout = new JLabel("");
+			lblLogout.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+				}
+			});
 			lblLogout.setBackground(new Color(253, 253, 253));
 			lblLogout.setBounds(950, 0, 48, 64);
 			lblLogout.setFont(new Font("Marker Felt", Font.BOLD, 18));
@@ -332,7 +338,13 @@ public class MenuMain extends JFrame {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
-
+		
+		DefaultTableCellRenderer celAlignRight = new DefaultTableCellRenderer();
+		celAlignRight.setHorizontalAlignment(JLabel.RIGHT);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(celAlignRight);
+		innerTable.getColumnModel().getColumn(4).setCellRenderer(celAlignRight);
+		innerTable.getColumnModel().getColumn(5).setCellRenderer(celAlignRight);
+		
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
 		for (int j = 0; j < i; j++) {
