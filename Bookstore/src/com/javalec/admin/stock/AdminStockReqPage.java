@@ -256,6 +256,7 @@ public class AdminStockReqPage extends JPanel {
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			btnRequest.setBorder(line);
 			btnRequest.setOpaque(true);
+			btnRequest.setForeground(new Color(253, 253, 253));
 			btnRequest.setBorderPainted(false);
 			
 			
