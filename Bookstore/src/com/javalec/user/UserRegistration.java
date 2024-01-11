@@ -21,6 +21,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class UserRegistration extends JDialog {
 
@@ -45,6 +51,7 @@ public class UserRegistration extends JDialog {
 	private JButton btnconfirm;
 	private JComboBox comboBox;
 	private JLabel lblNewLabel_8;
+	private boolean isFirstInput = true;
 
 	/**
 	 * Launch the application.
@@ -70,18 +77,109 @@ public class UserRegistration extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			tfId = new JTextField();
+			tfId.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				
+				}
+			});
+			tfId.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					char typedChar = e.getKeyChar();
+					
+					if(typedChar != '\b') {	
+		                if (isSpecialCharacter(typedChar)) {
+		                   JOptionPane.showMessageDialog(null, "ID에는 특수문자를 사용할 수 없습니다.");
+		                    e.consume(); // 이벤트를 소비하고 무시
+		                }
+
+		                // 여기서 특수문자 여부를 확인하고 원하는 동작 수행
+		                if (isSpecialCharacter(typedChar)) {
+		                    // 특수문자 처리 로직
+		                    System.out.println("Special Character Typed: " + typedChar);
+		                }
+		            }
+				}
+					
+					
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode()==KeyEvent.VK_ENTER){
+						check();
+			}
+				}
+			});
 			tfId.setBounds(85, 195, 120, 25);
 			contentPanel.add(tfId);
 			tfId.setColumns(10);
 		}
 		{
 			pfPw = new JPasswordField();
+			pfPw.addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+					 /*char typedChar = e.getKeyChar();
+
+		                // 첫 번째 문자가 특수 문자인 경우
+					 
+					 if(typedChar != '\b') {	
+		                if (Character.isDigit(typedChar)||isSpecialCharacter(typedChar)) {
+		                   JOptionPane.showMessageDialog(null, "처음 문자는 특수문자를 사용할 수 없습니다.");
+		                    e.consume(); // 이벤트를 소비하고 무시
+		                }
+
+		                // 여기서 특수문자 여부를 확인하고 원하는 동작 수행
+		                if (Character.isDigit(typedChar)||isSpecialCharacter(typedChar)) {
+		                    // 특수문자 처리 로직
+		                    System.out.println("Special Character Typed: " + typedChar);
+		                }
+		            }*/
+				}
+				@Override
+				public void keyReleased(KeyEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+		
+	                }}
+			); 
 			pfPw.setEditable(false);
 			pfPw.setBounds(85, 250, 170, 25);
 			contentPanel.add(pfPw);
 		}
 		{
 			pfPw2 = new JPasswordField();
+			pfPw2.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					/*char typedChar = e.getKeyChar();
+				
+					 if(typedChar != '\b') {	
+			                if (Character.isDigit(typedChar)||isSpecialCharacter(typedChar)) {
+			                   JOptionPane.showMessageDialog(null, "처음 문자는 특수문자를 사용할 수 없습니다.");
+			                    e.consume(); // 이벤트를 소비하고 무시
+			                }
+
+			                // 여기서 특수문자 여부를 확인하고 원하는 동작 수행
+			                if (Character.isDigit(typedChar)||isSpecialCharacter(typedChar)) {
+			                    // 특수문자 처리 로직
+			                    System.out.println("Special Character Typed: " + typedChar);}}*/
+			                    }
+			          
+			            
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode()==e.VK_ENTER) {
+						pwcheck();
+						
+					}
+				}
+					});
 			pfPw2.setEditable(false);
 			pfPw2.setBounds(85, 305, 170, 25);
 			contentPanel.add(pfPw2);
@@ -224,13 +322,22 @@ public class UserRegistration extends JDialog {
 		String phone =tfPhone.getText();
 		String email = tfEmail1.getText();
 		String email1=tfEmail2.getText();
+		 String regex = "^(?=.*[A-Za-z])(?=.*\\d).{8,}$";
+	        Pattern pattern = Pattern.compile(regex);
+	        Matcher matcher = pattern.matcher(id);
 		
 		
 		UserDAO dao = new UserDAO(id,pass);
 		boolean result = dao.check();
 		
-		if(id.length()==0) {
-			JOptionPane.showMessageDialog(null, "ID값은 비워둘 수 없습니다.");
+		/*if(!matcher.matches()) {
+			JOptionPane.showMessageDialog(null, "ID 형식이 잘못되었습니다.");
+		}*/
+		/*if(id.length()==0 || id.length()<6 ) {
+			JOptionPane.showMessageDialog(null, "ID값은 7자리 이상이어야 합니다.");
+		}*/
+		if(!matcher.matches()) {
+			JOptionPane.showMessageDialog(null, "최소 8자, 영문자 최소 1개, 숫자 최소 1개를 포함해야 함");
 		}
 		else if(id.contains("admin")) {
 			JOptionPane.showMessageDialog(null, "사용할 수 없는 아이디입니다.");
@@ -260,9 +367,18 @@ public class UserRegistration extends JDialog {
 		ThreeChar = Pattern.compile("(\\p{Alnum})\\1{2,}");
 		Matcher matcher1;
 		matcher1 = ThreeChar.matcher(pass);
+		String regex = ".*\\d{3}.*";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher;
+		matcher = pattern.matcher(pass);
 		
-		if(pass.length()<4||pass2.length()>8) {
-			JOptionPane.showMessageDialog(null, "비밀번호를 4자리 이상 8자리 미만으로 입력하세요");
+		
+		
+		if(pass.length()<4||pass2.length()>15) {
+			JOptionPane.showMessageDialog(null, "비밀번호를 4자리 이상 15자리 미만으로 입력하세요");
+		}
+		else if(matcher.matches()) {
+			JOptionPane.showMessageDialog(null, "연속된 숫자가 포함되어있습니다.");
 		}
 		else if(matcher1.find()) {
 			JOptionPane.showMessageDialog(null, "동일한 문자나 숫자를 3개이상 사용하실 수 없습니다.");
@@ -282,6 +398,7 @@ public class UserRegistration extends JDialog {
 		}
 		
 	}
+	
 	private void okAction() {
 		String id = tfId.getText();
 		char[] pw = pfPw.getPassword();
@@ -292,9 +409,16 @@ public class UserRegistration extends JDialog {
 		String phone =tfPhone.getText();
 		String email = tfEmail1.getText();
 		String email1=tfEmail2.getText();
+		String regex = "\\d{2,3}-\\d{4}-\\d{4}";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(phone);
 		
-		if(name.length()!=0&&phone.length()!=0&&email.length()!=0&&email1.length()!=0) {
+		
+		
+		if(name.length()!=0&&phone.length()!=0&&email.length()!=0&&email1.length()!=0 && matcher.matches()) {
 			okAction1();
+		}else if(!matcher.matches()) {
+			JOptionPane.showMessageDialog(null, "전화번호 형식이 잘못되었습니다.");
 		}
 		else {
 			JOptionPane.showMessageDialog(null, "잘못된 부분이 있습니다.");
@@ -313,12 +437,26 @@ public class UserRegistration extends JDialog {
 		String email1=tfEmail2.getText();
 		String Email = email+"@"+email1;
 		String insert="";
+		/*try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			byte[] hashedBytes = md.digest(pass.getBytes());
+			
+			StringBuilder hexString = new StringBuilder();
+			for(byte hashedByte : hashedBytes) {
+				hexString.append(String.format("%02X", hashedByte));
+			}
+			String pass1 = new String(hexString.toString()); 
+			
+		}catch(NoSuchAlgorithmException ex) {
+			ex.printStackTrace();
+		}*/
 		
 		
 		UserDAO dao = new UserDAO(id,pass,name,Email,phone,insert);
 		boolean result= dao.insertAction();
 		
 		if(result==true) {
+			
 			JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.");
 			dispose();
 		}else {
@@ -351,6 +489,9 @@ public class UserRegistration extends JDialog {
   		  
 	}}
 	
-
+	 private boolean isSpecialCharacter(char ch) {
+	        // 특수문자 여부를 판단하는 메서드
+	        return !Character.isLetterOrDigit(ch) && !Character.isWhitespace(ch);
+	    }
 
 }

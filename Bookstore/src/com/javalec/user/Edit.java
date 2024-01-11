@@ -296,10 +296,19 @@ public class Edit extends JDialog {
 		ThreeChar = Pattern.compile("(\\p{Alnum})\\1{2,}");
 		Matcher matcher1;
 		matcher1 = ThreeChar.matcher(pass);
+		String regex = ".*\\d{3}.*";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher;
+		matcher = pattern.matcher(pass);
 		
-		if(pass.length()<4||pass2.length()>8) {
-			JOptionPane.showMessageDialog(null, "비밀번호를 4자리 이상 8자리 미만으로 입력하세요");
+		
+		
+		if(pass.length()<4||pass2.length()>15) {
+			JOptionPane.showMessageDialog(null, "비밀번호를 4자리 이상 15자리 미만으로 입력하세요");
 			checkdialog=1;
+		}
+		else if(matcher.matches()) {
+			JOptionPane.showMessageDialog(null, "연속된 숫자가 포함되어있습니다.");
 		}
 		else if(matcher1.find()) {
 			JOptionPane.showMessageDialog(null, "동일한 문자나 숫자를 3개이상 사용하실 수 없습니다.");

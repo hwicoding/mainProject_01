@@ -17,6 +17,8 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Mypage extends JDialog {
 
@@ -49,6 +51,11 @@ public class Mypage extends JDialog {
 	 * Create the dialog.
 	 */
 	public Mypage() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+			}
+		});
 		setBounds(100, 100, 400, 760);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(Color.WHITE);
@@ -69,6 +76,10 @@ public class Mypage extends JDialog {
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("장바구니");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
 			btnNewButton.setBackground(new Color(30, 144, 255));
 			btnNewButton.setForeground(Color.WHITE);
 			btnNewButton.setFont(new Font("Malgun Gothic", Font.PLAIN, 25));

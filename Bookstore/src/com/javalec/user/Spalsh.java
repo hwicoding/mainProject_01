@@ -13,6 +13,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Spalsh extends JFrame {
 	private static final long serialVersionUID=1L;
@@ -37,22 +39,37 @@ public class Spalsh extends JFrame {
 		label.setBackground(Color.white);
 		getContentPane().add(label);
 		
+		JLabel label1 = new JLabel("화면을 터치해주세요");
+		label1.setHorizontalAlignment(SwingConstants.CENTER);
+		label1.setFont(new Font("Gulim", Font.PLAIN, 15));
+		label1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				click();
+			}
+		});
+		label1.setVerticalAlignment(SwingConstants.BOTTOM);
+		label1.setBounds(0,0,400,760);
+		getContentPane().add(label1);
+		label1.setVisible(false);
+		
 		progressBar =  new JProgressBar(0,100);
+		progressBar.setBounds(90, 570, 220, 20);
 		progressBar.setFont(new Font("Gulim", Font.PLAIN, 13));
-		progressBar.setBounds(83, 570, 220, 20);
 		progressBar.setStringPainted(true);
 		progressBar.setVisible(true);
 		
-		getContentPane().add(progressBar,BorderLayout.CENTER);
+		getContentPane().add(progressBar);
 		
 		Timer timer = new Timer(100, e ->{
 			int value = progressBar.getValue()+4;
 			progressBar.setValue(value);
 			
 			if(value ==100) {
-				Login login = new Login();
-				login.setVisible(true);
-				dispose();
+				progressBar.setVisible(false);
+				label1.setVisible(true);
+
+
 			}
 		});
 		
@@ -71,6 +88,11 @@ public class Spalsh extends JFrame {
 		});
 		
 		
+	}
+	private void click() {
+		Login login =  new Login();
+		login.setVisible(true);
+		dispose();
 	}
 		
 		/*Spalsh splash1 = new Spalsh();
