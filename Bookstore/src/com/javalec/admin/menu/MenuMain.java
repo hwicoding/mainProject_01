@@ -26,6 +26,7 @@ import javax.swing.table.TableColumn;
 
 import com.javalec.admin.book.AdminBookPage;
 import com.javalec.admin.book.AdminBookRegisterPage;
+import com.javalec.admin.book.AdminBookUpdatePage;
 import com.javalec.admin.publisher.AdminPublishPage;
 import com.javalec.admin.stock.AdminStockPage;
 import com.javalec.admin.stock.AdminStockReqPage;
@@ -125,6 +126,9 @@ public class MenuMain extends JFrame {
 				} else if (index == 2 && subIndex == 2) {
 					showForm(new AdminBookRegisterPage());
 
+				} else if (index == 2 && subIndex == 3) {
+					showForm(new AdminBookUpdatePage());
+
 				} else {
 					showForm(new DefaultForm("Form : " + index + " " + subIndex));
 				}
@@ -180,7 +184,8 @@ public class MenuMain extends JFrame {
 			lblLogout.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					
+					//Login page new Login();
+					//page.setVisible(true);
 				}
 			});
 			lblLogout.setBackground(new Color(253, 253, 253));
@@ -339,11 +344,17 @@ public class MenuMain extends JFrame {
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
 		
-		DefaultTableCellRenderer celAlignRight = new DefaultTableCellRenderer();
-		celAlignRight.setHorizontalAlignment(JLabel.RIGHT);
-		innerTable.getColumnModel().getColumn(3).setCellRenderer(celAlignRight);
-		innerTable.getColumnModel().getColumn(4).setCellRenderer(celAlignRight);
-		innerTable.getColumnModel().getColumn(5).setCellRenderer(celAlignRight);
+		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+		r.setHorizontalAlignment(JLabel.RIGHT);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(r);
+		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
+		innerTable.getColumnModel().getColumn(5).setCellRenderer(r);
+		
+		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
+		c.setHorizontalAlignment(JLabel.CENTER);
+		innerTable.getColumnModel().getColumn(1).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(6).setCellRenderer(c);
 		
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
