@@ -7,14 +7,18 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class InformationPage extends JDialog {
 
@@ -33,6 +37,9 @@ public class InformationPage extends JDialog {
 	private JLabel lblGenre;
 	private JLabel lblBookcontents;
 	private JButton btnCart;
+	private JLabel lblBokNum;
+
+	
 
 	/**
 	 * Launch the application.
@@ -77,6 +84,7 @@ public class InformationPage extends JDialog {
 		getContentPane().add(getLblGenre());
 		getContentPane().add(getLblBookcontents());
 		getContentPane().add(getBtnCart());
+		getContentPane().add(getLblBokNum());
 
 	}
 
@@ -102,6 +110,15 @@ public class InformationPage extends JDialog {
 			lblBack.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					 if(e.getClickCount()==1) {
+						 
+//							창 종료
+							dispose();
+							
+//							열기
+							SearchPage searchPage = new SearchPage();
+							searchPage.setVisible(true);
+					 }
 				}
 			});
 			
@@ -126,8 +143,8 @@ public class InformationPage extends JDialog {
 							dispose();
 							
 //							열기
-							MainPage MainPage = new MainPage();
-							MainPage.setVisible(true);
+							SearchPage searchPage = new SearchPage();
+							searchPage.setVisible(true);
 					 }
 				}
 			});
@@ -218,6 +235,23 @@ public class InformationPage extends JDialog {
 		return lblBookcontents;
 	}
 	
+	private JButton getBtnCart() {
+		if (btnCart == null) {
+			btnCart = new JButton("New button");
+			
+			btnCart.setBounds(251, 617, 95, 23);
+		}
+		return btnCart;
+	}
+	
+	private JLabel getLblBokNum() {
+		if (lblBokNum == null) {
+			lblBokNum = new JLabel("New label");
+			lblBokNum.setBounds(50, 98, 52, 15);
+		}
+		return lblBokNum;
+	}
+	
 //	--- Function ---
 	
 	ImageIcon imageSetSize(ImageIcon icon, int i, int j) {
@@ -230,7 +264,6 @@ public class InformationPage extends JDialog {
 	
 // SearchPage 정보를 받아서 출력
 	public void selectByinfo(List<Object> list) {
-		
 		lblImage.setIcon((Icon) list.get(0));
 		lblBookname.setText((String) list.get(1));
 		lblBooktitle.setText((String) list.get(2));
@@ -240,14 +273,34 @@ public class InformationPage extends JDialog {
 		lblPrice.setText(Integer.toString((int) list.get(6)));
 		lblGenre.setText(String.format("%s > %s > %s", list.get(7), list.get(8), list.get(9)));
 		lblBookcontents.setText((String) list.get(10));
+
+		cartinfo(Integer.parseInt(String.valueOf( list.get(11))));
+	}
+	
+	public void cartinfo(int num) {
 		
+		btnCart.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				ProductDAO dao = new ProductDAO();
+				Integer booknum =num;
+				boolean result = dao.insertinfo(booknum);		
+				if(result==true) {
+					JOptionPane.showMessageDialog(null, "장바구니에 담았습니다.");
+					
+//					창 종료
+					dispose();
+					
+//					열기
+					SearchPage searchPage = new SearchPage();
+					searchPage.setVisible(true);
+					
+				}else {
+					JOptionPane.showMessageDialog(null, "잘못된 부분이 있습니다.");
+				}			
+			}
+		});
 		
 	}
-	private JButton getBtnCart() {
-		if (btnCart == null) {
-			btnCart = new JButton("New button");
-			btnCart.setBounds(251, 617, 95, 23);
-		}
-		return btnCart;
-	}
+	
 }

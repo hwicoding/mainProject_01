@@ -7,6 +7,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import com.javalec.user.Mypage;
+
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -94,7 +97,7 @@ public class MainPage extends JDialog {
 			lblHome.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					 if(e.getClickCount()==2) {
+					 if(e.getClickCount()==1) {
 						 
 //							창 종료
 							dispose();
@@ -120,6 +123,15 @@ public class MainPage extends JDialog {
 			lblMypage.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					 if(e.getClickCount()==1) {
+						 
+//							창 종료
+							dispose();
+							
+//							열기
+							Mypage mypage = new Mypage();
+							mypage.setVisible(true);						 
+					 }
 				}
 			});
 			lblMypage.setBounds(258, 650, 128, 60);

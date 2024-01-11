@@ -7,6 +7,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,6 +17,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import com.javalec.cartorder.Cart;
+
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JScrollPane;
@@ -23,11 +26,15 @@ import javax.swing.JTable;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 import javax.swing.ListSelectionModel;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class SearchPage extends JDialog {
 
@@ -47,6 +54,8 @@ public class SearchPage extends JDialog {
 	
 //	file 정리
 	ArrayList<ProductDTO> dtoList = null;
+	private JButton btnNewButton;
+	private JLabel lblNewLabel;
 
 
 	/**
@@ -90,12 +99,28 @@ public class SearchPage extends JDialog {
 		getContentPane().add(getLblMypage());
 		getContentPane().add(getGroupSearch());
 		getContentPane().add(getScrollPane());
+		getContentPane().add(getBtnNewButton());
+		getContentPane().add(getLblNewLabel());
 
 	}
 
 	private JLabel getLblLogo() {
 		if (lblLogo == null) {
 			lblLogo = new JLabel("");
+			lblLogo.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					 if(e.getClickCount()==1) {
+						 
+//							창 종료
+							dispose();
+							
+//							열기
+							Cart cart = new Cart();
+							cart.setVisible(true);
+					 }
+				}
+			});
 			lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
 			ImageIcon imgTest = new ImageIcon(SearchPage.class.getResource("/com/javalec/image/logo(name_add).png"));
 			imgTest = imageSetSize(imgTest, 150, 50);
@@ -209,14 +234,14 @@ public class SearchPage extends JDialog {
 			lblHome.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					 if(e.getClickCount()==2) {
+					 if(e.getClickCount()==1) {
 						 
 //							창 종료
 							dispose();
 							
 //							열기
-							MainPage MainPage = new MainPage();
-							MainPage.setVisible(true);
+							SearchPage searchPage = new SearchPage();
+							searchPage.setVisible(true);
 					 }
 					
 					
@@ -354,7 +379,7 @@ public class SearchPage extends JDialog {
 	}
 	
 //	Table 에서 Row 를 click 했을 경우
-	private List<Object> tableClick() {
+	public List<Object> tableClick() {
 		int i = inner_table.getSelectedRow();	
 		List<Object> array = new ArrayList<>();
 		
@@ -371,6 +396,8 @@ public class SearchPage extends JDialog {
 		String qTxt8 = dtoList.get(i).getGenreseckind();
 		String qTxt9 = dtoList.get(i).getGenrethirdkind();
 		String qTxt10 = dtoList.get(i).getBookcontents();
+		int qTxt11 = dtoList.get(i).getBooknum();
+		
 		
 		array.add(icon);
 		array.add(qTxt1);
@@ -383,11 +410,12 @@ public class SearchPage extends JDialog {
 		array.add(qTxt8);
 		array.add(qTxt9);
 		array.add(qTxt10);
+		array.add(qTxt11);
 		
 		
 		dispose();
 		
-//		Buy Page 로 정보 보내기
+//		InformationPage 로 정보 보내기
 		InformationPage InformationPage = new InformationPage();
 		InformationPage.setVisible(true);
 		InformationPage.selectByinfo(array);
@@ -396,7 +424,6 @@ public class SearchPage extends JDialog {
 		
 	}
 
-	
 	private void closingAction() {
 		
 		for(int index=0; index < dtoList.size(); index++) {
@@ -405,5 +432,43 @@ public class SearchPage extends JDialog {
 			
 		}
 		
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("New button");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+//					showVirtualKeyboard();
+				}
+			});
+			btnNewButton.setBounds(33, 133, 95, 23);
+		}
+		return btnNewButton;
+	}
+	
+//	 private void showVirtualKeyboard() {
+//	       String oskPath = "C:\\Windows\\System32\\osk.exe";
+//	           try {
+//	               // Windows에서는 osk.exe를 실행하여 가상 키보드를 띄웁니다.
+//	              ProcessBuilder builder = new ProcessBuilder("runas", "/user:Administrator", oskPath);
+//	               Process process = builder.start();
+//	               int exitCode = process.waitFor();
+//	               
+//	               if(exitCode == 0) {
+//	                   System.out.println("On-Screen Keyboard 실행 성공");
+//	               } else {
+//	                   System.err.println("On-Screen Keyboard 실행 중 오류 발생 (Exit Code: " + exitCode + ")");
+//	               }
+//	            
+//	           } catch (IOException | InterruptedException e) {
+//	               e.printStackTrace();
+//	           }
+//	       }
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("New label");
+			lblNewLabel.setBounds(307, 20, 52, 32);
+		}
+		return lblNewLabel;
 	}
 }

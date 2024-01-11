@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -17,9 +18,10 @@ public class ProductDAO {
 	private final String url_mysql = ShareVar.dbName;
 	private final String id_mysql = ShareVar.dbUser;
 	private final String ps_mysql = ShareVar.dbPass;
+	private final String userid = ShareVar.userid;
 	
 	String bookname, bookfilename, genrekind, genreseckind, genrethirdkind, authorname, translatorname, publishername;
-	int pressprice;
+	int booknum, pressprice;
 	File bookimg;
 	
 //	constructor
@@ -45,14 +47,19 @@ public ProductDAO(String bookname, String bookfilename, String genrekind, String
 }
 
 
+public ProductDAO(int booknum) {
+	super();
+	this.booknum = booknum;
+}
+
 
 //	Method
 
-//	검색 결과를 Table 로 보내자
+	//	검색 결과를 Table 로 보내자
 	public ArrayList<ProductDTO> selecList(){
 		ArrayList<ProductDTO> dtoList = new ArrayList<ProductDTO>();
 		
-		String select_01 = "select bookimage, bookname, bookfilename, booktitle, bookcontents, genrekind, genreseckind, ";
+		String select_01 = "select b.booknum, bookimage, bookname, bookfilename, booktitle, bookcontents, genrekind, genreseckind, ";
 		String select_02 = "genrethirdkind, authorname, translatorname, publishername, pressprice ";
 		String from_01 = "from book b, press p, publisher pub, bookstore.write w, ";
 		String from_02 = "author a, translator ttor, translate tte, genre g, register r ";
@@ -72,28 +79,29 @@ public ProductDAO(String bookname, String bookfilename, String genrekind, String
 					 														where_03 +where_04);
 			while(rs.next()) {
 
-				String bookname = rs.getString(2);
-				String bookfilename = rs.getString(3);
-				String booktitle = rs.getString(4);
-				String bookcontents = rs.getString(5);
-				String genrekind = rs.getString(6);
-				String genreseckind = rs.getString(7);
-				String genrethirdkind = rs.getString(8);
-				String authorname = rs.getString(9);
-				String translatorname = rs.getString(10);
-				String publishername = rs.getString(11);
-				int pressprice = rs.getInt(12);
+				int booknum = rs.getInt(1);
+				String bookname = rs.getString(3);
+				String bookfilename = rs.getString(4);
+				String booktitle = rs.getString(5);
+				String bookcontents = rs.getString(6);
+				String genrekind = rs.getString(7);
+				String genreseckind = rs.getString(8);
+				String genrethirdkind = rs.getString(9);
+				String authorname = rs.getString(10);
+				String translatorname = rs.getString(11);
+				String publishername = rs.getString(12);
+				int pressprice = rs.getInt(13);
 				
 //				file
 				File file = new File("./" + bookfilename);
 				FileOutputStream output = new FileOutputStream(file);
-				InputStream input = rs.getBinaryStream(1);
+				InputStream input = rs.getBinaryStream(2);
 				byte[] buffer = new byte[1024];
 				while (input.read(buffer) > 0) {
 					output.write(buffer);
 				}
 
-				ProductDTO dto = new ProductDTO(bookname, bookfilename, booktitle,
+				ProductDTO dto = new ProductDTO(booknum, bookname, bookfilename, booktitle,
 						                                                  bookcontents, genrekind, genreseckind,
 						                                                  genrethirdkind, authorname,
 						                                                  translatorname, publishername, pressprice);
@@ -108,6 +116,30 @@ public ProductDAO(String bookname, String bookfilename, String genrekind, String
 		}
 		return dtoList;
 		
+	}
+	
+	
+	public boolean insertinfo(Integer booknum) {
+		PreparedStatement ps = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql,id_mysql,ps_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+			
+			String insert =  "insert into cart (userid, booknum) ";
+			String values = "values('" + userid + "', " + booknum + ")";
+			
+			ps = conn_mysql.prepareStatement(insert + values);
+			ps.executeUpdate();
+			
+			conn_mysql.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return true;
+
 	}
 
 }
