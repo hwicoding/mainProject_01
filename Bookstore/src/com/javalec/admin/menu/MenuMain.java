@@ -24,6 +24,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import com.javalec.admin.book.AdminBookDeletePage;
 import com.javalec.admin.book.AdminBookPage;
 import com.javalec.admin.book.AdminBookRegisterPage;
 import com.javalec.admin.book.AdminBookUpdatePage;
@@ -32,6 +33,7 @@ import com.javalec.admin.stock.AdminStockPage;
 import com.javalec.admin.stock.AdminStockReqPage;
 import com.javalec.admin.stock.AdminStockStatusDao;
 import com.javalec.admin.stock.AdminStockStatusDto;
+import com.javalec.admin.stock.AdminStockStatusPage;
 import com.javalec.admin.stock.DefaultForm;
 
 import javax.swing.JLabel;
@@ -117,6 +119,9 @@ public class MenuMain extends JFrame {
 				} else if (index == 0 && subIndex == 2) {
 					showForm(new AdminStockReqPage());
 
+				} else if (index == 0 && subIndex == 3) {
+					showForm(new AdminStockStatusPage());
+
 				} else if (index == 1 && subIndex == 0) {
 					showForm(new AdminPublishPage());
 
@@ -128,6 +133,9 @@ public class MenuMain extends JFrame {
 
 				} else if (index == 2 && subIndex == 3) {
 					showForm(new AdminBookUpdatePage());
+
+				} else if (index == 2 && subIndex == 4) {
+					showForm(new AdminBookDeletePage());
 
 				} else {
 					showForm(new DefaultForm("Form : " + index + " " + subIndex));
@@ -186,6 +194,9 @@ public class MenuMain extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 					//Login page new Login();
 					//page.setVisible(true);
+					System.out.println("로그아웃");
+					DefaultForm page = new DefaultForm(getName());
+					page.setVisible(true);
 				}
 			});
 			lblLogout.setBackground(new Color(253, 253, 253));
@@ -239,7 +250,7 @@ public class MenuMain extends JFrame {
 
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("입고 및 재고 현황");
+			lblNewLabel = new JLabel("입고 현황");
 			lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 			lblNewLabel.setBounds(29, 39, 200, 50);
 		}
@@ -249,7 +260,7 @@ public class MenuMain extends JFrame {
 	private JComboBox getCbSearch() {
 		if (cbSearch == null) {
 			cbSearch = new JComboBox();
-			cbSearch.setModel(new DefaultComboBoxModel(new String[] { "책제목", "출판사", "입고일" }));
+			cbSearch.setModel(new DefaultComboBoxModel(new String[] { "책제목", "출판사", "입고일", "책현황" }));
 			cbSearch.setBounds(29, 125, 120, 27);
 		}
 		return cbSearch;
@@ -311,7 +322,7 @@ public class MenuMain extends JFrame {
 		outerTable.addColumn("출판사");
 		outerTable.addColumn("가격(원)");
 		outerTable.addColumn("입고수량(개)");
-		outerTable.addColumn("재고수량(개)");
+		outerTable.addColumn("책현황");
 		outerTable.addColumn("입고일");
 		outerTable.setColumnCount(7);
 
@@ -333,8 +344,8 @@ public class MenuMain extends JFrame {
 		col.setPreferredWidth(80);
 
 		col = innerTable.getColumnModel().getColumn(5);
-		col.setPreferredWidth(100);
-
+		col.setPreferredWidth(80);
+		
 		col = innerTable.getColumnModel().getColumn(6);
 		col.setPreferredWidth(100);
 
@@ -343,19 +354,19 @@ public class MenuMain extends JFrame {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
-		
+
 		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
 		r.setHorizontalAlignment(JLabel.RIGHT);
 		innerTable.getColumnModel().getColumn(3).setCellRenderer(r);
 		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
-		innerTable.getColumnModel().getColumn(5).setCellRenderer(r);
-		
+
 		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
 		c.setHorizontalAlignment(JLabel.CENTER);
 		innerTable.getColumnModel().getColumn(1).setCellRenderer(c);
 		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(5).setCellRenderer(c);
 		innerTable.getColumnModel().getColumn(6).setCellRenderer(c);
-		
+
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
 		for (int j = 0; j < i; j++) {
@@ -370,23 +381,17 @@ public class MenuMain extends JFrame {
 
 		int listCnt = dtoList.size();
 
-		// b.bookname, a.authorname, pub.publishername, p.pressprice, p.presscount,
-		// (p.presscount - pur.purchasecount), date(p.pressdate)
 		for (int i = 0; i < listCnt; i++) {
 
 			// 가격 포맷 ###,### 설정
 			DecimalFormat decFormat = new DecimalFormat("###,###");
 			int tmp3 = dtoList.get(i).getPressPrice();
-			int tmCount = dtoList.get(i).getPressCount();
-			int tmStock = dtoList.get(i).getStockCount();
+			int tmCount = dtoList.get(i).getStockCount();
 			String tmPressPrice = decFormat.format(tmp3);
-			String tmPressCount = decFormat.format(tmCount);
-			String tmStockCount = decFormat.format(tmStock);
+			String tmPressStock = decFormat.format(tmCount);
 
-			// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
 			String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-					dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-					dtoList.get(i).getPressDate() };
+					dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 			outerTable.addRow(qTxt);
 		}
@@ -408,18 +413,15 @@ public class MenuMain extends JFrame {
 			for (int i = 0; i < dtoList.size(); i++) {
 
 				// 가격 포맷 ###,### 설정
+				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
+				int tmCount = dtoList.get(i).getStockCount();
 				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
+				String tmPressStock = decFormat.format(tmCount);
 
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
 				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-						dtoList.get(i).getPressDate() };
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
 			}
@@ -431,18 +433,15 @@ public class MenuMain extends JFrame {
 			for (int i = 0; i < dtoList.size(); i++) {
 
 				// 가격 포맷 ###,### 설정
+				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
+				int tmCount = dtoList.get(i).getStockCount();
 				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
+				String tmPressStock = decFormat.format(tmCount);
 
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
 				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-						dtoList.get(i).getPressDate() };
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
 			}
@@ -455,18 +454,36 @@ public class MenuMain extends JFrame {
 			for (int i = 0; i < dtoList.size(); i++) {
 
 				// 가격 포맷 ###,### 설정
+				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
+				int tmCount = dtoList.get(i).getStockCount();
 				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
+				String tmPressStock = decFormat.format(tmCount);
 
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
 				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-						dtoList.get(i).getPressDate() };
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
+
+				outerTable.addRow(qTxt);
+			}
+			break;
+			
+		case 3:
+			dao = new AdminStockStatusDao();
+			dtoList = dao.searchConditionToBoostatus(inputStr);
+
+			for (int i = 0; i < dtoList.size(); i++) {
+
+				// 가격 포맷 ###,### 설정
+				// 가격 포맷 ###,### 설정
+				DecimalFormat decFormat = new DecimalFormat("###,###");
+				int tmp3 = dtoList.get(i).getPressPrice();
+				int tmCount = dtoList.get(i).getStockCount();
+				String tmPressPrice = decFormat.format(tmp3);
+				String tmPressStock = decFormat.format(tmCount);
+
+				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
 			}
