@@ -16,8 +16,11 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.text.html.HTML;
 
 import com.javalec.cartorder.Cart;
+import com.javalec.user.Mypage;
+import com.mysql.cj.xdevapi.Table;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -27,6 +30,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +39,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextArea;
 
 public class SearchPage extends JDialog {
 
@@ -52,10 +57,11 @@ public class SearchPage extends JDialog {
 //	outerTable 생성
 	private final DefaultTableModel outerTable = new DefaultTableModel();
 	
+	
 //	file 정리
 	ArrayList<ProductDTO> dtoList = null;
-	private JButton btnNewButton;
-	private JLabel lblNewLabel;
+	private JLabel lblCart;
+	private JTextArea textArea;
 
 
 	/**
@@ -99,8 +105,7 @@ public class SearchPage extends JDialog {
 		getContentPane().add(getLblMypage());
 		getContentPane().add(getGroupSearch());
 		getContentPane().add(getScrollPane());
-		getContentPane().add(getBtnNewButton());
-		getContentPane().add(getLblNewLabel());
+		getContentPane().add(getLblCart());
 
 	}
 
@@ -183,10 +188,20 @@ public class SearchPage extends JDialog {
 	private JTable getInner_table() {
 		if (inner_table == null) {
 			inner_table = new JTable() {
-				public Class getColumnClass(int column) { 				// <--****************
-			        return (column == 0) ? Icon.class : Object.class; 	// <--****************
-			      }
-			};
+				
+				@Override
+				public boolean isCellEditable(int row, int column) {
+
+					return false;
+				}
+				
+				
+//				public Class getColumnClass(int column) { 				// <--****************
+//			        return (column == 0) ? Icon.class : Object.class; 	// <--****************
+//			      }
+			};		
+			
+			
 			inner_table.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -197,7 +212,6 @@ public class SearchPage extends JDialog {
 				}
 			});
 			inner_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			inner_table.setRowHeight(150);
 			inner_table.setModel(outerTable);
 		}
 		return inner_table;
@@ -262,6 +276,17 @@ public class SearchPage extends JDialog {
 			lblMypage.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					
+					 if(e.getClickCount()==1) {
+						 
+//							창 종료
+							dispose();
+							
+//							열기
+							Mypage mypage = new Mypage();
+							mypage.setVisible(true);
+					 }
+					
 				}
 			});
 			lblMypage.setBounds(258, 650, 128, 60);
@@ -294,16 +319,17 @@ public class SearchPage extends JDialog {
 //		outerTable.addColumn("상품명");
 		outerTable.setColumnCount(2);
 		
+		
 //		Table Column 크기 정하기
 		
 		int colNo = 0;
 		TableColumn col = inner_table.getColumnModel().getColumn(colNo);
-		int width = 70;
+		int width = 280;
 		col.setPreferredWidth(width);
 		
 		colNo = 1;
 		col = inner_table.getColumnModel().getColumn(colNo);
-		width = 280;
+		width = 60;
 		col.setPreferredWidth(width);
 		
 //		colNo =2;
@@ -355,23 +381,18 @@ public class SearchPage extends JDialog {
 		int listCount = dtoList.size();
 
 		for(int index = 0; index < listCount; index++) {
+			
 //			ProductDTO dto = dtoList.get(i);
 			
-			ImageIcon icon = new ImageIcon("./" +dtoList.get(index).getBookfilename());
-			icon = imageSetSize(icon, 50, 100);
-			Object[] qTxt1 = {icon, dtoList.get(index).getBookname()};
+//			ImageIcon icon = new ImageIcon("./" +dtoList.get(index).getBookfilename());
+//			icon = imageSetSize(icon, 50, 100);
 			
-//			String productInfo = String.format("%s",
-//					dto.getGenrekind()
-//					dto.getGenreseckind(),
-//					dto.getGenrethirdkind(),
-// 				dto.getAuthorname(),
-//					dto.getTranslatorname(),
-//					dto.getPublishername(),
-//					dto.getPressprice()
-//					);
-//
-//			String[] qTxt = {fileImage, productInfo};
+//			String[] contents = {dtoList.get(index).getBookname(),dtoList.get(index).getAuthorname()};
+			
+			String[] contents = {dtoList.get(index).getBookname(),dtoList.get(index).getBooktitle()};
+			
+			Object[] qTxt1 = {String.format("%s : %s", contents[0], contents[1]), dtoList.get(index).getPressprice()};	
+			
 			
 			outerTable.addRow(qTxt1);
 			
@@ -382,8 +403,7 @@ public class SearchPage extends JDialog {
 	public List<Object> tableClick() {
 		int i = inner_table.getSelectedRow();	
 		List<Object> array = new ArrayList<>();
-		
-		
+			
 		ImageIcon icon = new ImageIcon("./" +dtoList.get(i).getBookfilename());
 		icon = imageSetSize(icon, 100, 200);
 		String qTxt1 = dtoList.get(i).getBookname();
@@ -433,42 +453,13 @@ public class SearchPage extends JDialog {
 		}
 		
 	}
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("New button");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-//					showVirtualKeyboard();
-				}
-			});
-			btnNewButton.setBounds(33, 133, 95, 23);
+
+	private JLabel getLblCart() {
+		if (lblCart == null) {
+			lblCart = new JLabel("New label");
+			lblCart.setBounds(307, 20, 52, 32);
 		}
-		return btnNewButton;
+		return lblCart;
 	}
-	
-//	 private void showVirtualKeyboard() {
-//	       String oskPath = "C:\\Windows\\System32\\osk.exe";
-//	           try {
-//	               // Windows에서는 osk.exe를 실행하여 가상 키보드를 띄웁니다.
-//	              ProcessBuilder builder = new ProcessBuilder("runas", "/user:Administrator", oskPath);
-//	               Process process = builder.start();
-//	               int exitCode = process.waitFor();
-//	               
-//	               if(exitCode == 0) {
-//	                   System.out.println("On-Screen Keyboard 실행 성공");
-//	               } else {
-//	                   System.err.println("On-Screen Keyboard 실행 중 오류 발생 (Exit Code: " + exitCode + ")");
-//	               }
-//	            
-//	           } catch (IOException | InterruptedException e) {
-//	               e.printStackTrace();
-//	           }
-//	       }
-	private JLabel getLblNewLabel() {
-		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("New label");
-			lblNewLabel.setBounds(307, 20, 52, 32);
-		}
-		return lblNewLabel;
-	}
+
 }

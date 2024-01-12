@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableModel;
+
 import com.javalec.util.ShareVar;
 
 public class ProductDAO {
@@ -76,7 +78,8 @@ public ProductDAO(int booknum) {
 			ResultSet rs = stmt_mysql.executeQuery(select_01 + select_02 +
 					 														from_01 + from_02 + 
 					 														where_01 + where_02 + 
-					 														where_03 +where_04);
+					 														where_03 +where_04);		
+			
 			while(rs.next()) {
 
 				int booknum = rs.getInt(1);
@@ -105,6 +108,7 @@ public ProductDAO(int booknum) {
 						                                                  bookcontents, genrekind, genreseckind,
 						                                                  genrethirdkind, authorname,
 						                                                  translatorname, publishername, pressprice);
+
 				dtoList.add(dto);
 
 				

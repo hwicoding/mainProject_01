@@ -9,6 +9,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+
+import com.javalec.user.Mypage;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
@@ -163,6 +166,16 @@ public class InformationPage extends JDialog {
 			lblMypage.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					
+					 if(e.getClickCount()==2) {
+						 
+//							창 종료
+							dispose();
+							
+//							열기
+							Mypage mypage = new Mypage();
+							mypage.setVisible(true);
+					 }				
 				}
 			});
 			lblMypage.setBounds(258, 650, 128, 60);
@@ -246,7 +259,7 @@ public class InformationPage extends JDialog {
 	
 	private JLabel getLblBokNum() {
 		if (lblBokNum == null) {
-			lblBokNum = new JLabel("New label");
+			lblBokNum = new JLabel("");
 			lblBokNum.setBounds(50, 98, 52, 15);
 		}
 		return lblBokNum;
