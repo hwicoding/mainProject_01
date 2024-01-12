@@ -29,6 +29,8 @@ import com.javalec.admin.book.AdminBookPage;
 import com.javalec.admin.book.AdminBookRegisterPage;
 import com.javalec.admin.book.AdminBookUpdatePage;
 import com.javalec.admin.publisher.AdminPublishPage;
+import com.javalec.admin.sales.AdminBestSalesPage;
+import com.javalec.admin.sales.AdminSalesPage;
 import com.javalec.admin.stock.AdminStockPage;
 import com.javalec.admin.stock.AdminStockReqPage;
 import com.javalec.admin.stock.AdminStockStatusDao;
@@ -136,6 +138,12 @@ public class MenuMain extends JFrame {
 
 				} else if (index == 2 && subIndex == 4) {
 					showForm(new AdminBookDeletePage());
+					
+				} else if (index == 3 && subIndex == 1) {
+					showForm(new AdminSalesPage());
+
+				} else if (index == 3 && subIndex == 2) {
+					showForm(new AdminBestSalesPage());
 
 				} else {
 					showForm(new DefaultForm("Form : " + index + " " + subIndex));
@@ -413,7 +421,6 @@ public class MenuMain extends JFrame {
 			for (int i = 0; i < dtoList.size(); i++) {
 
 				// 가격 포맷 ###,### 설정
-				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
 				int tmCount = dtoList.get(i).getStockCount();
@@ -432,7 +439,6 @@ public class MenuMain extends JFrame {
 
 			for (int i = 0; i < dtoList.size(); i++) {
 
-				// 가격 포맷 ###,### 설정
 				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
@@ -454,7 +460,6 @@ public class MenuMain extends JFrame {
 			for (int i = 0; i < dtoList.size(); i++) {
 
 				// 가격 포맷 ###,### 설정
-				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
 				int tmCount = dtoList.get(i).getStockCount();
@@ -474,8 +479,6 @@ public class MenuMain extends JFrame {
 
 			for (int i = 0; i < dtoList.size(); i++) {
 
-				// 가격 포맷 ###,### 설정
-				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
 				int tmCount = dtoList.get(i).getStockCount();
