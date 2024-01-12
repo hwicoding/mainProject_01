@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.AncestorEvent;
 
-public class AdminStockPage extends JPanel {
+public class AdminStockStatusPage extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel lblNewLabel;
@@ -41,7 +41,7 @@ public class AdminStockPage extends JPanel {
 	private JTable innerTable;
 	private final DefaultTableModel outerTable = new DefaultTableModel();
 
-	public AdminStockPage() {
+	public AdminStockStatusPage() {
 		addAncestorListener(new AncestorListener() {
 			public void ancestorAdded(AncestorEvent event) {
 				tableInit();
@@ -68,7 +68,7 @@ public class AdminStockPage extends JPanel {
 
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("입고 현황");
+			lblNewLabel = new JLabel("재고 현황");
 			lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 			lblNewLabel.setBounds(29, 39, 200, 50);
 		}
@@ -133,6 +133,7 @@ public class AdminStockPage extends JPanel {
 		return innerTable;
 	}
 
+	// ------ function --------
 
 	// -------function -----
 	// 테이블 초기화
@@ -141,7 +142,7 @@ public class AdminStockPage extends JPanel {
 		outerTable.addColumn("작가");
 		outerTable.addColumn("출판사");
 		outerTable.addColumn("가격(원)");
-		outerTable.addColumn("입고수량(개)");
+		outerTable.addColumn("재고수량(개)");
 		outerTable.addColumn("책현황");
 		outerTable.addColumn("입고일");
 		outerTable.setColumnCount(7);
@@ -162,10 +163,10 @@ public class AdminStockPage extends JPanel {
 
 		col = innerTable.getColumnModel().getColumn(4);
 		col.setPreferredWidth(80);
-
+		
 		col = innerTable.getColumnModel().getColumn(5);
 		col.setPreferredWidth(80);
-		
+
 		col = innerTable.getColumnModel().getColumn(6);
 		col.setPreferredWidth(100);
 
@@ -197,7 +198,7 @@ public class AdminStockPage extends JPanel {
 	// 테이블 조회 메소드
 	private void searchAction() {
 		AdminStockStatusDao dao = new AdminStockStatusDao();
-		ArrayList<AdminStockStatusDto> dtoList = dao.searchAction();
+		ArrayList<AdminStockStatusDto> dtoList = dao.searchStockAction();
 
 		int listCnt = dtoList.size();
 
@@ -228,11 +229,9 @@ public class AdminStockPage extends JPanel {
 		switch (index) {
 		case 0:
 			dao = new AdminStockStatusDao();
-			dtoList = dao.searchConditionToBookName(inputStr);
-
+			dtoList = dao.searchBookName(inputStr);
 			for (int i = 0; i < dtoList.size(); i++) {
 
-				// 가격 포맷 ###,### 설정
 				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
@@ -248,11 +247,10 @@ public class AdminStockPage extends JPanel {
 			break;
 		case 1:
 			dao = new AdminStockStatusDao();
-			dtoList = dao.searchConditionToPublisher(inputStr);
+			dtoList = dao.searchPublisher(inputStr);
 
 			for (int i = 0; i < dtoList.size(); i++) {
 
-				// 가격 포맷 ###,### 설정
 				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
@@ -269,11 +267,10 @@ public class AdminStockPage extends JPanel {
 
 		case 2:
 			dao = new AdminStockStatusDao();
-			dtoList = dao.searchConditionToPressDate(inputStr);
+			dtoList = dao.searchPressDate(inputStr);
 
 			for (int i = 0; i < dtoList.size(); i++) {
 
-				// 가격 포맷 ###,### 설정
 				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
@@ -290,11 +287,10 @@ public class AdminStockPage extends JPanel {
 			
 		case 3:
 			dao = new AdminStockStatusDao();
-			dtoList = dao.searchConditionToBoostatus(inputStr);
+			dtoList = dao.searchBookStatus(inputStr);
 
 			for (int i = 0; i < dtoList.size(); i++) {
 
-				// 가격 포맷 ###,### 설정
 				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();

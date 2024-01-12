@@ -16,39 +16,46 @@ public class AdminStockStatusDto {
 	int publishernum;
 	String authorname;
 	String publishername;
-	
-	//wkBookName, wkAuthorName, wkTranslatorName, wkPublisherName, wkPressPrice, wkPressCount, wkStockCount, wkPressDate
+	String bookstatus;
 
-
-	
-	
 	public AdminStockStatusDto(String publishername) {
 		super();
 		this.publishername = publishername;
 	}
 
-	
-	public AdminStockStatusDto(String bookName, String authorname,String publishername, int pressPrice, int pressCount, int stockCount, String pressDate) {
+	public AdminStockStatusDto(String bookName, int pressPrice) {
+		super();
+		this.bookName = bookName;
+		this.pressPrice = pressPrice;
+	}
+
+	public AdminStockStatusDto(String bookName, String authorname, String publishername, int pressPrice, int stockCount,
+			String bookstatus, String pressDate) {
 		super();
 		this.bookName = bookName;
 		this.authorname = authorname;
 		this.publishername = publishername;
 		this.pressPrice = pressPrice;
-		this.pressCount = pressCount;
 		this.stockCount = stockCount;
+		this.bookstatus = bookstatus;
 		this.pressDate = pressDate;
 	}
-
 
 	public String getAuthorname() {
 		return authorname;
 	}
 
+	public String getBookstatus() {
+		return bookstatus;
+	}
+
+	public void setBookstatus(String bookstatus) {
+		this.bookstatus = bookstatus;
+	}
 
 	public void setAuthorname(String authorname) {
 		this.authorname = authorname;
 	}
-
 
 	public AdminStockStatusDto(int booknum, int publishernum) {
 		super();
@@ -56,26 +63,21 @@ public class AdminStockStatusDto {
 		this.publishernum = publishernum;
 	}
 
-
 	public int getPublishernum() {
 		return publishernum;
 	}
-
 
 	public void setPublishernum(int publishernum) {
 		this.publishernum = publishernum;
 	}
 
-
 	public String getPublishername() {
 		return publishername;
 	}
 
-
 	public void setPublishername(String publishername) {
 		this.publishername = publishername;
 	}
-
 
 	public int getBooknum() {
 		return booknum;
@@ -157,15 +159,12 @@ public class AdminStockStatusDto {
 		this.pressDate = pressDate;
 	}
 
-
 	public int getPressCount() {
 		return pressCount;
 	}
 
-
 	public void setPressCount(int pressCount) {
 		this.pressCount = pressCount;
 	}
-	
-	
+
 }
