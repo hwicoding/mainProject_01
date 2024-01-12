@@ -457,6 +457,15 @@ public class AdminBookRegisterPage extends JPanel {
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
 
+		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
+		c.setHorizontalAlignment(JLabel.CENTER);
+		innerTable.getColumnModel().getColumn(0).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(1).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(4).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(5).setCellRenderer(c);
+
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
 		for (int j = 0; j < i; j++) {

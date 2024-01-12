@@ -145,7 +145,8 @@ public class AdminBookPage extends JPanel {
 		outerTable.addColumn("작가명");
 		outerTable.addColumn("출판사명");
 		outerTable.addColumn("가격(원)");
-		outerTable.setColumnCount(4);
+		outerTable.addColumn("책현황");
+		outerTable.setColumnCount(5);
 
 		// outerTable 제목 가운데정렬 과연?
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
@@ -159,12 +160,25 @@ public class AdminBookPage extends JPanel {
 
 		col = innerTable.getColumnModel().getColumn(3);
 		col.setPreferredWidth(80);
+		
+		col = innerTable.getColumnModel().getColumn(4);
+		col.setPreferredWidth(120);
 
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
 
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
+		
+		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+		r.setHorizontalAlignment(JLabel.RIGHT);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(r);
+
+		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
+		c.setHorizontalAlignment(JLabel.CENTER);
+		innerTable.getColumnModel().getColumn(1).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(4).setCellRenderer(c);
 
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
@@ -185,7 +199,7 @@ public class AdminBookPage extends JPanel {
 			String tmPressPrice = decFormat.format(tmp3);
 
 			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getAuthorname(),
-					dtoList.get(i).getPublishername(), tmPressPrice };
+					dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
 
 			outerTable.addRow(qTxt);
 		}
@@ -210,7 +224,7 @@ public class AdminBookPage extends JPanel {
 				String tmPressPrice = decFormat.format(tmp3);
 
 				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice };
+						dtoList.get(i).getPublishername(), tmPressPrice , dtoList.get(i).getBookstatus() };
 
 				outerTable.addRow(qTxt);
 			}
@@ -227,7 +241,7 @@ public class AdminBookPage extends JPanel {
 				String tmPressPrice = decFormat.format(tmp3);
 
 				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice };
+						dtoList.get(i).getPublishername(), tmPressPrice , dtoList.get(i).getBookstatus() };
 
 				outerTable.addRow(qTxt);
 			}
@@ -243,7 +257,7 @@ public class AdminBookPage extends JPanel {
 				String tmPressPrice = decFormat.format(tmp3);
 
 				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice };
+						dtoList.get(i).getPublishername(), tmPressPrice , dtoList.get(i).getBookstatus() };
 
 				outerTable.addRow(qTxt);
 			}
