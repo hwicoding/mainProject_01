@@ -40,16 +40,16 @@ public class Spalsh extends JFrame {
 		getContentPane().add(label);
 		
 		JLabel label1 = new JLabel("화면을 터치해주세요");
+		label1.setForeground(Color.GRAY);
 		label1.setHorizontalAlignment(SwingConstants.CENTER);
-		label1.setFont(new Font("Gulim", Font.PLAIN, 15));
+		label1.setFont(new Font("HYHeadLine-Medium", Font.PLAIN, 22));
 		label1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				click();
 			}
 		});
-		label1.setVerticalAlignment(SwingConstants.BOTTOM);
-		label1.setBounds(0,0,400,760);
+		label1.setBounds(0,0,400,1100);
 		getContentPane().add(label1);
 		label1.setVisible(false);
 		
