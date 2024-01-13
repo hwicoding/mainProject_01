@@ -430,8 +430,8 @@ public class AdminBookUpdatePage extends JPanel {
 		outerTable.addColumn("책제목");
 		outerTable.addColumn("책부제목");
 		outerTable.addColumn("출판사명");
-		outerTable.addColumn("수량");
-		outerTable.addColumn("가격");
+		outerTable.addColumn("수량(개)");
+		outerTable.addColumn("가격(원)");
 		outerTable.addColumn("책현황");
 		outerTable.setColumnCount(6);
 

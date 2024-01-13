@@ -70,6 +70,7 @@ public class MenuMain extends JFrame {
 	private JScrollPane scrollPane;
 	private JTable innerTable;
 	private final DefaultTableModel outerTable = new DefaultTableModel();
+	private JLabel lblQuit;
 
 	/**
 	 * Launch the application.
@@ -194,15 +195,11 @@ public class MenuMain extends JFrame {
 			lblLogout.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					//Login page new Login();
-					//page.setVisible(true);
-					System.out.println("로그아웃");
-					DefaultForm page = new DefaultForm(getName());
-					page.setVisible(true);
+					btnLogoutClick();
 				}
 			});
 			lblLogout.setBackground(new Color(253, 253, 253));
-			lblLogout.setBounds(950, 0, 48, 64);
+			lblLogout.setBounds(900, 0, 48, 64);
 			lblLogout.setFont(new Font("Marker Felt", Font.BOLD, 18));
 			ImageIcon icon = new ImageIcon(Header.class.getResource("/com/javalec/image/logoutIcon.png"));
 			Image img = icon.getImage();
@@ -237,6 +234,7 @@ public class MenuMain extends JFrame {
 			layeredPane.setBackground(new Color(253, 253, 253));
 			layeredPane.setBorder(BorderFactory.createLineBorder(Color.black));
 			layeredPane.add(getLblInfo());
+			layeredPane.add(getLblQuit());
 		}
 		return layeredPane;
 	}
@@ -245,7 +243,7 @@ public class MenuMain extends JFrame {
 		if (lblInfo == null) {
 			lblInfo = new JLabel("관리자님 환영합니다!");
 			lblInfo.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			lblInfo.setBounds(850, 25, 200, 16);
+			lblInfo.setBounds(800, 25, 200, 16);
 		}
 		return lblInfo;
 	}
@@ -320,6 +318,26 @@ public class MenuMain extends JFrame {
 			
 		}
 		return innerTable;
+	}
+	
+	private JLabel getLblQuit() {
+		if (lblQuit == null) {
+			lblQuit = new JLabel("");
+			lblQuit.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					btnQuitClick();
+				}
+			});
+			lblQuit.setBounds(950, 7, 50, 50);
+			lblQuit.setBackground(new Color(253, 253, 253));
+			ImageIcon icon = new ImageIcon(Header.class.getResource("/com/javalec/image/quit.png"));
+			Image img = icon.getImage();
+			Image changeImg = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+			ImageIcon changeIcon = new ImageIcon(changeImg);
+			lblQuit.setIcon(changeIcon);
+		}
+		return lblQuit;
 	}
 
 	// -------function -----
@@ -495,4 +513,15 @@ public class MenuMain extends JFrame {
 			break;
 		}
 	}
+	
+	private void btnLogoutClick() {
+		this.dispose();
+		//Login main = new Login();
+		//main.main(null);
+	}
+	
+	private void btnQuitClick() {
+		this.dispose();
+	}
+	
 }
