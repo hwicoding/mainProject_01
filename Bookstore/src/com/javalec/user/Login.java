@@ -111,6 +111,12 @@ public class Login extends JDialog {
 						login();
 					}
 				}
+				@Override
+				public void keyTyped(KeyEvent e) {
+					if(e.getKeyCode()==KeyEvent.VK_TAB) {
+						pfPw.requestFocus();
+					}
+				}
 			});
 			tfId.setBounds(90, 350, 220, 25);
 			tfId.setColumns(10);
@@ -217,6 +223,7 @@ public class Login extends JDialog {
 					ShareVar.phone=dtolist1.get(0).getUserphone();
 					clearcolumn();
 					searchpage();
+					dispose();
 				} else {
 					JOptionPane.showMessageDialog(null, "로그인 실패");	}
 			}else {
