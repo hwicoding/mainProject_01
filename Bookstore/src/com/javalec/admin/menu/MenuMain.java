@@ -1,6 +1,5 @@
 package com.javalec.admin.menu;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -12,7 +11,6 @@ import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -32,8 +30,6 @@ import com.javalec.admin.book.AdminBookUpdatePage;
 import com.javalec.admin.publisher.AdminPublishPage;
 import com.javalec.admin.sales.AdminBestSalesPage;
 import com.javalec.admin.sales.AdminSalesPage;
-import com.javalec.admin.sales.AdminSalesPage222;
-import com.javalec.admin.sales.TableIcon;
 import com.javalec.admin.stock.AdminStockPage;
 import com.javalec.admin.stock.AdminStockReqPage;
 import com.javalec.admin.stock.AdminStockStatusDao;
