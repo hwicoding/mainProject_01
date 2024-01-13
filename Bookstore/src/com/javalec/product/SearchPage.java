@@ -40,6 +40,12 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
+import javax.swing.JComboBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 public class SearchPage extends JDialog {
 
@@ -53,6 +59,7 @@ public class SearchPage extends JDialog {
 	private JLabel lblSearchbtn;
 	private JScrollPane scrollPane;
 	private JTable inner_table;
+	private JLabel lblCart;
 	
 //	outerTable 생성
 	private final DefaultTableModel outerTable = new DefaultTableModel();
@@ -60,8 +67,11 @@ public class SearchPage extends JDialog {
 	
 //	file 정리
 	ArrayList<ProductDTO> dtoList = null;
-	private JLabel lblCart;
-	private JTextArea textArea;
+	private JRadioButton rbname;
+	private JRadioButton rbpopular;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+
+
 
 
 	/**
@@ -97,7 +107,7 @@ public class SearchPage extends JDialog {
 			}
 		});
 		setTitle("logo");
-		setBounds(0, 0, 400, 760);
+		setBounds(750, 180, 400, 760);
 		getContentPane().setLayout(null);
 		getContentPane().add(getLblLogo());
 		getContentPane().add(getLblBack());
@@ -106,13 +116,16 @@ public class SearchPage extends JDialog {
 		getContentPane().add(getGroupSearch());
 		getContentPane().add(getScrollPane());
 		getContentPane().add(getLblCart());
+		getContentPane().add(getRbname());
+		getContentPane().add(getRbpopular());
 
 	}
 
-	private JLabel getLblLogo() {
-		if (lblLogo == null) {
-			lblLogo = new JLabel("");
-			lblLogo.addMouseListener(new MouseAdapter() {
+//	Cart button
+	private JLabel getLblCart() {
+		if (lblCart == null) {
+			lblCart = new JLabel("");
+			lblCart.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					 if(e.getClickCount()==1) {
@@ -126,24 +139,46 @@ public class SearchPage extends JDialog {
 					 }
 				}
 			});
+			lblCart.setIcon(new ImageIcon(SearchPage.class.getResource("/com/javalec/image/cart_icon.png")));
+			lblCart.setHorizontalAlignment(SwingConstants.CENTER);
+			lblCart.setBounds(307, 20, 52, 32);
+		}
+		return lblCart;
+	}
+	
+//	Logo 새로고침
+	private JLabel getLblLogo() {
+		if (lblLogo == null) {
+			lblLogo = new JLabel("");
+			lblLogo.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					 if(e.getClickCount()==1) {				 
+//							창 종료
+							dispose();
+							
+//							열기
+							SearchPage searchPage = new SearchPage();
+							searchPage.setVisible(true);
+					 }
+				}
+			});
 			lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
 			ImageIcon imgTest = new ImageIcon(SearchPage.class.getResource("/com/javalec/image/logo(name_add).png"));
 			imgTest = imageSetSize(imgTest, 150, 50);
 			lblLogo.setIcon(imgTest);
-			lblLogo.setBounds(0, 0, 386, 74);
+			lblLogo.setBounds(113, 0, 159, 74);
 		}
 		return lblLogo;
-	}	
-
-
+	}
+	
 	
 //	검색
-	
 	private JPanel getGroupSearch() {
 		if (groupSearch == null) {
 			groupSearch = new JPanel();
 			groupSearch.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-			groupSearch.setBounds(22, 71, 337, 32);
+			groupSearch.setBounds(24, 71, 333, 32);
 			groupSearch.setLayout(null);
 			groupSearch.add(getTfSearch());
 			groupSearch.add(getLblSearchbtn());
@@ -154,10 +189,18 @@ public class SearchPage extends JDialog {
 	private JTextField getTfSearch() {
 		if (tfSearch == null) {
 			tfSearch = new JTextField();
+			tfSearch.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					tfSearch.setText("");
+					tfSearch.setForeground(new Color(0, 0, 0));
+				}
+			});
+			tfSearch.setForeground(new Color(128, 128, 128));
 			tfSearch.setFont(new Font("나눔고딕", Font.PLAIN, 14));
 			tfSearch.setBorder(new LineBorder(new Color(255,255,255), 1, true));
 			tfSearch.setBounds(1, 1, 295, 30);
-			tfSearch.setText(" ");
+			tfSearch.setText(" 제목을 입력하세요.");
 			tfSearch.setColumns(10);
 		}
 		return tfSearch;
@@ -166,21 +209,28 @@ public class SearchPage extends JDialog {
 	private JLabel getLblSearchbtn() {
 		if (lblSearchbtn == null) {
 			lblSearchbtn = new JLabel("");
+			lblSearchbtn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					tableInit();
+					searchCondition();
+				}
+			});
 			lblSearchbtn.setHorizontalAlignment(SwingConstants.CENTER);
 			ImageIcon imgTest = new ImageIcon(SearchPage.class.getResource("/com/javalec/image/search.png"));
 			imgTest = imageSetSize(imgTest, 28, 28);
 			lblSearchbtn.setIcon(imgTest);
-			lblSearchbtn.setBounds(297, 1, 40, 30);
+			lblSearchbtn.setBackground(new Color(255 ,255, 255));
+			lblSearchbtn.setBounds(297, 1, 36, 30);
 		}
 		return lblSearchbtn;
 	}
 	
 //	 목록창
-	
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(22, 168, 337, 438);
+			scrollPane.setBounds(24, 150, 333, 438);
 			scrollPane.setViewportView(getInner_table());
 		}
 		return scrollPane;
@@ -189,13 +239,13 @@ public class SearchPage extends JDialog {
 		if (inner_table == null) {
 			inner_table = new JTable() {
 				
+//				테이블 입력기능 막기
 				@Override
 				public boolean isCellEditable(int row, int column) {
-
 					return false;
 				}
 				
-				
+//				이미지 테이블 인식 기능?
 //				public Class getColumnClass(int column) { 				// <--****************
 //			        return (column == 0) ? Icon.class : Object.class; 	// <--****************
 //			      }
@@ -204,8 +254,7 @@ public class SearchPage extends JDialog {
 			
 			inner_table.addMouseListener(new MouseAdapter() {
 				@Override
-				public void mouseClicked(MouseEvent e) {
-					
+				public void mouseClicked(MouseEvent e) {		
 					if(e.getClickCount()==2) {
 						tableClick();
 					}
@@ -232,7 +281,6 @@ public class SearchPage extends JDialog {
 				public void mouseClicked(MouseEvent e) {
 				}
 			});
-			
 			lblBack.setBounds(0, 650, 128, 60);
 		}
 		return lblBack;
@@ -248,17 +296,14 @@ public class SearchPage extends JDialog {
 			lblHome.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					 if(e.getClickCount()==1) {
-						 
+					 if(e.getClickCount()==1) {				 
 //							창 종료
 							dispose();
 							
 //							열기
 							SearchPage searchPage = new SearchPage();
 							searchPage.setVisible(true);
-					 }
-					
-					
+					 }					
 				}
 			});
 			lblHome.setBounds(129, 650, 128, 60);
@@ -275,8 +320,7 @@ public class SearchPage extends JDialog {
 			lblMypage.setIcon(imgTest);
 			lblMypage.addMouseListener(new MouseAdapter() {
 				@Override
-				public void mouseClicked(MouseEvent e) {
-					
+				public void mouseClicked(MouseEvent e) {			
 					 if(e.getClickCount()==1) {
 						 
 //							창 종료
@@ -286,16 +330,13 @@ public class SearchPage extends JDialog {
 							Mypage mypage = new Mypage();
 							mypage.setVisible(true);
 					 }
-					
 				}
 			});
 			lblMypage.setBounds(258, 650, 128, 60);
 		}
 		return lblMypage;
 	}
-	
-	
-	
+
 	
 //	--- Function ---
 	
@@ -309,22 +350,17 @@ public class SearchPage extends JDialog {
 	
 //	Table 초기화 하기
 	private void tableInit() {
-		outerTable.addColumn("브랜드");
-		outerTable.addColumn("상품명");
-//		outerTable.addColumn("상품명");
-//		outerTable.addColumn("상품명");
-//		outerTable.addColumn("상품명");
-//		outerTable.addColumn("상품명");
-//		outerTable.addColumn("상품명");
-//		outerTable.addColumn("상품명");
-		outerTable.setColumnCount(2);
-		
+		outerTable.addColumn("제목");
+		outerTable.addColumn("가격");
+		outerTable.addColumn("작가");
+		outerTable.addColumn("출판사");
+		outerTable.setColumnCount(4);
 		
 //		Table Column 크기 정하기
 		
 		int colNo = 0;
 		TableColumn col = inner_table.getColumnModel().getColumn(colNo);
-		int width = 280;
+		int width = 150;
 		col.setPreferredWidth(width);
 		
 		colNo = 1;
@@ -332,36 +368,15 @@ public class SearchPage extends JDialog {
 		width = 60;
 		col.setPreferredWidth(width);
 		
-//		colNo =2;
-//		col = inner_table.getColumnModel().getColumn(colNo);
-//		width = 200;
-//		col.setPreferredWidth(width);
-//		
-//		colNo = 3;
-//		col = inner_table.getColumnModel().getColumn(colNo);
-//		width = 200;
-//		col.setPreferredWidth(width);
-//		
-//		colNo = 4;
-//		col = inner_table.getColumnModel().getColumn(colNo);
-//		width = 200;
-//		col.setPreferredWidth(width);
-//		
-//		colNo = 5;
-//		col = inner_table.getColumnModel().getColumn(colNo);
-//		width = 200;
-//		col.setPreferredWidth(width);
-//		
-//		colNo = 6;
-//		col = inner_table.getColumnModel().getColumn(colNo);
-//		width = 200;
-//		col.setPreferredWidth(width);
-//		
-//		colNo = 7;
-//		col = inner_table.getColumnModel().getColumn(colNo);
-//		width = 200;
-//		col.setPreferredWidth(width);
+		colNo =2;
+		col = inner_table.getColumnModel().getColumn(colNo);
+		width = 60;
+		col.setPreferredWidth(width);
 		
+		colNo = 3;
+		col = inner_table.getColumnModel().getColumn(colNo);
+		width = 60;
+		col.setPreferredWidth(width);
 		
 		inner_table.setAutoResizeMode(inner_table.AUTO_RESIZE_OFF);
 		
@@ -389,15 +404,37 @@ public class SearchPage extends JDialog {
 			
 //			String[] contents = {dtoList.get(index).getBookname(),dtoList.get(index).getAuthorname()};
 			
-			String[] contents = {dtoList.get(index).getBookname(),dtoList.get(index).getBooktitle()};
+			String[] contents = {dtoList.get(index).getBookname(),dtoList.get(index).getBooktitle(), 
+					                      dtoList.get(index).getAuthorname(), dtoList.get(index).getPublishername()};
 			
-			Object[] qTxt1 = {String.format("%s : %s", contents[0], contents[1]), dtoList.get(index).getPressprice()};	
+			Object[] qTxt1 = {String.format("%s : %s", contents[0], contents[1]), String.format("%,8d", dtoList.get(index).getPressprice())+"원",
+					                  String.format("%s", contents[2]), String.format("%s", contents[3])};	
 			
 			
 			outerTable.addRow(qTxt1);
 			
 		}
 	}
+	
+//	텍스트 입력으로 검색 시
+	private void searchCondition() {
+		ProductDAO dao = new ProductDAO();
+		String str = tfSearch.getText().trim();
+		dtoList = dao.searchCondition(str);
+		
+		int listCount = dtoList.size();
+
+		for(int index = 0; index < listCount; index++) {
+					
+			String[] contents = {dtoList.get(index).getBookname(),dtoList.get(index).getBooktitle(), 
+					                      dtoList.get(index).getAuthorname(), dtoList.get(index).getPublishername()};
+			
+			Object[] qTxt1 = {String.format("%s : %s", contents[0], contents[1]), String.format("%,8d", dtoList.get(index).getPressprice())+"원",
+					                  String.format("%s", contents[2]), String.format("%s", contents[3])};	
+			
+			outerTable.addRow(qTxt1);
+		}
+	};
 	
 //	Table 에서 Row 를 click 했을 경우
 	public List<Object> tableClick() {
@@ -418,7 +455,6 @@ public class SearchPage extends JDialog {
 		String qTxt10 = dtoList.get(i).getBookcontents();
 		int qTxt11 = dtoList.get(i).getBooknum();
 		
-		
 		array.add(icon);
 		array.add(qTxt1);
 		array.add(qTxt2);
@@ -432,7 +468,6 @@ public class SearchPage extends JDialog {
 		array.add(qTxt10);
 		array.add(qTxt11);
 		
-		
 		dispose();
 		
 //		InformationPage 로 정보 보내기
@@ -443,23 +478,38 @@ public class SearchPage extends JDialog {
 		return array;
 		
 	}
-
+	
+//	종료 후 초기화
 	private void closingAction() {
 		
 		for(int index=0; index < dtoList.size(); index++) {
 			File file = new File("./" + dtoList.get(index).getBookfilename());
-			file.delete();
-			
+			file.delete();	
 		}
-		
 	}
-
-	private JLabel getLblCart() {
-		if (lblCart == null) {
-			lblCart = new JLabel("New label");
-			lblCart.setBounds(307, 20, 52, 32);
+	private JRadioButton getRbname() {
+		if (rbname == null) {
+			rbname = new JRadioButton("가나다순");
+			rbname.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			buttonGroup.add(rbname);
+			rbname.setSelected(true);
+			rbname.setBounds(24, 121, 85, 23);
 		}
-		return lblCart;
+		return rbname;
 	}
-
+	private JRadioButton getRbpopular() {
+		if (rbpopular == null) {
+			rbpopular = new JRadioButton("인기순");
+			rbpopular.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			buttonGroup.add(rbpopular);
+			rbpopular.setBounds(113, 121, 73, 23);
+		}
+		return rbpopular;
+	}
 }

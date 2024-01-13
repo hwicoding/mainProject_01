@@ -22,6 +22,7 @@ import java.util.List;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class InformationPage extends JDialog {
 
@@ -41,6 +42,13 @@ public class InformationPage extends JDialog {
 	private JLabel lblBookcontents;
 	private JButton btnCart;
 	private JLabel lblBokNum;
+	private JLabel lblNewLabel;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_1_1;
+	private JLabel lblNewLabel_1_1_1;
+	private JLabel lblNewLabel_1_1_1_1;
+	private JLabel lblNewLabel_1_1_1_1_1;
+	private JLabel lblNewLabel_1_1_1_1_1_1;
 
 	
 
@@ -71,7 +79,7 @@ public class InformationPage extends JDialog {
 			}
 		});
 		setTitle("logo");
-		setBounds(0, 0, 400, 760);
+		setBounds(750, 180, 400, 760);
 		getContentPane().setLayout(null);
 		getContentPane().add(getLblLogo());
 		getContentPane().add(getLblBack());
@@ -88,6 +96,13 @@ public class InformationPage extends JDialog {
 		getContentPane().add(getLblBookcontents());
 		getContentPane().add(getBtnCart());
 		getContentPane().add(getLblBokNum());
+		getContentPane().add(getLblNewLabel());
+		getContentPane().add(getLblNewLabel_1());
+		getContentPane().add(getLblNewLabel_1_1());
+		getContentPane().add(getLblNewLabel_1_1_1());
+		getContentPane().add(getLblNewLabel_1_1_1_1());
+		getContentPane().add(getLblNewLabel_1_1_1_1_1());
+		getContentPane().add(getLblNewLabel_1_1_1_1_1_1());
 
 	}
 
@@ -194,56 +209,63 @@ public class InformationPage extends JDialog {
 	private JLabel getLblBookname() {
 		if (lblBookname == null) {
 			lblBookname = new JLabel("New label");
-			lblBookname.setBounds(49, 253, 194, 31);
+			lblBookname.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblBookname.setBounds(85, 253, 130, 31);
 		}
 		return lblBookname;
 	}
 	private JLabel getLblAuthor() {
 		if (lblAuthor == null) {
 			lblAuthor = new JLabel("New label");
-			lblAuthor.setBounds(49, 330, 194, 25);
+			lblAuthor.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblAuthor.setBounds(85, 330, 130, 25);
 		}
 		return lblAuthor;
 	}
 	private JLabel getLblBooktitle() {
 		if (lblBooktitle == null) {
 			lblBooktitle = new JLabel("New label");
-			lblBooktitle.setBounds(49, 294, 194, 26);
+			lblBooktitle.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblBooktitle.setBounds(85, 294, 130, 26);
 		}
 		return lblBooktitle;
 	}
 	private JLabel getLbltranslator() {
 		if (lbltranslator == null) {
 			lbltranslator = new JLabel("New label");
-			lbltranslator.setBounds(49, 365, 194, 25);
+			lbltranslator.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lbltranslator.setBounds(85, 365, 130, 25);
 		}
 		return lbltranslator;
 	}
 	private JLabel getLblPublisher() {
 		if (lblPublisher == null) {
 			lblPublisher = new JLabel("New label");
-			lblPublisher.setBounds(49, 401, 194, 25);
+			lblPublisher.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblPublisher.setBounds(85, 401, 130, 25);
 		}
 		return lblPublisher;
 	}
 	private JLabel getLblPrice() {
 		if (lblPrice == null) {
 			lblPrice = new JLabel("New label");
-			lblPrice.setBounds(49, 436, 194, 25);
+			lblPrice.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblPrice.setBounds(85, 436, 130, 25);
 		}
 		return lblPrice;
 	}
 	private JLabel getLblGenre() {
 		if (lblGenre == null) {
 			lblGenre = new JLabel("New label");
-			lblGenre.setBounds(49, 477, 194, 25);
+			lblGenre.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblGenre.setBounds(85, 477, 180, 25);
 		}
 		return lblGenre;
 	}
 	private JLabel getLblBookcontents() {
 		if (lblBookcontents == null) {
 			lblBookcontents = new JLabel("New label");
-			lblBookcontents.setBounds(49, 500, 297, 106);
+			lblBookcontents.setBounds(70, 500, 297, 106);
 		}
 		return lblBookcontents;
 	}
@@ -264,6 +286,71 @@ public class InformationPage extends JDialog {
 		}
 		return lblBokNum;
 	}
+	
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("제목 : ");
+			lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblNewLabel.setBounds(25, 261, 57, 15);
+		}
+		return lblNewLabel;
+	}
+	private JLabel getLblNewLabel_1() {
+		if (lblNewLabel_1 == null) {
+			lblNewLabel_1 = new JLabel("부제 : ");
+			lblNewLabel_1.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNewLabel_1.setBounds(25, 300, 57, 15);
+		}
+		return lblNewLabel_1;
+	}
+	private JLabel getLblNewLabel_1_1() {
+		if (lblNewLabel_1_1 == null) {
+			lblNewLabel_1_1 = new JLabel("글쓴이 : ");
+			lblNewLabel_1_1.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNewLabel_1_1.setBounds(25, 335, 57, 15);
+		}
+		return lblNewLabel_1_1;
+	}
+	private JLabel getLblNewLabel_1_1_1() {
+		if (lblNewLabel_1_1_1 == null) {
+			lblNewLabel_1_1_1 = new JLabel("옮긴이 : ");
+			lblNewLabel_1_1_1.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNewLabel_1_1_1.setBounds(25, 370, 57, 15);
+		}
+		return lblNewLabel_1_1_1;
+	}
+	private JLabel getLblNewLabel_1_1_1_1() {
+		if (lblNewLabel_1_1_1_1 == null) {
+			lblNewLabel_1_1_1_1 = new JLabel("출판사 : ");
+			lblNewLabel_1_1_1_1.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblNewLabel_1_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNewLabel_1_1_1_1.setBounds(25, 406, 57, 15);
+		}
+		return lblNewLabel_1_1_1_1;
+	}
+	private JLabel getLblNewLabel_1_1_1_1_1() {
+		if (lblNewLabel_1_1_1_1_1 == null) {
+			lblNewLabel_1_1_1_1_1 = new JLabel("가격 : ");
+			lblNewLabel_1_1_1_1_1.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblNewLabel_1_1_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNewLabel_1_1_1_1_1.setBounds(25, 441, 57, 15);
+		}
+		return lblNewLabel_1_1_1_1_1;
+	}
+	private JLabel getLblNewLabel_1_1_1_1_1_1() {
+		if (lblNewLabel_1_1_1_1_1_1 == null) {
+			lblNewLabel_1_1_1_1_1_1 = new JLabel("분류 : ");
+			lblNewLabel_1_1_1_1_1_1.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblNewLabel_1_1_1_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNewLabel_1_1_1_1_1_1.setBounds(25, 482, 57, 15);
+		}
+		return lblNewLabel_1_1_1_1_1_1;
+	}
+	
 	
 //	--- Function ---
 	
@@ -315,5 +402,4 @@ public class InformationPage extends JDialog {
 		});
 		
 	}
-	
 }
