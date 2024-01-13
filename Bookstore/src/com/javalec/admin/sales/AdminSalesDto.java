@@ -11,6 +11,7 @@ public class AdminSalesDto {
 	String publishername;
 	String authorname;
 	InputStream file;
+	int filename;
 
 	public AdminSalesDto() {
 
@@ -23,12 +24,13 @@ public class AdminSalesDto {
 		this.totalPrice = totalPrice;
 	}
 
-	public AdminSalesDto(String bookname, String publishername, String authorname, InputStream file) {
+	public AdminSalesDto(String bookname, String publishername, String authorname, InputStream file, int filename) {
 		super();
 		this.bookname = bookname;
 		this.publishername = publishername;
 		this.authorname = authorname;
 		this.file = file;
+		this.filename = filename;
 	}
 
 	public String getBookname() {
@@ -85,6 +87,14 @@ public class AdminSalesDto {
 
 	public void setFile(InputStream file) {
 		this.file = file;
+	}
+
+	public int getFilename() {
+		return filename;
+	}
+
+	public void setFilename(int filename) {
+		this.filename = filename;
 	}
 
 }

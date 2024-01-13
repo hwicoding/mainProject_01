@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -31,6 +32,8 @@ import com.javalec.admin.book.AdminBookUpdatePage;
 import com.javalec.admin.publisher.AdminPublishPage;
 import com.javalec.admin.sales.AdminBestSalesPage;
 import com.javalec.admin.sales.AdminSalesPage;
+import com.javalec.admin.sales.AdminSalesPage222;
+import com.javalec.admin.sales.TableIcon;
 import com.javalec.admin.stock.AdminStockPage;
 import com.javalec.admin.stock.AdminStockReqPage;
 import com.javalec.admin.stock.AdminStockStatusDao;
@@ -42,15 +45,10 @@ import javax.swing.JLabel;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JLayeredPane;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -109,7 +107,7 @@ public class MenuMain extends JFrame {
 		setUndecorated(true);
 		tableInit();
 		searchAction();
-
+		
 		dropMenu.setEvent(new MenuEvent() {
 
 			@Override
@@ -315,9 +313,15 @@ public class MenuMain extends JFrame {
 
 	private JTable getInnerTable() {
 		if (innerTable == null) {
-			innerTable = new JTable();
+			innerTable = new JTable() {
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
+			};
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
+			
 		}
 		return innerTable;
 	}
@@ -333,9 +337,8 @@ public class MenuMain extends JFrame {
 		outerTable.addColumn("책현황");
 		outerTable.addColumn("입고일");
 		outerTable.setColumnCount(7);
-
+		
 		// outerTable 제목 가운데정렬 과연?
-
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
 		col.setPreferredWidth(200);
 
@@ -374,13 +377,16 @@ public class MenuMain extends JFrame {
 		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
 		innerTable.getColumnModel().getColumn(5).setCellRenderer(c);
 		innerTable.getColumnModel().getColumn(6).setCellRenderer(c);
-
+		
+		
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
 		for (int j = 0; j < i; j++) {
 			outerTable.removeRow(0);
 		}
+		
 	}
+	
 
 	// 테이블 조회 메소드
 	private void searchAction() {
@@ -400,7 +406,7 @@ public class MenuMain extends JFrame {
 
 			String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
 					dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
-
+ 
 			outerTable.addRow(qTxt);
 		}
 	}

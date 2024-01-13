@@ -100,7 +100,7 @@ public class AdminSalesDao {
 				String wkAuthorname = rs.getString(4);
 				
 				ShareVar.filename = ShareVar.filename + 1;
-				File file = new File(Integer.toString(ShareVar.filename));
+				File file = new File("./"+Integer.toString(ShareVar.filename));
 				FileOutputStream output = new FileOutputStream(file);
 				InputStream input = rs.getBinaryStream(1);
 				
@@ -110,7 +110,7 @@ public class AdminSalesDao {
 					output.write(buffer);
 				}
 				
-				AdminSalesDto dto = new AdminSalesDto(wkBookName, wkPublishername, wkAuthorname, input);
+				AdminSalesDto dto = new AdminSalesDto(wkBookName, wkPublishername, wkAuthorname, input, ShareVar.filename);
 				dtoList.add(dto);
 			}
 			conn.close();
