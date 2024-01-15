@@ -108,7 +108,7 @@ public class SearchPage extends JDialog {
 			}
 		});
 		setTitle("logo");
-		setBounds(750, 180, 400, 760);
+		setBounds(650, 180, 400, 760);
 		getContentPane().setLayout(null);
 		getContentPane().add(getLblLogo());
 		getContentPane().add(getLblBack());
