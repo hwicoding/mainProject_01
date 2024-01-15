@@ -117,8 +117,8 @@ public class MenuMain extends JFrame {
 				} else if (index == 0 && subIndex == 2) {
 					showForm(new AdminStockReqPage());
 
-				} else if (index == 0 && subIndex == 3) {
-					showForm(new AdminStockStatusPage());
+				//} else if (index == 0 && subIndex == 3) {
+				//	showForm(new AdminStockStatusPage());
 
 				} else if (index == 1 && subIndex == 0) {
 					showForm(new AdminPublishPage());
