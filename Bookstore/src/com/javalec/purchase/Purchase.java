@@ -143,6 +143,12 @@ public class Purchase extends JDialog {
 			lblBack.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+//					창 종료
+					dispose();
+					
+//					열기
+					SearchPage searchPage = new SearchPage();
+					searchPage.setVisible(true);
 				}
 			});
 			lblBack.setBounds(0, 650, 128, 60);

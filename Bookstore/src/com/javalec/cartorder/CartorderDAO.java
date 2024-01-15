@@ -1,8 +1,6 @@
 package com.javalec.cartorder;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -80,7 +78,7 @@ public class CartorderDAO {
 					String wkBookname = rs.getString(2);
 					int wkTotalprice = rs.getInt(3);
 					
-				CartorderDTO dto = new CartorderDTO(wknum,wkBookname,wkTotalprice);
+				CartorderDTO dto = new CartorderDTO(wknum,wkBookname, wkTotalprice);
 				dtoliList.add(dto);
 				}
 		   	    conn_mysql.close();
