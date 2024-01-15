@@ -10,6 +10,7 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JTextField;
 
 public class Sample_name extends JDialog {
 
@@ -39,7 +40,7 @@ public class Sample_name extends JDialog {
 	 */
 	public Sample_name() {
 		setTitle("logo");
-		setBounds(0, 0, 400, 760);
+		setBounds(0, 0, 401, 760);
 		getContentPane().setLayout(null);
 		getContentPane().add(getLblBack());
 		getContentPane().add(getLblTitle());
