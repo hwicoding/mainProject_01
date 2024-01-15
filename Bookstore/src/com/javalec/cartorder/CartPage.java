@@ -9,14 +9,20 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+
+import com.javalec.product.InformationPage;
+import com.javalec.user.UserDAO;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.JComboBox;
@@ -26,33 +32,40 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Cart extends JDialog {
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+
+public class CartPage extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JScrollPane scrollPane;
 	private JTable innertable;
-	private JLabel lblPublisher;
+	private JLabel lblPublishername;
 	private JLabel lblBookname;
-	private JLabel lblAuthor;
+	private JLabel lblAuthorname;
 	private JLabel lblBooktitle;
 	private JLabel lblGenre;
 	private JLabel lblCount;
 	private JLabel lblTotalprice;
-	private JTextField tfPublisher;
+	private JTextField tfPublishername;
 	private JTextField tfBookname;
 	private JTextField tfBooktitle;
-	private JTextField tfAuthor;
+	private JTextField tfAuthorname;
 	private JTextField tfGenre;
-	private JTextField tfCount;
-	private JTextField tfTotalprice;
+	private JTextField tfCartcount;
+	private JTextField tfTotalmoney;
 	private JComboBox cbCount;
-	private JButton btnCountchange;
 	private JButton btnOrder;
-	private JButton btnAdd;
+	
 	
 	private final DefaultTableModel outertable = new DefaultTableModel();
+	ArrayList<CartorderDTO> dtolist = null;
 	
 	/**
 	 * Launch the application.
@@ -61,7 +74,7 @@ public class Cart extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 		try {
-			Cart dialog = new Cart();
+			CartPage dialog = new CartPage();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -74,7 +87,7 @@ public class Cart extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Cart() {
+	public CartPage() {
 		getContentPane().setBackground(new Color(29, 84, 141));
 		setBackground(new Color(64, 62, 255));
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -83,7 +96,7 @@ public class Cart extends JDialog {
 			public void windowActivated(WindowEvent e) {
 				tableInit();
 				searchAction();
-				
+//				showTotalInfo();
 			}
 		});
 	
@@ -94,24 +107,22 @@ public class Cart extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getScrollPane());
-		contentPanel.add(getLblPublisher());
+		contentPanel.add(getLblPublishername());
 		contentPanel.add(getLblBookname());
-		contentPanel.add(getLblAuthor());
+		contentPanel.add(getLblAuthorname());
 		contentPanel.add(getLblBooktitle());
 		contentPanel.add(getLblGenre());
 		contentPanel.add(getLblCount());
 		contentPanel.add(getLblTotalprice());
-		contentPanel.add(getTfPublisher());
+		contentPanel.add(getTfPublishername());
 		contentPanel.add(getTfBookname());
 		contentPanel.add(getTfBooktitle());
-		contentPanel.add(getTfAuthor());
+		contentPanel.add(getTfAuthorname());
 		contentPanel.add(getTfGenre());
-		contentPanel.add(getTfCount());
-		contentPanel.add(getTfTotalprice());
+		contentPanel.add(getTfCartcount());
+		contentPanel.add(getTfTotalmoney());
 		contentPanel.add(getCbCount());
-		contentPanel.add(getBtnCountchange());
 		contentPanel.add(getBtnOrder());
-		contentPanel.add(getBtnAdd());
 	}
 	ImageIcon imageSetSize(ImageIcon icon, int i, int j) {
 		Image ximg = icon.getImage();
@@ -134,10 +145,8 @@ public class Cart extends JDialog {
 			innertable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-						if(e.getButton()==1) {
-						tableClick();
+					tableClick();
 					}
-				}
 			});
 			innertable.setFillsViewportHeight(true);
 			innertable.setBorder(new LineBorder(new Color(0,0,0)));
@@ -146,12 +155,12 @@ public class Cart extends JDialog {
 		}
 		return innertable;
 	}
-	private JLabel getLblPublisher() {
-		if (lblPublisher == null) {
-			lblPublisher = new JLabel("출판사 ");
-			lblPublisher.setBounds(34, 308, 50, 15);
+	private JLabel getLblPublishername() {
+		if (lblPublishername == null) {
+			lblPublishername = new JLabel("출판사 ");
+			lblPublishername.setBounds(34, 308, 50, 15);
 		}
-		return lblPublisher;
+		return lblPublishername;
 	}
 	private JLabel getLblBookname() {
 		if (lblBookname == null) {
@@ -160,12 +169,12 @@ public class Cart extends JDialog {
 		}
 		return lblBookname;
 	}
-	private JLabel getLblAuthor() {
-		if (lblAuthor == null) {
-			lblAuthor = new JLabel("작가");
-			lblAuthor.setBounds(34, 417, 50, 15);
+	private JLabel getLblAuthorname() {
+		if (lblAuthorname == null) {
+			lblAuthorname = new JLabel("작가");
+			lblAuthorname.setBounds(34, 417, 50, 15);
 		}
-		return lblAuthor;
+		return lblAuthorname;
 	}
 	private JLabel getLblBooktitle() {
 		if (lblBooktitle == null) {
@@ -195,17 +204,19 @@ public class Cart extends JDialog {
 		}
 		return lblTotalprice;
 	}
-	private JTextField getTfPublisher() {
-		if (tfPublisher == null) {
-			tfPublisher = new JTextField();
-			tfPublisher.setBounds(114, 305, 119, 21);
-			tfPublisher.setColumns(10);
+	private JTextField getTfPublishername() {
+		if (tfPublishername == null) {
+			tfPublishername = new JTextField();
+			tfPublishername.setEditable(false);
+			tfPublishername.setBounds(114, 305, 119, 21);
+			tfPublishername.setColumns(10);
 		}
-		return tfPublisher;
+		return tfPublishername;
 	}
 	private JTextField getTfBookname() {
 		if (tfBookname == null) {
 			tfBookname = new JTextField();
+			tfBookname.setEditable(false);
 			tfBookname.setColumns(10);
 			tfBookname.setBounds(114, 341, 191, 21);
 		}
@@ -214,70 +225,74 @@ public class Cart extends JDialog {
 	private JTextField getTfBooktitle() {
 		if (tfBooktitle == null) {
 			tfBooktitle = new JTextField();
+			tfBooktitle.setEditable(false);
 			tfBooktitle.setColumns(10);
 			tfBooktitle.setBounds(114, 378, 191, 21);
 		}
 		return tfBooktitle;
 	}
-	private JTextField getTfAuthor() {
-		if (tfAuthor == null) {
-			tfAuthor = new JTextField();
-			tfAuthor.setColumns(10);
-			tfAuthor.setBounds(114, 417, 119, 21);
+	private JTextField getTfAuthorname() {
+		if (tfAuthorname == null) {
+			tfAuthorname = new JTextField();
+			tfAuthorname.setEditable(false);
+			tfAuthorname.setColumns(10);
+			tfAuthorname.setBounds(114, 417, 119, 21);
 		}
-		return tfAuthor;
+		return tfAuthorname;
 	}
 	private JTextField getTfGenre() {
 		if (tfGenre == null) {
 			tfGenre = new JTextField();
+			tfGenre.setEditable(false);
 			tfGenre.setColumns(10);
 			tfGenre.setBounds(114, 453, 139, 21);
 		}
 		return tfGenre;
 	}
-	private JTextField getTfCount() {
-		if (tfCount == null) {
-			tfCount = new JTextField();
-			tfCount.setColumns(10);
-			tfCount.setBounds(114, 494, 55, 21);
+	private JTextField getTfCartcount() {
+		if (tfCartcount == null) {
+			tfCartcount = new JTextField();
+			tfCartcount.setEditable(false);
+			tfCartcount.setColumns(10);
+			tfCartcount.setBounds(114, 494, 55, 21);
 		}
-		return tfCount;
+		return tfCartcount;
 	}
-	private JTextField getTfTotalprice() {
-		if (tfTotalprice == null) {
-			tfTotalprice = new JTextField();
-			tfTotalprice.setColumns(10);
-			tfTotalprice.setBounds(114, 534, 119, 21);
+	private JTextField getTfTotalmoney() {
+		if (tfTotalmoney == null) {
+			tfTotalmoney = new JTextField();
+			tfTotalmoney.setEditable(false);
+			tfTotalmoney.setColumns(10);
+			tfTotalmoney.setBounds(114, 534, 119, 21);
 		}
-		return tfTotalprice;
+		return tfTotalmoney;
 	}
 	private JComboBox getCbCount() {
 		if (cbCount == null) {
 			cbCount = new JComboBox();
+			cbCount.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					countAction();
+					
+					
+				}
+			});
+			cbCount.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4"}));
 			cbCount.setBounds(181, 493, 52, 23);
 		}
 		return cbCount;
 	}
-	private JButton getBtnCountchange() {
-		if (btnCountchange == null) {
-			btnCountchange = new JButton("수량 변경");
-			btnCountchange.setBounds(253, 493, 91, 23);
-		}
-		return btnCountchange;
-	}
 	private JButton getBtnOrder() {
 		if (btnOrder == null) {
 			btnOrder = new JButton("주문하기");
+			btnOrder.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					orderBtnclick();
+				}
+			});
 			btnOrder.setBounds(253, 603, 91, 23);
 		}
 		return btnOrder;
-	}
-	private JButton getBtnAdd() {
-		if (btnAdd == null) {
-			btnAdd = new JButton("추가하기");
-			btnAdd.setBounds(135, 603, 91, 23);
-		}
-		return btnAdd;
 	}
 	
 	//---	Function  ---
@@ -330,13 +345,100 @@ public class Cart extends JDialog {
 		// 테이플 클릭했을 때
 		private void tableClick() {
 			int i = innertable.getSelectedRow();
+			CartorderDAO dao = new CartorderDAO();
+			CartorderDTO dto = dao.selectlist();
+			
+			tfPublishername.setText(dto.getPublishename());
+			tfBookname.setText(dto.getBookname());
+			tfBooktitle.setText(dto.getBooktitle());
+			tfAuthorname.setText(dto.getAuthorname());
+			tfGenre.setText(dto.getGenrekind());
+			tfCartcount.setText(Integer.toString(dto.getCartcount()));
+			tfTotalmoney.setText(Integer.toString(dto.getTotalMoney()));
+			System.out.println(dto.getCartcount());
+			System.out.println(dto.getTotalMoney());
+			}
+	
+			
 		
-			return i;
-		}
-		}
+			
 	
-	
-	// 창종료 
+		
+		// 콤보박스 수량 check
+			private int cbCountinfo() {
+				int i = cbCount.getSelectedIndex();
+				return i;
+				
+			}
+			
+			
+		// 수량에 맞게 가격 변동 
+		private void countAction() {
+			String selectedValue = cbCount.getSelectedItem().toString();
+		      switch(cbCount.getSelectedIndex()) {
+		       case 0:
+		            tfCartcount.setText(selectedValue);
+		            break;
+		       case 1:
+		    	    tfCartcount.setText(selectedValue);
+		    	   
+		            break;
+		       case 2:
+		    	   tfCartcount.setText(selectedValue);
+		    	  
+		          break;
+		       case 3:
+		    	   tfCartcount.setText(selectedValue);
+		    	   
+		          break;}
+		      
+		         
+			
+			int Countnumber = cbCount.getSelectedIndex();
+			
+			tfCartcount.setText(String.valueOf(Countnumber+1));
+			
+		}
+		
+		private void showTotalInfo() {
+			
+			CartorderDAO dao = new CartorderDAO();
+			CartorderDTO dto = dao.showTotalInfo();
+			
+			DecimalFormat decFormat = new DecimalFormat("###,###");	
+			int tmp3 = dto.getTotalMoney();
+			String wkPrice = decFormat.format(tmp3);
+			String wkCartcount = decFormat.format(tmp3);
+			tfCartcount.setText(wkPrice);
+			tfTotalmoney.setText(wkPrice);
+		}
+
+
+		// 주문하기 버튼 클릭했을 때, (주문내역 테이블로 호출, 장바구니 테이블 delete 처리)
+		private void orderBtnclick(ArrayList<CartorderDTO> list) {
+			int num = 1;
+			
+			JFrame jframe = new JFrame();
+			jframe.setAlwaysOnTop(true);
+			CartorderDAO dao = new CartorderDAO();
+			if(JOptionPane.showConfirmDialog(jframe, "위 상품들을 구매하시겠습니까?","알림",JOptionPane.YES_NO_OPTION) == 0) {
+
+				
+			dispose();
+			
+		// Orderpage로 정보 보내기
+//		Orderpage orderpage = new Orderpage();
+//		Orderpage.setVisible(true);
+//		Orderpage.selectByinfo(array);
+//
+//		return array;
+
+			}
+		}
+}
+
+
+		// 창종료 
 
 	
 	// 열기

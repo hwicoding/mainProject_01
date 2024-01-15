@@ -1,11 +1,17 @@
 package com.javalec.cartorder;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.javalec.product.ProductDTO;
+import com.javalec.user.UserDAO;
 import com.javalec.util.ShareVar;
 import com.mysql.cj.protocol.Resultset;
 
@@ -79,44 +85,13 @@ public class CartorderDAO {
 				   
 	   
 	   // Table 을 Click 하였을 경우
-	  public CartorderDTO tableClick() {
+	  public CartorderDTO selectlist() {
 		   
-		   CartorderDTO dto = null;
-		   
-		String where4 = "select bookname, pressprice ";
-		String where5 = "from book, press, cart ";
-		String where6 = "where press.booknum = book.booknum and cart.booknum = book.booknum ";
-		
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, ps_mysql);
-			Statement stmt_mysql  = conn_mysql.createStatement();
-			
-			ResultSet rs = stmt_mysql.executeQuery(where4 + where5 + where6);
-		
-			while(rs.next()) {
-				String wkBookname = rs.getString(1);
-				int wkTotalprice = rs.getInt(2);
-				
-				dto = new CartorderDTO(wkBookname, wkTotalprice);
-		}
-		
-
-		conn_mysql.close();
-		
-	   } catch (Exception e) {
-		   e.printStackTrace();
-	   }
-	 
-	   return dto;	
-}
-
-	  // table 데이터를 tf에 보내기 
-	  public ArrayList<CartorderDTO> selectlist(){
-		  ArrayList<CartorderDTO> dtoList = new ArrayList<CartorderDTO>();
+		  //ArrayList<CartorderDTO> dtolist = new ArrayList<CartorderDTO>();
+		  CartorderDTO dto = null;
 		  
-		  // publishername, bookname, booktitle, authorname, genrekind, genreseckind, genrethirdkind, count, totalprice 불러오기
-		  String query = "select publishername, bookname, booktitle, authorname, genrekind, genreseckind, genrethirdkind, cartcount, pressprice ";
+		  
+		  String query = "select publishername, bookname, booktitle, authorname, genrekind, genreseckind, genrethirdkind, cartcount, (cartcount*pressprice) as totalsum, bookfilename ";
 		  String query1 = "from publisher, book, bookstore.write w, author, bookstore.register r, genre, cart, press ";
 		  String query2 = "where publisher.publishernum = press.publishernum and publisher.publishernum = w.publishernum and w.authornum = author.authornum ";
 		  String query3 = "and publisher.publishernum = r.publishernum and r.genrenum = genre.genrenum ";
@@ -126,11 +101,9 @@ public class CartorderDAO {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, ps_mysql);
 				Statement stmt_mysql = conn_mysql.createStatement();
-				
 				ResultSet rs = stmt_mysql.executeQuery(query + query1 + query2 + query3 + query4);
 				
 				while(rs.next()) {
-					
 					String wkPublishername = rs.getString(1);
 					String wkBookname = rs.getString(2);
 					String wkBooktitle = rs.getString(3);
@@ -140,15 +113,84 @@ public class CartorderDAO {
 					String wkGenrethirdkind = rs.getString(7);
 					int wkCount = rs.getInt(8);
 					int wkTotalprice = rs.getInt(9);
-				
-					CartorderDTO dto = new CartorderDTO(wkPublishername, wkBookname, wkBooktitle, wkAuthorname, wkGenrekind, wkGenreseckind, wkGenrethirdkind, wkCount, wkTotalprice);
-					dtoList.add(dto);
+					String wkBookfilename = rs.getString(10);
+					
+//					file
+//					File file = new File("./" + wkBookfilename);
+//					FileOutputStream output = new FileOutputStream(file);
+//					InputStream input = rs.getBinaryStream(11);
+//					byte[] buffer = new byte[1024];
+//					while (input.read(buffer) > 0) {
+//						output.write(buffer);
+//					}
+					dto = new CartorderDTO(wkPublishername, wkBookname, wkBooktitle, wkAuthorname, wkGenrekind, wkGenreseckind, wkGenrethirdkind, wkCount, wkTotalprice, wkBookfilename);
+					
 				}
 				conn_mysql.close();
 				
 		  } catch (Exception e) {
 			e.printStackTrace();
-		}
-		  return dtoList;
-	  }
+		  }return dto;
+		
 }
+	  // 수량에 맞춰서 금액 변경하기 
+	  public CartorderDTO showTotalInfo() {
+		  CartorderDTO dto = null;
+		  String query = "select cartcount, (cartcount*pressprice) as totalsum ";
+		  String query1 = "from cart, book, press ";
+		  String query2 = "where cart.booknum = book.booknum and press.booknum = book.booknum ";
+		  
+		  try {
+
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, ps_mysql);
+				Statement stmt_mysql = conn_mysql.createStatement();
+
+				ResultSet rs = stmt_mysql.executeQuery(query + query1 + query2);
+				
+				if(rs.next()) {
+					int wkCartcount = rs.getInt(1);
+					int wkTotalmoney = rs.getInt(2);
+					
+					int a = wkCartcount*wkTotalmoney;
+					
+					dto = new CartorderDTO(wkCartcount, a);
+				}
+				
+				conn_mysql.close();
+	  } catch (Exception e) {
+			e.printStackTrace();
+	  
+	  	}
+		  return dto;
+	  }
+	  
+	  public void insertCartInfo() {
+		  PreparedStatement ps = null;
+		  
+		  try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection conn = DriverManager.getConnection(url_mysql, id_mysql, ps_mysql);
+				Statement stmt_mysql = conn_mysql.createStatement();
+				
+				String
+				String
+				
+				ps = conn_mysql.prepareStatement(query);
+				ps.executeUpdate();
+				
+				conn.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+	  }
+	  
+
+	  
+
+	  
+	 
+	  
+
