@@ -59,7 +59,7 @@ import java.awt.event.InputMethodEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
-public class AdminBookUpdatePage extends JPanel {
+public class AdminBookDeletePage extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel lblNewLabel;
@@ -77,8 +77,6 @@ public class AdminBookUpdatePage extends JPanel {
 	private JTextField tfContent;
 	private JLabel lblNewLabel_2_1_1_1;
 	private JLabel lblImage;
-	private JTextField tfImagePath;
-	private JButton btnImage;
 	private JButton btnRegister;
 	private JLabel lblNewLabel_2_1_1_2;
 	private JTextField tfCount;
@@ -86,10 +84,8 @@ public class AdminBookUpdatePage extends JPanel {
 	private JTextField tfPrice;
 	private JLabel lblNewLabel_2_1_1_2_3;
 	private JLabel lblNewLabel_2_1_1_2_3_1;
-	private JLabel lblNewLabel_2_1_1_2_1;
-	private JComboBox cbStatus;
 
-	public AdminBookUpdatePage() {
+	public AdminBookDeletePage() {
 		addAncestorListener(new AncestorListener() {
 			public void ancestorAdded(AncestorEvent event) {
 				tableInit();
@@ -119,8 +115,6 @@ public class AdminBookUpdatePage extends JPanel {
 		add(getTfContent());
 		add(getLblNewLabel_2_1_1_1_1());
 		add(getLblImage());
-		add(getTfImagePath());
-		add(getBtnImage());
 		add(getBtnRegister());
 		add(getLblNewLabel_2_1_1_2());
 		add(getTfCount());
@@ -128,14 +122,12 @@ public class AdminBookUpdatePage extends JPanel {
 		add(getTfPrice());
 		add(getLblNewLabel_2_1_1_2_3());
 		add(getLblNewLabel_2_1_1_2_3_1());
-		add(getLblNewLabel_2_1_1_2_1());
-		add(getCbStatus());
 
 	}
 
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("책 수정");
+			lblNewLabel = new JLabel("책 삭제");
 			lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 			lblNewLabel.setBounds(29, 39, 200, 50);
 		}
@@ -212,7 +204,7 @@ public class AdminBookUpdatePage extends JPanel {
 
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
-			lblNewLabel_2 = new JLabel("책 제목 *");
+			lblNewLabel_2 = new JLabel("책 제목");
 			lblNewLabel_2.setBounds(340, 300, 61, 16);
 		}
 		return lblNewLabel_2;
@@ -221,8 +213,10 @@ public class AdminBookUpdatePage extends JPanel {
 	private JTextField getTfBookName() {
 		if (tfBookName == null) {
 			tfBookName = new JTextField();
+			tfBookName.setEditable(false);
 			tfBookName.setBounds(340, 320, 400, 40);
 			LineBorder line = new LineBorder(Color.gray, 1, true);
+			tfBookName.setBackground(new Color(234, 234, 234));
 			tfBookName.setBorder(line);
 			tfBookName.setColumns(10);
 		}
@@ -240,7 +234,9 @@ public class AdminBookUpdatePage extends JPanel {
 	private JTextField getTextField_1_1() {
 		if (tfBookSubTitle == null) {
 			tfBookSubTitle = new JTextField();
+			tfBookSubTitle.setEditable(false);
 			tfBookSubTitle.setColumns(10);
+			tfBookSubTitle.setBackground(new Color(234, 234, 234));
 			tfBookSubTitle.setBounds(340, 400, 400, 40);
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfBookSubTitle.setBorder(line);
@@ -250,7 +246,7 @@ public class AdminBookUpdatePage extends JPanel {
 
 	private JLabel getLblNewLabel_2_1_1_1() {
 		if (lblNewLabel_2_1_1 == null) {
-			lblNewLabel_2_1_1 = new JLabel("줄거리 (100자 내) *");
+			lblNewLabel_2_1_1 = new JLabel("줄거리 (100자 내)");
 			lblNewLabel_2_1_1.setBounds(340, 460, 120, 16);
 		}
 		return lblNewLabel_2_1_1;
@@ -259,7 +255,9 @@ public class AdminBookUpdatePage extends JPanel {
 	private JTextField getTfContent() {
 		if (tfContent == null) {
 			tfContent = new JTextField();
+			tfContent.setEditable(false);
 			tfContent.setColumns(10);
+			tfContent.setBackground(new Color(234, 234, 234));
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfContent.setBorder(line);
 			tfContent.setBounds(340, 480, 400, 40);
@@ -285,48 +283,16 @@ public class AdminBookUpdatePage extends JPanel {
 		return lblImage;
 	}
 
-	private JTextField getTfImagePath() {
-		if (tfImagePath == null) {
-			tfImagePath = new JTextField();
-			tfImagePath.setBounds(29, 580, 180, 35);
-			tfImagePath.setColumns(10);
-			LineBorder line = new LineBorder(Color.gray, 1, true);
-			tfImagePath.setBorder(line);
-		}
-		return tfImagePath;
-	}
-
-	private JButton getBtnImage() {
-		if (btnImage == null) {
-			btnImage = new JButton("이미지 등록");
-			btnImage.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					imageRegisterBtnClicked();
-				}
-			});
-			btnImage.setBounds(220, 580, 80, 35);
-			btnImage.setBackground(new Color(130, 179, 235));
-			LineBorder line = new LineBorder(Color.gray, 1, true);
-			btnImage.setBorder(line);
-			btnImage.setForeground(new Color(253, 253, 253));
-			btnImage.setOpaque(true);
-			btnImage.setBorderPainted(false);
-		}
-		return btnImage;
-	}
-
 	private JButton getBtnRegister() {
 		if (btnRegister == null) {
-			btnRegister = new JButton("수정");
+			btnRegister = new JButton("삭제");
 			btnRegister.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (nullCheck() == 0) {
-						updateBtnClicked();
-					}
+					deleteBtnClicked();
 				}
 			});
 			btnRegister.setBounds(652, 120, 117, 35);
-			btnRegister.setBackground(new Color(130, 179, 235));
+			btnRegister.setBackground(new Color(255, 153, 153));
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			btnRegister.setBorder(line);
 			btnRegister.setForeground(new Color(253, 253, 253));
@@ -339,7 +305,7 @@ public class AdminBookUpdatePage extends JPanel {
 
 	private JLabel getLblNewLabel_2_1_1_2() {
 		if (lblNewLabel_2_1_1_2 == null) {
-			lblNewLabel_2_1_1_2 = new JLabel("수량 *");
+			lblNewLabel_2_1_1_2 = new JLabel("수량");
 			lblNewLabel_2_1_1_2.setBounds(340, 538, 61, 16);
 		}
 		return lblNewLabel_2_1_1_2;
@@ -348,6 +314,7 @@ public class AdminBookUpdatePage extends JPanel {
 	private JTextField getTfCount() {
 		if (tfCount == null) {
 			tfCount = new JTextField();
+			tfCount.setEditable(false);
 			tfCount.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -363,6 +330,7 @@ public class AdminBookUpdatePage extends JPanel {
 			});
 			tfCount.setHorizontalAlignment(SwingConstants.TRAILING);
 			tfCount.setColumns(10);
+			tfCount.setBackground(new Color(234, 234, 234));
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfCount.setBorder(line);
 			tfCount.setBounds(340, 558, 180, 40);
@@ -372,7 +340,7 @@ public class AdminBookUpdatePage extends JPanel {
 
 	private JLabel getLblNewLabel_2_1_1_2_2() {
 		if (lblNewLabel_2_1_1_2_2 == null) {
-			lblNewLabel_2_1_1_2_2 = new JLabel("가격 *");
+			lblNewLabel_2_1_1_2_2 = new JLabel("가격");
 			lblNewLabel_2_1_1_2_2.setBounds(560, 538, 61, 16);
 		}
 		return lblNewLabel_2_1_1_2_2;
@@ -381,10 +349,12 @@ public class AdminBookUpdatePage extends JPanel {
 	private JTextField getTfPrice() {
 		if (tfPrice == null) {
 			tfPrice = new JTextField();
+			tfPrice.setEditable(false);
 			tfPrice.setHorizontalAlignment(SwingConstants.TRAILING);
 			tfPrice.setColumns(10);
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfPrice.setBorder(line);
+			tfPrice.setBackground(new Color(234, 234, 234));
 			tfPrice.setBounds(560, 558, 180, 40);
 		}
 		return tfPrice;
@@ -406,25 +376,9 @@ public class AdminBookUpdatePage extends JPanel {
 		return lblNewLabel_2_1_1_2_3_1;
 	}
 
-	private JLabel getLblNewLabel_2_1_1_2_1() {
-		if (lblNewLabel_2_1_1_2_1 == null) {
-			lblNewLabel_2_1_1_2_1 = new JLabel("책 현황");
-			lblNewLabel_2_1_1_2_1.setBounds(340, 620, 61, 16);
-		}
-		return lblNewLabel_2_1_1_2_1;
-	}
-
-	private JComboBox getCbStatus() {
-		if (cbStatus == null) {
-			cbStatus = new JComboBox();
-			cbStatus.setModel(new DefaultComboBoxModel(new String[] { "판매중", "판매종료" }));
-			cbStatus.setBounds(340, 638, 200, 27);
-		}
-		return cbStatus;
-	}
-
 	// ------ function --------
 
+	// 테이블 초기화
 	// 테이블 초기화
 	public void tableInit() {
 		outerTable.addColumn("책제목");
@@ -438,7 +392,7 @@ public class AdminBookUpdatePage extends JPanel {
 		// outerTable 제목 가운데정렬 과연?
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
 		col.setPreferredWidth(200);
-		
+
 		col = innerTable.getColumnModel().getColumn(1);
 		col.setPreferredWidth(100);
 
@@ -450,7 +404,7 @@ public class AdminBookUpdatePage extends JPanel {
 
 		col = innerTable.getColumnModel().getColumn(4);
 		col.setPreferredWidth(80);
-		
+
 		col = innerTable.getColumnModel().getColumn(5);
 		col.setPreferredWidth(120);
 
@@ -459,7 +413,7 @@ public class AdminBookUpdatePage extends JPanel {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
-		
+
 		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
 		r.setHorizontalAlignment(JLabel.RIGHT);
 		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
@@ -488,14 +442,15 @@ public class AdminBookUpdatePage extends JPanel {
 			int tmp3 = dtoList.get(i).getPresspirce();
 			String tmPressPrice = decFormat.format(tmp3);
 
-			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
-					dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
+			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(),
+					dtoList.get(i).getAuthorname(), dtoList.get(i).getPublishername(), tmPressPrice,
+					dtoList.get(i).getBookstatus() };
 
 			outerTable.addRow(qTxt);
 		}
 	}
 
-	// 검색 - 출판사명
+	// 검색 - 책제목명
 	private void searchBtnClickedToBook() {
 		AdminBookDao dao = null;
 		String inputStr = tfSearch.getText();
@@ -511,8 +466,9 @@ public class AdminBookUpdatePage extends JPanel {
 			int tmp3 = dtoList.get(i).getPresspirce();
 			String tmPressPrice = decFormat.format(tmp3);
 
-			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
-					dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
+			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(),
+					dtoList.get(i).getAuthorname(), dtoList.get(i).getPublishername(), tmPressPrice,
+					dtoList.get(i).getBookstatus() };
 
 			outerTable.addRow(qTxt);
 		}
@@ -523,11 +479,12 @@ public class AdminBookUpdatePage extends JPanel {
 		int i = innerTable.getSelectedRow();
 
 		String bookName = (String) innerTable.getValueAt(i, 0);
+		String subtitle = (String) innerTable.getValueAt(i, 1);
 		String bookPrice = (String) innerTable.getValueAt(i, 4);
 		int price = Integer.parseInt(bookPrice.replaceAll(",", ""));
 
-		AdminBookDao dao = new AdminBookDao(bookName, price);
-		int bookNum = dao.bookSeqNumUp();
+		AdminBookDao dao = new AdminBookDao(bookName, subtitle, price);
+		int bookNum = dao.bookSeqNum();
 
 		if (bookNum > 0) {
 			AdminBookDto dto = dao.tableClick();
@@ -550,12 +507,6 @@ public class AdminBookUpdatePage extends JPanel {
 			File file = new File(filePath);
 			file.delete();
 
-			if (dto.getBookstatus().equals("판매중")) {
-				cbStatus.setSelectedIndex(0);
-			} else {
-				cbStatus.setSelectedIndex(1);
-			}
-
 		} else {
 			JOptionPane.showMessageDialog(this, "테이블을 다시 선택해주세요!");
 		}
@@ -563,45 +514,18 @@ public class AdminBookUpdatePage extends JPanel {
 		return bookNum;
 	}
 
-	// 이미지 등록 버튼 클릭했을 때
-	private void imageRegisterBtnClicked() {
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setMultiSelectionEnabled(false); // 다중 선택 불가
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("png 파일", "png");
-		fileChooser.addChoosableFileFilter(filter);
-
-		String name = "";
-		int result = fileChooser.showOpenDialog(this);
-		if (result == JFileChooser.APPROVE_OPTION) {
-			File selectedFile = fileChooser.getSelectedFile();
-			tfImagePath.setText(selectedFile.toString());
-
-			ImageIcon icon = new ImageIcon(selectedFile.toString());
-			Image img = icon.getImage();
-			Image changeImg = img.getScaledInstance(180, 250, Image.SCALE_SMOOTH);
-			ImageIcon changeIcon = new ImageIcon(changeImg);
-			lblImage.setIcon(changeIcon);
-
-		}
-	}
-
-	// 수정 버튼 눌렀을 때
-	private void updateBtnClicked() {
-		
+	// 삭제 버튼 클릭 시
+	private void deleteBtnClicked() {
 		String bookName = tfBookName.getText();
-		int cnt = Integer.parseInt(tfCount.getText());
-		int price = Integer.parseInt(tfPrice.getText());
-		
-		
-		// 등록하겠냐는 메세지
-		int infoAlert = JOptionPane.showConfirmDialog(this,
-		"<html>책제목 : " + bookName + "\n 수량 : " + cnt + " 개, "+price+"원으로 \n 수정하시겠습니까?", "알림",
-		JOptionPane.YES_NO_OPTION);
-		
-		if(infoAlert == JOptionPane.YES_OPTION) {
-			
-			if(updateBookInfo() == true && updatePressInfo(cnt, price) == true) {
-				JOptionPane.showMessageDialog(this, "<html>책제목 : " + bookName + "\n 수량 : " + cnt + " 개, "+price+"원으로  등록되었습니다.");
+
+		int infoAlert = JOptionPane.showConfirmDialog(this, "<html>책제목 : [" + bookName + "]을 삭제하시겠습니까?", "알림",
+				JOptionPane.YES_NO_OPTION);
+
+		if (infoAlert == JOptionPane.YES_OPTION) {
+			AdminBookDao dao = new AdminBookDao();
+			boolean check = dao.deleteBookInfo(bookName);
+			if (check == true) {
+				JOptionPane.showMessageDialog(this, "<html>책제목 : [" + bookName + "]이 삭제되었습니다.");
 				tableInit();
 				searchBook();
 				tfBookName.setText("");
@@ -610,111 +534,19 @@ public class AdminBookUpdatePage extends JPanel {
 				tfCount.setText("");
 				tfPrice.setText("");
 				lblImage.setIcon(null);
-				tfImagePath.setText(""); 
+
 			} else {
-				JOptionPane.showMessageDialog(this, "입력한 내용을 확인해주세요.");
+				JOptionPane.showMessageDialog(this, "오류가 발생했습니다.");
 			}
 		} else if (infoAlert == JOptionPane.NO_OPTION) {
-			tableInit();
-			searchBook();
 			tfBookName.setText("");
 			tfBookSubTitle.setText("");
 			tfContent.setText("");
 			tfCount.setText("");
 			tfPrice.setText("");
 			lblImage.setIcon(null);
-			tfImagePath.setText("");
-			System.out.println("아니요 성공");
-		}
-	}
-
-	//bookTable update
-	private boolean updateBookInfo() {
-		String bookName = tfBookName.getText();
-		String bookSubName = tfBookSubTitle.getText();
-		String bookContent = tfContent.getText();
-		String status = (String) cbStatus.getSelectedItem();
-		
-		boolean check;
-		int bookNum = cellClicked();
-		
-		AdminBookDao dao = null;
-		if(tfImagePath.getText().length() <= 0) {
-			dao = new AdminBookDao(bookNum, bookName, bookSubName, bookContent, status);
-			check =  dao.updateBook();
-		} else {
-			FileInputStream input = null;
-			File file = new File(tfImagePath.getText());
-			try {
-				input = new FileInputStream(file);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			dao = new AdminBookDao(bookNum, bookName, bookSubName, bookContent, input, status); 
-			check = dao.updateWithImgBook();
-		}
-		
-		return check;
-	}
-	
-	//press table update
-	private boolean updatePressInfo(int count, int price) {
-		int bookNum = cellClicked();
-		AdminBookDao dao = new AdminBookDao(bookNum, count, price);
-		
-		return dao.updatePress();
-	}
-
-	// 빈 칸 체크 메소드
-	private int nullCheck() {
-		int num = 0;
-		
-		if(lblImage.getIcon() != null) {
-			return num;
-		} else {
-			if (tfImagePath.getText().length() <= 0) {
-				JOptionPane.showMessageDialog(this, "이미지를 선택하세요.");
-				num++;
-				return num;
-			}
 		}
 
-		if (tfBookName.getText().length() <= 0) {
-			JOptionPane.showMessageDialog(this, "책 제목을 작성하세요.");
-			tfBookName.requestFocus();
-			num++;
-			return num;
-		}
-
-		if (tfContent.getText().length() <= 0) {
-			JOptionPane.showMessageDialog(this, "책 줄거리 작성하세요.");
-			tfContent.requestFocus();
-			num++;
-			return num;
-		}
-
-		if (tfContent.getText().length() >= 100) {
-			JOptionPane.showMessageDialog(this, "책 줄거리 100자 내로 작성하세요.");
-			tfContent.setText("");
-			tfContent.requestFocus();
-			num++;
-			return num;
-		}
-
-		if (tfCount.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "수량을 입력하세요.");
-			tfCount.requestFocus();
-			num++;
-			return num;
-		}
-
-		if (tfPrice.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "가격을 입력하세요.");
-			tfPrice.requestFocus();
-			num++;
-			return num;
-		}
-		return num;
 	}
 
 }
