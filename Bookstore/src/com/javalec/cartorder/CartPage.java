@@ -301,20 +301,26 @@ public class CartPage extends JDialog {
 	//	Table 초기화 하기
 		private void tableInit() {
 			outertable.addColumn("책 제목");
+			outertable.addColumn("부제");
 			outertable.addColumn("가격");
 	
 	
 	//	Table Column 크기 정하기
 		int colNo = 0;
 		TableColumn col = innertable.getColumnModel().getColumn(colNo);
-		int width = 155;
+		int width = 115;
 		col.setPreferredWidth(width);
 	
 		colNo = 1;
 		col = innertable.getColumnModel().getColumn(colNo);
-		width = 155;
+		width = 115;
 		col.setPreferredWidth(width);
 	
+		
+		colNo = 2;
+		col = innertable.getColumnModel().getColumn(colNo);
+		width = 79;
+		col.setPreferredWidth(width);
 		innertable.setAutoResizeMode(innertable.AUTO_RESIZE_OFF);
 	
 	
@@ -328,14 +334,14 @@ public class CartPage extends JDialog {
 		public ArrayList<CartorderDTO> searchAction() {
 			CartorderDAO dao = new CartorderDAO();
 			
-			// bookname, totalprice를 가져
+			// bookname, booktitle, totalprice를 가져오기
 			ArrayList<CartorderDTO> dtolist = dao.selecList();
 			for(int i = 0; i < dtolist.size(); i++) {
 				
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtolist.get(i).getTotalprice();
 				String wkTotalprice = decFormat.format(tmp3);
-				String[] qTxt = { dtolist.get(i).getBookname(), wkTotalprice };
+				String[] qTxt = { dtolist.get(i).getBookname(), dtolist.get(i).getBooktitle(), wkTotalprice };
 				outertable.addRow(qTxt);
 			}		
 			return dtolist;
@@ -343,10 +349,11 @@ public class CartPage extends JDialog {
 		
    
 		// 테이플 클릭했을 때
-		private void tableClick() {
+		private  void tableClick() {
 			int i = innertable.getSelectedRow();
 			CartorderDAO dao = new CartorderDAO();
-			CartorderDTO dto = dao.selectlist();
+			CartorderDTO dto = dao.tableclick();
+//			List<Object> array = new ArrayList<>();
 			
 			tfPublishername.setText(dto.getPublishename());
 			tfBookname.setText(dto.getBookname());
@@ -359,10 +366,6 @@ public class CartPage extends JDialog {
 			System.out.println(dto.getTotalMoney());
 			}
 	
-			
-		
-			
-	
 		
 		// 콤보박스 수량 check
 			private int cbCountinfo() {
@@ -373,15 +376,17 @@ public class CartPage extends JDialog {
 			
 			
 		// 수량에 맞게 가격 변동 
-		private void countAction() {
+		private void countAction(int cartcount, int totalmoney) {
 			String selectedValue = cbCount.getSelectedItem().toString();
-		      switch(cbCount.getSelectedIndex()) {
+			
+			switch(cbCount.getSelectedIndex()) {
 		       case 0:
 		            tfCartcount.setText(selectedValue);
+		          
 		            break;
 		       case 1:
 		    	    tfCartcount.setText(selectedValue);
-		    	   
+		    	    
 		            break;
 		       case 2:
 		    	   tfCartcount.setText(selectedValue);
@@ -389,7 +394,7 @@ public class CartPage extends JDialog {
 		          break;
 		       case 3:
 		    	   tfCartcount.setText(selectedValue);
-		    	   
+		    	  
 		          break;}
 		      
 		         
@@ -404,18 +409,18 @@ public class CartPage extends JDialog {
 			
 			CartorderDAO dao = new CartorderDAO();
 			CartorderDTO dto = dao.showTotalInfo();
-			
+				
 			DecimalFormat decFormat = new DecimalFormat("###,###");	
 			int tmp3 = dto.getTotalMoney();
-			String wkPrice = decFormat.format(tmp3);
 			String wkCartcount = decFormat.format(tmp3);
-			tfCartcount.setText(wkPrice);
-			tfTotalmoney.setText(wkPrice);
+			String wkTotalmoney = decFormat.format(tmp3);
+			tfCartcount.setText(wkCartcount);
+			tfTotalmoney.setText(Integer.toString(dto.totalMoney));
 		}
 
 
 		// 주문하기 버튼 클릭했을 때, (주문내역 테이블로 호출, 장바구니 테이블 delete 처리)
-		private void orderBtnclick(ArrayList<CartorderDTO> list) {
+		private void orderBtnclick() {
 			int num = 1;
 			
 			JFrame jframe = new JFrame();
@@ -427,8 +432,8 @@ public class CartPage extends JDialog {
 			dispose();
 			
 		// Orderpage로 정보 보내기
-//		Orderpage orderpage = new Orderpage();
-//		Orderpage.setVisible(true);
+		Orderpage orderpage = new Orderpage();
+		Orderpage.setVisible(true);
 //		Orderpage.selectByinfo(array);
 //
 //		return array;

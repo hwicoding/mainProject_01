@@ -5,7 +5,7 @@ import java.io.File;
 public class CartorderDTO {
 
 	String publishename, bookfilename, bookname, booktitle, authorname, genrekind, genreseckind, genrethirdkind;
-	int count, totalprice, cartcount, totalMoney;
+	int totalprice, count, cartcount, totalMoney;
 	File bookimg;
 	
 	public CartorderDTO() {
@@ -13,26 +13,25 @@ public class CartorderDTO {
 	}
 	
 	// outtable
-	public CartorderDTO(String bookname, int totalprice) {
+	public CartorderDTO(String bookname, String booktitle, int totalprice) {
 		super();
 		this.bookname = bookname;
+		this.booktitle = booktitle;
 		this.totalprice = totalprice;
 	}
 
     
 	public CartorderDTO(String publishename, String bookname, String booktitle, String authorname, String genrekind,
-			String genreseckind, String genrethirdkind, int count, int totalprice, String bookfilename) {
+						int cartcount, int totalprice) {
 		super();
 		this.publishename = publishename;
 		this.bookname = bookname;
 		this.booktitle = booktitle;
 		this.authorname = authorname;
 		this.genrekind = genrekind;
-		this.genreseckind = genreseckind;
-		this.genrethirdkind = genrethirdkind;
-		this.count = count;
+		this.cartcount = cartcount;
 		this.totalprice = totalprice;
-		this.bookfilename = bookfilename;
+		
 	}
 	
 
