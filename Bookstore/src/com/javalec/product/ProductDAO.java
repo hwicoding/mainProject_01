@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableModel;
+
 import com.javalec.util.ShareVar;
 
 public class ProductDAO {
@@ -55,18 +57,17 @@ public ProductDAO(int booknum) {
 
 //	Method
 
-	//	검색 결과를 Table 로 보내자
-	public ArrayList<ProductDTO> selecList(){
+	//	가나다순 검색 결과를 Table 로 보내자
+	public ArrayList<ProductDTO> searchName(){
 		ArrayList<ProductDTO> dtoList = new ArrayList<ProductDTO>();
 		
 		String select_01 = "select b.booknum, bookimage, bookname, bookfilename, booktitle, bookcontents, genrekind, genreseckind, ";
-		String select_02 = "genrethirdkind, authorname, translatorname, publishername, pressprice ";
+		String select_02 = "genrethirdkind, authorname, publishername, pressprice ";
 		String from_01 = "from book b, press p, publisher pub, bookstore.write w, ";
-		String from_02 = "author a, translator ttor, translate tte, genre g, register r ";
+		String from_02 = "author a, genre g, register r ";
 		String where_01 = "where pub.publishernum = w.publishernum and w.authornum = a.authornum ";
-		String where_02 = "and pub.publishernum = tte.publishernum and tte.translatornum = ttor.translatornum ";
-		String where_03 = "and b.booknum = p.booknum and p.publishernum = pub.publishernum ";
-		String where_04 = "and g.genrenum = r.genrenum and pub.publishernum = r.publishernum";
+		String where_02 = "and b.booknum = p.booknum and p.publishernum = pub.publishernum ";
+		String where_03 = "and g.genrenum = r.genrenum and pub.publishernum = r.publishernum";
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -76,7 +77,8 @@ public ProductDAO(int booknum) {
 			ResultSet rs = stmt_mysql.executeQuery(select_01 + select_02 +
 					 														from_01 + from_02 + 
 					 														where_01 + where_02 + 
-					 														where_03 +where_04);
+					 														where_03);		
+			
 			while(rs.next()) {
 
 				int booknum = rs.getInt(1);
@@ -88,9 +90,8 @@ public ProductDAO(int booknum) {
 				String genreseckind = rs.getString(8);
 				String genrethirdkind = rs.getString(9);
 				String authorname = rs.getString(10);
-				String translatorname = rs.getString(11);
-				String publishername = rs.getString(12);
-				int pressprice = rs.getInt(13);
+				String publishername = rs.getString(11);
+				int pressprice = rs.getInt(12);
 				
 //				file
 				File file = new File("./" + bookfilename);
@@ -105,6 +106,203 @@ public ProductDAO(int booknum) {
 						                                                  bookcontents, genrekind, genreseckind,
 						                                                  genrethirdkind, authorname,
 						                                                  translatorname, publishername, pressprice);
+
+				dtoList.add(dto);
+
+				
+			}
+			conn_mysql.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dtoList;
+		
+	}
+	
+	//	인기순 검색 결과를 Table 로 보내자
+	public ArrayList<ProductDTO> searchPopular(){
+		ArrayList<ProductDTO> dtoList = new ArrayList<ProductDTO>();
+		
+		String select_01 = "select b.booknum, bookimage, bookname, bookfilename, booktitle, bookcontents, genrekind, genreseckind, ";
+		String select_02 = "genrethirdkind, authorname, publishername, pressprice ";
+		String from_01 = "from book b, press p, publisher pub, bookstore.write w, ";
+		String from_02 = "author a, genre g, register r, purchase pur ";
+		String where_01 = "where pub.publishernum = w.publishernum and w.authornum = a.authornum ";
+		String where_02 = "and b.booknum = p.booknum and p.publishernum = pub.publishernum ";
+		String where_03 = "and g.genrenum = r.genrenum and pub.publishernum = r.publishernum ";
+		String where_04 = "and pur.booknum = b.booknum order by pur.purchasecount desc";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, ps_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+			
+			ResultSet rs = stmt_mysql.executeQuery(select_01 + select_02 +
+					 														from_01 + from_02 + 
+					 														where_01 + where_02 + 
+					 														where_03 +where_04);		
+			
+			while(rs.next()) {
+
+				int booknum = rs.getInt(1);
+				String bookname = rs.getString(3);
+				String bookfilename = rs.getString(4);
+				String booktitle = rs.getString(5);
+				String bookcontents = rs.getString(6);
+				String genrekind = rs.getString(7);
+				String genreseckind = rs.getString(8);
+				String genrethirdkind = rs.getString(9);
+				String authorname = rs.getString(10);
+				String publishername = rs.getString(11);
+				int pressprice = rs.getInt(12);
+				
+//				file
+				File file = new File("./" + bookfilename);
+				FileOutputStream output = new FileOutputStream(file);
+				InputStream input = rs.getBinaryStream(2);
+				byte[] buffer = new byte[1024];
+				while (input.read(buffer) > 0) {
+					output.write(buffer);
+				}
+
+				ProductDTO dto = new ProductDTO(booknum, bookname, bookfilename, booktitle,
+						                                                  bookcontents, genrekind, genreseckind,
+						                                                  genrethirdkind, authorname,
+						                                                  translatorname, publishername, pressprice);
+
+				dtoList.add(dto);
+
+				
+			}
+			conn_mysql.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dtoList;
+		
+	}
+	
+	//	텍스트 입력 시 가나다순 Table 로 보내자
+	public ArrayList<ProductDTO> searchNameCondition(String str){
+		ArrayList<ProductDTO> dtoList = new ArrayList<ProductDTO>();
+		
+		String select_01 = "select b.booknum, bookimage, bookname, bookfilename, booktitle, bookcontents, genrekind, genreseckind, ";
+		String select_02 = "genrethirdkind, authorname, publishername, pressprice ";
+		String from_01 = "from book b, press p, publisher pub, bookstore.write w, ";
+		String from_02 = "author a, genre g, register r, purchase pur ";
+		String where_01 = "where pub.publishernum = w.publishernum and w.authornum = a.authornum ";
+		String where_02 = "and b.booknum = p.booknum and p.publishernum = pub.publishernum ";
+		String where_03 = "and g.genrenum = r.genrenum and pub.publishernum = r.publishernum ";
+		String where_04 = "and (bookname like '%" + str + "%' or booktitle like '%" + str + "%')";
+		String where_05 = "and pur.booknum = b.booknum order by pur.purchasecount desc";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, ps_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+			
+			ResultSet rs = stmt_mysql.executeQuery(select_01 + select_02 +
+					 														from_01 + from_02 + 
+					 														where_01 + where_02 + 
+					 														where_03 +where_04 +
+					 														where_05);		
+			
+			while(rs.next()) {
+
+				int booknum = rs.getInt(1);
+				String bookname = rs.getString(3);
+				String bookfilename = rs.getString(4);
+				String booktitle = rs.getString(5);
+				String bookcontents = rs.getString(6);
+				String genrekind = rs.getString(7);
+				String genreseckind = rs.getString(8);
+				String genrethirdkind = rs.getString(9);
+				String authorname = rs.getString(10);
+				String publishername = rs.getString(11);
+				int pressprice = rs.getInt(12);
+				
+//				file
+				File file = new File("./" + bookfilename);
+				FileOutputStream output = new FileOutputStream(file);
+				InputStream input = rs.getBinaryStream(2);
+				byte[] buffer = new byte[1024];
+				while (input.read(buffer) > 0) {
+					output.write(buffer);
+				}
+
+				ProductDTO dto = new ProductDTO(booknum, bookname, bookfilename, booktitle,
+						                                                  bookcontents, genrekind, genreseckind,
+						                                                  genrethirdkind, authorname,
+						                                                  translatorname, publishername, pressprice);
+
+				dtoList.add(dto);
+
+				
+			}
+			conn_mysql.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dtoList;
+		
+	}
+	
+	//	텍스트 입력 시 인기순 Table 로 보내자
+	public ArrayList<ProductDTO> searchPopularCondition(String str){
+		ArrayList<ProductDTO> dtoList = new ArrayList<ProductDTO>();
+		
+		String select_01 = "select b.booknum, bookimage, bookname, bookfilename, booktitle, bookcontents, genrekind, genreseckind, ";
+		String select_02 = "genrethirdkind, authorname, publishername, pressprice ";
+		String from_01 = "from book b, press p, publisher pub, bookstore.write w, ";
+		String from_02 = "author a, translator ttor, translate tte, genre g, register r, purchase pur ";
+		String where_01 = "where pub.publishernum = w.publishernum and w.authornum = a.authornum ";
+		String where_02 = "and b.booknum = p.booknum and p.publishernum = pub.publishernum ";
+		String where_03 = "and g.genrenum = r.genrenum and pub.publishernum = r.publishernum ";
+		String where_04 = "and (bookname like '%" + str + "%' or booktitle like '%" + str + "%') ";
+		String where_05 = "and pur.booknum = b.booknum order by pur.purchasecount desc";
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, ps_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+			
+			ResultSet rs = stmt_mysql.executeQuery(select_01 + select_02 +
+					 														from_01 + from_02 + 
+					 														where_01 + where_02 + 
+					 														where_03 +where_04 +
+					 														where_05);		
+			
+			while(rs.next()) {
+
+				int booknum = rs.getInt(1);
+				String bookname = rs.getString(3);
+				String bookfilename = rs.getString(4);
+				String booktitle = rs.getString(5);
+				String bookcontents = rs.getString(6);
+				String genrekind = rs.getString(7);
+				String genreseckind = rs.getString(8);
+				String genrethirdkind = rs.getString(9);
+				String authorname = rs.getString(10);
+				String publishername = rs.getString(11);
+				int pressprice = rs.getInt(12);
+				
+//				file
+				File file = new File("./" + bookfilename);
+				FileOutputStream output = new FileOutputStream(file);
+				InputStream input = rs.getBinaryStream(2);
+				byte[] buffer = new byte[1024];
+				while (input.read(buffer) > 0) {
+					output.write(buffer);
+				}
+
+				ProductDTO dto = new ProductDTO(booknum, bookname, bookfilename, booktitle,
+						                                                  bookcontents, genrekind, genreseckind,
+						                                                  genrethirdkind, authorname,
+						                                                  translatorname, publishername, pressprice);
+
 				dtoList.add(dto);
 
 				
