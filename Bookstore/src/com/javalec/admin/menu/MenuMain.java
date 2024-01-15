@@ -36,6 +36,7 @@ import com.javalec.admin.stock.AdminStockStatusDao;
 import com.javalec.admin.stock.AdminStockStatusDto;
 import com.javalec.admin.stock.AdminStockStatusPage;
 import com.javalec.admin.stock.DefaultForm;
+import com.javalec.user.Login;
 
 import javax.swing.JLabel;
 import java.awt.Panel;
@@ -516,8 +517,8 @@ public class MenuMain extends JFrame {
 	
 	private void btnLogoutClick() {
 		this.dispose();
-		//Login main = new Login();
-		//main.main(null);
+		Login page = new Login();
+		page.setVisible(true);
 	}
 	
 	private void btnQuitClick() {
