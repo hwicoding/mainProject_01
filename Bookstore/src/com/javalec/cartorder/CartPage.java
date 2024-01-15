@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import com.javalec.product.InformationPage;
+import com.javalec.product.SearchPage;
 import com.javalec.user.UserDAO;
 
 import javax.swing.JScrollPane;
@@ -39,6 +40,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class CartPage extends JDialog {
 
@@ -60,12 +65,12 @@ public class CartPage extends JDialog {
 	private JTextField tfGenre;
 	private JTextField tfCartcount;
 	private JTextField tfTotalmoney;
-	private JComboBox cbCount;
 	private JButton btnOrder;
 	
 	
 	private final DefaultTableModel outertable = new DefaultTableModel();
 	ArrayList<CartorderDTO> dtolist = null;
+	private JTextField textField;
 	
 	/**
 	 * Launch the application.
@@ -121,8 +126,8 @@ public class CartPage extends JDialog {
 		contentPanel.add(getTfGenre());
 		contentPanel.add(getTfCartcount());
 		contentPanel.add(getTfTotalmoney());
-		contentPanel.add(getCbCount());
 		contentPanel.add(getBtnOrder());
+		contentPanel.add(getTextField());
 	}
 	ImageIcon imageSetSize(ImageIcon icon, int i, int j) {
 		Image ximg = icon.getImage();
@@ -141,14 +146,23 @@ public class CartPage extends JDialog {
 	}
 	private JTable getInnertable() {
 		if (innertable == null) {
-			innertable = new JTable();
+			innertable = new JTable() {
+				
+				  @Override
+		            public boolean isCellEditable(int row, int column) {
+		               return false;
+		            }
+				
+				
+			};
+			innertable.setFillsViewportHeight(true);
+			
 			innertable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					tableClick();
 					}
 			});
-			innertable.setFillsViewportHeight(true);
 			innertable.setBorder(new LineBorder(new Color(0,0,0)));
 			innertable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innertable.setModel(outertable);
@@ -252,7 +266,53 @@ public class CartPage extends JDialog {
 	private JTextField getTfCartcount() {
 		if (tfCartcount == null) {
 			tfCartcount = new JTextField();
-			tfCartcount.setEditable(false);
+			tfCartcount.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					
+					if(e.getKeyCode()==KeyEvent.VK_ENTER) {
+						int b= Integer.parseInt(tfCartcount.getText()); 
+						
+						if(0>=b || b>=11) {
+							JOptionPane.showMessageDialog(null, "숫자는 1~10까지 입력해주십시오.");
+						}else {
+							int d= Integer.parseInt(tfTotalmoney.getText());
+							int result = b*d;
+							tfTotalmoney.setText(Integer.toString(result));
+							tfCartcount.setEnabled(false);
+							
+							
+							
+						}
+						
+						
+					}
+				}
+				@Override
+				public void keyTyped(KeyEvent e) {
+					
+					char c = e.getKeyChar();
+					
+					if(c != '\b') {	
+						if (((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+								isSpecialCharacter(c)||(c >= 'ㄱ' && c <= 'ㅎ')||(c >= 'ㅏ' && c <= 'ㅣ'))){
+							JOptionPane.showMessageDialog(null, "한글, 영어,특수문자는 사용 불가합니다.");
+							e.consume(); // 이벤트를 소비하고 무시
+						}
+						
+						// 여기서 특수문자 여부를 확인하고 원하는 동작 수행
+						if (isSpecialCharacter(c)) {
+							// 특수문자 처리 로직
+							System.out.println("Special Character Typed: " + c);
+						}
+					}
+				}
+			});
+			tfCartcount.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+				}
+			});
 			tfCartcount.setColumns(10);
 			tfCartcount.setBounds(114, 494, 55, 21);
 		}
@@ -267,27 +327,12 @@ public class CartPage extends JDialog {
 		}
 		return tfTotalmoney;
 	}
-	private JComboBox getCbCount() {
-		if (cbCount == null) {
-			cbCount = new JComboBox();
-			cbCount.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					countAction();
-					
-					
-				}
-			});
-			cbCount.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4"}));
-			cbCount.setBounds(181, 493, 52, 23);
-		}
-		return cbCount;
-	}
 	private JButton getBtnOrder() {
 		if (btnOrder == null) {
 			btnOrder = new JButton("주문하기");
 			btnOrder.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					orderBtnclick();
+					orderpage();
 				}
 			});
 			btnOrder.setBounds(253, 603, 91, 23);
@@ -300,27 +345,28 @@ public class CartPage extends JDialog {
 	
 	//	Table 초기화 하기
 		private void tableInit() {
+			outertable.addColumn("목록");
 			outertable.addColumn("책 제목");
-			outertable.addColumn("부제");
 			outertable.addColumn("가격");
+			outertable.setColumnCount(3);
 	
 	
 	//	Table Column 크기 정하기
 		int colNo = 0;
 		TableColumn col = innertable.getColumnModel().getColumn(colNo);
-		int width = 115;
-		col.setPreferredWidth(width);
-	
+		int width = 100;
+		col.setPreferredWidth(width);	
+			
 		colNo = 1;
 		col = innertable.getColumnModel().getColumn(colNo);
-		width = 115;
+		width = 105;
 		col.setPreferredWidth(width);
 	
-		
 		colNo = 2;
 		col = innertable.getColumnModel().getColumn(colNo);
-		width = 79;
+		width = 109;
 		col.setPreferredWidth(width);
+	
 		innertable.setAutoResizeMode(innertable.AUTO_RESIZE_OFF);
 	
 	
@@ -334,14 +380,15 @@ public class CartPage extends JDialog {
 		public ArrayList<CartorderDTO> searchAction() {
 			CartorderDAO dao = new CartorderDAO();
 			
-			// bookname, booktitle, totalprice를 가져오기
+			// bookname, totalprice를 가져
 			ArrayList<CartorderDTO> dtolist = dao.selecList();
 			for(int i = 0; i < dtolist.size(); i++) {
 				
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtolist.get(i).getTotalprice();
+				String tmp2 = Integer.toString (dtolist.get(i).getNum());
 				String wkTotalprice = decFormat.format(tmp3);
-				String[] qTxt = { dtolist.get(i).getBookname(), dtolist.get(i).getBooktitle(), wkTotalprice };
+				String[] qTxt = { tmp2,dtolist.get(i).getBookname(), wkTotalprice };
 				outertable.addRow(qTxt);
 			}		
 			return dtolist;
@@ -349,97 +396,147 @@ public class CartPage extends JDialog {
 		
    
 		// 테이플 클릭했을 때
-		private  void tableClick() {
-			int i = innertable.getSelectedRow();
-			CartorderDAO dao = new CartorderDAO();
-			CartorderDTO dto = dao.tableclick();
-//			List<Object> array = new ArrayList<>();
+		private void tableClick() {
 			
-			tfPublishername.setText(dto.getPublishename());
-			tfBookname.setText(dto.getBookname());
-			tfBooktitle.setText(dto.getBooktitle());
-			tfAuthorname.setText(dto.getAuthorname());
-			tfGenre.setText(dto.getGenrekind());
-			tfCartcount.setText(Integer.toString(dto.getCartcount()));
-			tfTotalmoney.setText(Integer.toString(dto.getTotalMoney()));
-			System.out.println(dto.getCartcount());
-			System.out.println(dto.getTotalMoney());
+			int j=innertable.getSelectedRow();
+			
+			
+		//	for(int i =0;i<innertable.getColumnCount();i++) {
+			//	System.out.println(innertable.getModel().getValueAt(row, i)+"\t");
+			//}
+		
+			
+			CartorderDAO dao = new CartorderDAO();
+			dao.selectlist();
+			ArrayList<CartorderDTO> dtolist = dao.selectlist();
+			
+			
+			tfPublishername.setText(dtolist.get(j).getPublishename());
+			tfBookname.setText(dtolist.get(j).getBookname());
+			tfBooktitle.setText(dtolist.get(j).getBooktitle());
+			tfAuthorname.setText(dtolist.get(j).getAuthorname());
+			tfGenre.setText(dtolist.get(j).getGenrekind());
+			tfCartcount.setText(Integer.toString(dtolist.get(j).getCount()));
+			tfTotalmoney.setText(Integer.toString(dtolist.get(j).getTotalprice()));
+			textField.setText(Integer.toString(dtolist.get(j).getBooknum()));
+			tfCartcount.setEnabled(true);
+			tfCartcount.requestFocus();
+		
+			
+					
+				
 			}
 	
 		
-		// 콤보박스 수량 check
-			private int cbCountinfo() {
-				int i = cbCount.getSelectedIndex();
-				return i;
-				
-			}
+	
+			
+		
+			
+	
+		
+		
 			
 			
 		// 수량에 맞게 가격 변동 
-		private void countAction(int cartcount, int totalmoney) {
+		/*private void countAction(int price) {
 			String selectedValue = cbCount.getSelectedItem().toString();
-			
-			switch(cbCount.getSelectedIndex()) {
+		      switch(cbCount.getSelectedIndex()) {
 		       case 0:
-		            tfCartcount.setText(selectedValue);
-		          
+		            tfCartcount.setEnabled(false);
 		            break;
 		       case 1:
+		    	   tfCartcount.setEnabled(true);
 		    	    tfCartcount.setText(selectedValue);
-		    	    
-		            break;
+		    	    break;
 		       case 2:
+		    	   tfCartcount.setEnabled(true);
 		    	   tfCartcount.setText(selectedValue);
-		    	  
-		          break;
+		    	  // tfTotalmoney.setText("0");
+		    	   int b= Integer.parseInt(tfTotalmoney.getText()); 
+		    	   System.out.println(b);
+		    	   
+		    	   int c=	Integer.parseInt(selectedValue);
+		    	   System.out.println(c);
+		    	   int d =Integer.parseInt(tfCartcount.getText());
+		    	   System.out.println(d);
+		    	   int result = price*c;
+		    	   tfTotalmoney.setText(Integer.toString(result));
+		    	   System.out.println(result);
+		    	   break;
+	
 		       case 3:
+		    	   tfCartcount.setEnabled(true);
 		    	   tfCartcount.setText(selectedValue);
-		    	  
-		          break;}
+		          break;
+		       case 4:
+		    	   tfCartcount.setEnabled(true);
+		    	   tfCartcount.setText(selectedValue);
+			          break;}
 		      
 		         
 			
-			int Countnumber = cbCount.getSelectedIndex();
+			//int Countnumber = cbCount.getSelectedIndex();
 			
-			tfCartcount.setText(String.valueOf(Countnumber+1));
+			//tfCartcount.setText(String.valueOf(Countnumber+1));
 			
-		}
+		}*/
 		
 		private void showTotalInfo() {
 			
 			CartorderDAO dao = new CartorderDAO();
 			CartorderDTO dto = dao.showTotalInfo();
-				
+			
 			DecimalFormat decFormat = new DecimalFormat("###,###");	
 			int tmp3 = dto.getTotalMoney();
+			String wkPrice = decFormat.format(tmp3);
 			String wkCartcount = decFormat.format(tmp3);
-			String wkTotalmoney = decFormat.format(tmp3);
-			tfCartcount.setText(wkCartcount);
-			tfTotalmoney.setText(Integer.toString(dto.totalMoney));
+			tfCartcount.setText(wkPrice);
+			tfTotalmoney.setText(wkPrice);
 		}
 
 
 		// 주문하기 버튼 클릭했을 때, (주문내역 테이블로 호출, 장바구니 테이블 delete 처리)
-		private void orderBtnclick() {
-			int num = 1;
+	
+		private void orderpage() {
+			int a = Integer.parseInt(tfCartcount.getText());
+			int b  = Integer.parseInt(textField.getText());
+			System.out.println(a);
+			System.out.println(b);
+			CartorderDAO dao = new CartorderDAO(a,b);
+			boolean result = dao.insertAction();
 			
-			JFrame jframe = new JFrame();
-			jframe.setAlwaysOnTop(true);
-			CartorderDAO dao = new CartorderDAO();
-			if(JOptionPane.showConfirmDialog(jframe, "위 상품들을 구매하시겠습니까?","알림",JOptionPane.YES_NO_OPTION) == 0) {
-
+			if(result==true) {
+				JOptionPane.showMessageDialog(null, "...");
+				dispose();
+				SearchPage search = new SearchPage();
+				search.setVisible(true);
 				
-			dispose();
+			}else {
+				JOptionPane.showMessageDialog(null, "실패");}
+			
 			
 		// Orderpage로 정보 보내기
-		Orderpage orderpage = new Orderpage();
-		Orderpage.setVisible(true);
+//		Orderpage orderpage = new Orderpage();
+//		Orderpage.setVisible(true);
 //		Orderpage.selectByinfo(array);
 //
 //		return array;
 
 			}
+		
+		private boolean isSpecialCharacter(char ch) {
+	        // 특수문자 여부를 판단하는 메서드
+	        return !Character.isLetterOrDigit(ch) && !Character.isWhitespace(ch);
+	    }
+		
+	private JTextField getTextField() {
+		if (textField == null) {
+			textField = new JTextField();
+			textField.setBounds(114, 565, 96, 21);
+			textField.setColumns(10);
 		}
+		return textField;
+	}
 }
 
 
