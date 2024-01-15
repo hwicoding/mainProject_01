@@ -106,7 +106,7 @@ public class CartPage extends JDialog {
 		});
 	
 		setTitle("장바구니");
-		setBounds(100, 100, 401, 760);
+		setBounds(650, 180, 400, 760);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
