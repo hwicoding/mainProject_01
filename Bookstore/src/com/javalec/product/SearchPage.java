@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.text.html.HTML;
 
-import com.javalec.cartorder.Cart;
+import com.javalec.cartorder.CartPage;
 import com.javalec.user.Mypage;
 import com.mysql.cj.xdevapi.Table;
 
@@ -135,8 +135,8 @@ public class SearchPage extends JDialog {
 							dispose();
 							
 //							열기
-							Cart cart = new Cart();
-							cart.setVisible(true);
+							CartPage cartPage = new CartPage();
+							cartPage.setVisible(true);
 					 }
 				}
 			});

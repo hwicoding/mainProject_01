@@ -481,18 +481,18 @@ public class CartPage extends JDialog {
 			
 		}*/
 		
-		private void showTotalInfo() {
-			
-			CartorderDAO dao = new CartorderDAO();
-			CartorderDTO dto = dao.showTotalInfo();
-			
-			DecimalFormat decFormat = new DecimalFormat("###,###");	
-			int tmp3 = dto.getTotalMoney();
-			String wkPrice = decFormat.format(tmp3);
-			String wkCartcount = decFormat.format(tmp3);
-			tfCartcount.setText(wkPrice);
-			tfTotalmoney.setText(wkPrice);
-		}
+//		private void showTotalInfo() {
+//			
+//			CartorderDAO dao = new CartorderDAO();
+//			CartorderDTO dto = dao.showTotalInfo();
+//			
+//			DecimalFormat decFormat = new DecimalFormat("###,###");	
+//			int tmp3 = dto.getTotalMoney();
+//			String wkPrice = decFormat.format(tmp3);
+//			String wkCartcount = decFormat.format(tmp3);
+//			tfCartcount.setText(wkPrice);
+//			tfTotalmoney.setText(wkPrice);
+//		}
 
 
 		// 주문하기 버튼 클릭했을 때, (주문내역 테이블로 호출, 장바구니 테이블 delete 처리)

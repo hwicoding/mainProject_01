@@ -64,7 +64,7 @@ public class CartorderDAO {
 		   ArrayList<CartorderDTO> dtoliList = new ArrayList<CartorderDTO>();
 	   
 		   // bookname, price를 불러와야
-		   String where1 = "select cartnum, bookname ,(pressprice*cartcount) as total ";
+		   String where1 = "select cartnum, bookname, pressprice ";
 		   String where2 = "from book, press, cart ";
 		   String where3 = "where press.booknum = book.booknum and cart.booknum = book.booknum ";
 		   
@@ -99,7 +99,7 @@ public class CartorderDAO {
 		  //CartorderDTO dto = null;
 		  
 		  
-		  String query = "select publishername, bookname, booktitle, authorname, genrekind, genreseckind, genrethirdkind, cartcount, pressprice, cart.booknum ";
+		  String query = "select publishername, bookname, booktitle, authorname, genrekind, genreseckind, genrethirdkind, pressprice, cart.booknum ";
 		  String query1 = " from publisher, book, bookstore.write w, author, bookstore.register r, genre, cart, press ";
 		  String query2 = " where publisher.publishernum = press.publishernum and publisher.publishernum = w.publishernum and w.authornum = author.authornum ";
 		  String query3 = " and publisher.publishernum = r.publishernum and r.genrenum = genre.genrenum ";
@@ -119,9 +119,8 @@ public class CartorderDAO {
 					String wkGenrekind = rs.getString(5);
 					String wkGenreseckind = rs.getString(6);
 					String wkGenrethirdkind = rs.getString(7);
-					int wkCount = rs.getInt(8);
-					int wkTotalprice = rs.getInt(9);
-					int wkbooknum = rs.getInt(10);
+					int wkTotalprice = rs.getInt(8);
+					int wkbooknum = rs.getInt(9);
 					//String wkBookfilename = rs.getString(10);
 					
 //					file
@@ -131,7 +130,7 @@ public class CartorderDAO {
 //					byte[] buffer = new byte[1024];
 //					while (input.read(buffer) > 0) {
 //						output.write(buffer);
-					CartorderDTO dto = new CartorderDTO(wkPublishername, wkBookname, wkBooktitle, wkAuthorname, wkGenrekind, wkGenreseckind, wkGenrethirdkind, wkCount, wkTotalprice,wkbooknum);
+					CartorderDTO dto = new CartorderDTO(wkPublishername, wkBookname, wkBooktitle, wkAuthorname, wkGenrekind, wkGenreseckind, wkGenrethirdkind, wkTotalprice,wkbooknum);
 					dtolist.add(dto);
 //					}
 				}
@@ -152,37 +151,37 @@ public class CartorderDAO {
 	}
 
 
-	// 수량에 맞춰서 금액 변경하기 
-	  public CartorderDTO showTotalInfo() {
-		  CartorderDTO dto = null;
-		  String query = "select cartcount, (cartcount*pressprice) as totalsum ";
-		  String query1 = "from cart, book, press ";
-		  String query2 = "where cart.booknum = book.booknum and press.booknum = book.booknum ";
-		  
-		  try {
-
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, ps_mysql);
-				Statement stmt_mysql = conn_mysql.createStatement();
-
-				ResultSet rs = stmt_mysql.executeQuery(query + query1 + query2);
-				
-				if(rs.next()) {
-					int wkCartcount = rs.getInt(1);
-					int wkTotalmoney = rs.getInt(2);
-					
-					int a = wkCartcount*wkTotalmoney;
-					
-					dto = new CartorderDTO(wkCartcount, a);
-				}
-				
-				conn_mysql.close();
-	  } catch (Exception e) {
-			e.printStackTrace();
-	  
-	  	}
-		  return dto;
-	  }
+//	// 수량에 맞춰서 금액 변경하기 
+//	  public CartorderDTO showTotalInfo() {
+//		  CartorderDTO dto = null;
+//		  String query = "select cartcount, (cartcount*pressprice) as totalsum ";
+//		  String query1 = "from cart, book, press ";
+//		  String query2 = "where cart.booknum = book.booknum and press.booknum = book.booknum ";
+//		  
+//		  try {
+//
+//				Class.forName("com.mysql.cj.jdbc.Driver");
+//				Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, ps_mysql);
+//				Statement stmt_mysql = conn_mysql.createStatement();
+//
+//				ResultSet rs = stmt_mysql.executeQuery(query + query1 + query2);
+//				
+//				if(rs.next()) {
+//					int wkCartcount = rs.getInt(1);
+//					int wkTotalmoney = rs.getInt(2);
+//					
+//					int a = wkCartcount*wkTotalmoney;
+//					
+//					dto = new CartorderDTO(wkCartcount, a);
+//				}
+//				
+//				conn_mysql.close();
+//	  } catch (Exception e) {
+//			e.printStackTrace();
+//	  
+//	  	}
+//		  return dto;
+//	  }
 	  
 /*
 	  public CartorderDTO a() {

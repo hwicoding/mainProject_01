@@ -84,7 +84,7 @@ public class CartorderDTO {
 
     
 	public CartorderDTO(String publishename, String bookname, String booktitle, String authorname, String genrekind,
-			String genreseckind, String genrethirdkind, int count, int totalprice,int booknum) {
+			String genreseckind, String genrethirdkind, int totalprice,int booknum) {
 		super();
 		this.publishename = publishename;
 		this.bookname = bookname;
@@ -93,7 +93,6 @@ public class CartorderDTO {
 		this.genrekind = genrekind;
 		this.genreseckind = genreseckind;
 		this.genrethirdkind = genrethirdkind;
-		this.count = count;
 		this.totalprice = totalprice;
 		this.booknum=booknum;
 		//this.bookfilename = bookfilename;
