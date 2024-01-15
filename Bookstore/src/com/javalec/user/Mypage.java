@@ -7,6 +7,10 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.javalec.cartorder.CartPage;
+import com.javalec.product.SearchPage;
+
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -56,7 +60,7 @@ public class Mypage extends JDialog {
 			public void windowActivated(WindowEvent e) {
 			}
 		});
-		setBounds(100, 100, 400, 760);
+		setBounds(750, 180, 400, 760);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setForeground(Color.WHITE);
@@ -78,6 +82,7 @@ public class Mypage extends JDialog {
 			btnNewButton = new JButton("장바구니");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					cart();
 				}
 			});
 			btnNewButton.setBackground(new Color(30, 144, 255));
@@ -100,6 +105,11 @@ public class Mypage extends JDialog {
 	private JButton getBtnNewButton_2() {
 		if (btnNewButton_2 == null) {
 			btnNewButton_2 = new JButton("로그아웃");
+			btnNewButton_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					logout();
+				}
+			});
 			btnNewButton_2.setBackground(new Color(100, 149, 237));
 			btnNewButton_2.setFont(new Font("Malgun Gothic", Font.PLAIN, 25));
 			btnNewButton_2.setForeground(Color.WHITE);
@@ -149,7 +159,9 @@ public class Mypage extends JDialog {
 			lblMy.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					JOptionPane.showMessageDialog(null, "현재 페이지입니다.");
+					dispose();
+					Mypage mypage = new Mypage();
+					mypage.setVisible(true);
 				}
 			});
 			lblMy.setBounds(295, 670, 55, 50);
@@ -159,6 +171,12 @@ public class Mypage extends JDialog {
 	private JLabel getLblHome() {
 		if (lblHome == null) {
 			lblHome = new JLabel("New label");
+			lblHome.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					searchpage();
+				}
+			});
 			lblHome.setBounds(157, 672, 55, 50);
 		}
 		return lblHome;
@@ -166,8 +184,30 @@ public class Mypage extends JDialog {
 	private JLabel getLblBack() {
 		if (lblBack == null) {
 			lblBack = new JLabel("New label");
+			lblBack.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					dispose();
+				}
+			});
 			lblBack.setBounds(30, 670, 50, 50);
 		}
 		return lblBack;
+	}
+	
+	private void logout() {
+		JOptionPane.showMessageDialog(null, "로그아웃 완료");
+		Login login = new Login();
+		login.setVisible(true);
+		dispose();
+	}
+	private void searchpage() {
+		SearchPage searchpage = new SearchPage();
+		searchpage.setVisible(true);
+		dispose();
+	}
+	private void cart() {
+		CartPage cart = new CartPage();
+		cart.setVisible(true);
 	}
 }
