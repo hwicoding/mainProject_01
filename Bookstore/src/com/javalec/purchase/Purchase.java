@@ -23,6 +23,7 @@ import javax.swing.ListSelectionModel;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -37,9 +38,12 @@ public class Purchase extends JDialog {
 	private JScrollPane scrollPane;
 	private JTable innertable;
 	
+	//outbertable 만들기
 	private final DefaultTableModel outertable = new DefaultTableModel();
 
-	
+	//	file 정리
+		ArrayList<CartorderDTO> dtoList = null;
+		
 	/**
 	 * Launch the application.
 	 */
@@ -87,15 +91,11 @@ public class Purchase extends JDialog {
 	private JTable getInnertable() {
 		if (innertable == null) {
 			innertable = new JTable();
-			innertable.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
 			innertable.setFillsViewportHeight(true);
 			innertable.setBorder(new LineBorder(new Color(0,0,0)));
 			innertable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innertable.setModel(outertable);
-				}
-			});
+				
 		}
 		return innertable;
 	}
@@ -103,23 +103,29 @@ public class Purchase extends JDialog {
 	//	Table 초기화 하기
 		private void tableInit() {
 			outertable.addColumn("주문일");
-			outertable.addColumn("주문내용");
+			outertable.addColumn("책 제목");
+			outertable.addColumn("주문수량");
 			outertable.addColumn("총금액");
 			
     //	Table Column 크기 정하기
 			int colNo = 0;
 			TableColumn col = innertable.getColumnModel().getColumn(colNo);
-			int width = 100;
+			int width = 80;
 			col.setPreferredWidth(width);
 		
 			colNo = 1;
 			col = innertable.getColumnModel().getColumn(colNo);
-			width = 100;
+			width = 80;
 			col.setPreferredWidth(width);
 			
 			colNo = 2;
 			col = innertable.getColumnModel().getColumn(colNo);
-			width = 100;
+			width = 80;
+			col.setPreferredWidth(width);
+			
+			colNo = 3;
+			col = innertable.getColumnModel().getColumn(colNo);
+			width = 80;
 			col.setPreferredWidth(width);
 		
 			innertable.setAutoResizeMode(innertable.AUTO_RESIZE_OFF);
@@ -130,20 +136,21 @@ public class Purchase extends JDialog {
 				outertable.removeRow(0);
 			}
 		}
+			
 			// 테이블에 조회되도록
 			public ArrayList<PurchaseDTO> searchAction() {
 			PurchaseDAO dao = new PurchaseDAO();
 			
-			// purchasedate, purchasedetails, totalprice를 가져오기
+			// purchasedate, bookname, purchasecount, totalsum를 가져오기
 			ArrayList<PurchaseDTO> dtolist = dao.selecList();
 				for(int i = 0; i < dtolist.size(); i++) {
+				Date wkPurchasedate = dtolist.get(i).getPurchasedate();
+				String wkPurchasecount = Integer.toString(dtolist.get(i).getPurchasecount());
 				
 				DecimalFormat decFormat = new DecimalFormat("###,###");
-				int tmp3 = dtolist.get(i).getPurchasedate();
-				String wkPurchasedate = decFormat.format(tmp3);
-				int tmp4 = dtolist.get(i).getTotalprice();
-				String wkTotalprice = decFormat.format(tmp4);
-				String[] qTxt = { wkPurchasedate, dtolist.get(i).getPurchasedetails(), wkTotalprice };
+				int tmp3 = dtolist.get(i).getTotalsum();
+				String wkTotalsum = decFormat.format(tmp3);
+				Object[] qTxt = { wkPurchasedate, dtolist.get(i).getBookname(), wkPurchasecount, wkTotalsum };
 				outertable.addRow(qTxt);
 			}		
 			return dtolist;
