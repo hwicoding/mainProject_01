@@ -1,5 +1,13 @@
 package com.javalec.purchase;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.javalec.cartorder.CartorderDTO;
 import com.javalec.util.ShareVar;
 
 public class PurchaseDAO {
@@ -20,12 +28,11 @@ public class PurchaseDAO {
 	}
 
 
-	public PurchaseDAO(int purchasedate, String purchasedetails, int totalprice, String purchasestatus) {
+	public PurchaseDAO(int purchasedate, String purchasedetails, int totalprice) {
 		super();
 		this.purchasedate = purchasedate;
 		this.purchasedetails = purchasedetails;
 		this.totalprice = totalprice;
-		this.purchasestatus = purchasestatus;
 	}
 
 
@@ -39,7 +46,43 @@ public class PurchaseDAO {
 		this.purchasestatus = purchasestatus;
 	}
 	
+	// Method
 	
+	//테이블에 정보조회되도록 select
+	   public ArrayList<PurchaseDTO> selecList() {
+		   ArrayList<PurchaseDTO> dtoList = new ArrayList<PurchaseDTO>();
+	   
+		   // purchasedate, purchasedetails, totalprice를 가져오기
+		   String where1 = "select purchasedate, bookname, purchasecount, pressprice ";
+		   String where2 = "from purchase, press, book, cart ";
+		   String where3 = "where purchase.booknum = book.booknum and press.booknum = book.booknum and cart.booknum = book.booknum ";
+		   
+		   try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, ps_mysql);
+				Statement stmt_mysql = conn_mysql.createStatement();
+
+				ResultSet rs = stmt_mysql.executeQuery(where1 + where2 + where3);
+				
+				while(rs.next()) {
+					
+					Date wkPurchasedate = rs.getDate(1);
+					String wkBookname = rs.getString(2);
+					int wkPurchasecount = rs.getInt(3);
+					int wkTotalsum = rs.getInt(4);
+					
+					PurchaseDTO dto = new PurchaseDTO(wkPurchasedate, wkBookname, wkPurchasecount, wkTotalsum);
+					dtoList.add(dto);
+				
+				
+				}
+		   	    conn_mysql.close();
+		   	    
+		   } catch (Exception e) {
+			   e.printStackTrace();
+		   }
+		   return dtoList;
+	   }
 	
 	
 	

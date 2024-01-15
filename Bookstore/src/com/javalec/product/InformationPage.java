@@ -23,6 +23,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.JTextArea;
+import java.awt.Color;
 
 public class InformationPage extends JDialog {
 
@@ -39,7 +41,6 @@ public class InformationPage extends JDialog {
 	private JLabel lblPublisher;
 	private JLabel lblPrice;
 	private JLabel lblGenre;
-	private JLabel lblBookcontents;
 	private JButton btnCart;
 	private JLabel lblBokNum;
 	private JLabel lblNewLabel;
@@ -49,6 +50,8 @@ public class InformationPage extends JDialog {
 	private JLabel lblNewLabel_1_1_1_1;
 	private JLabel lblNewLabel_1_1_1_1_1;
 	private JLabel lblNewLabel_1_1_1_1_1_1;
+	private JTextArea taBookcontents;
+	private JLabel lblNewLabel_1_1_1_1_1_1_1;
 
 	
 
@@ -79,7 +82,7 @@ public class InformationPage extends JDialog {
 			}
 		});
 		setTitle("logo");
-		setBounds(750, 180, 400, 760);
+		setBounds(650, 180, 400, 760);
 		getContentPane().setLayout(null);
 		getContentPane().add(getLblLogo());
 		getContentPane().add(getLblBack());
@@ -93,7 +96,6 @@ public class InformationPage extends JDialog {
 		getContentPane().add(getLblPublisher());
 		getContentPane().add(getLblPrice());
 		getContentPane().add(getLblGenre());
-		getContentPane().add(getLblBookcontents());
 		getContentPane().add(getBtnCart());
 		getContentPane().add(getLblBokNum());
 		getContentPane().add(getLblNewLabel());
@@ -103,6 +105,8 @@ public class InformationPage extends JDialog {
 		getContentPane().add(getLblNewLabel_1_1_1_1());
 		getContentPane().add(getLblNewLabel_1_1_1_1_1());
 		getContentPane().add(getLblNewLabel_1_1_1_1_1_1());
+		getContentPane().add(getTaBookcontents());
+		getContentPane().add(getLblNewLabel_1_1_1_1_1_1_1());
 
 	}
 
@@ -262,19 +266,13 @@ public class InformationPage extends JDialog {
 		}
 		return lblGenre;
 	}
-	private JLabel getLblBookcontents() {
-		if (lblBookcontents == null) {
-			lblBookcontents = new JLabel("New label");
-			lblBookcontents.setBounds(70, 500, 297, 106);
-		}
-		return lblBookcontents;
-	}
 	
 	private JButton getBtnCart() {
 		if (btnCart == null) {
-			btnCart = new JButton("New button");
+			btnCart = new JButton("장바구니 담기");
+			btnCart.setFont(new Font("나눔고딕", Font.BOLD, 12));
 			
-			btnCart.setBounds(251, 617, 95, 23);
+			btnCart.setBounds(234, 615, 112, 25);
 		}
 		return btnCart;
 	}
@@ -372,7 +370,7 @@ public class InformationPage extends JDialog {
 		lblPublisher.setText((String) list.get(5));
 		lblPrice.setText(Integer.toString((int) list.get(6)));
 		lblGenre.setText(String.format("%s > %s > %s", list.get(7), list.get(8), list.get(9)));
-		lblBookcontents.setText((String) list.get(10));
+		taBookcontents.setText((String) list.get(10));
 
 		cartinfo(Integer.parseInt(String.valueOf( list.get(11))));
 	}
@@ -401,5 +399,29 @@ public class InformationPage extends JDialog {
 			}
 		});
 		
+	}
+	private JTextArea getTaBookcontents() {
+		if (taBookcontents == null) {
+			taBookcontents = new JTextArea();
+			taBookcontents.setForeground(new Color(0, 0, 0));
+			taBookcontents.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			taBookcontents.setEnabled(false);
+			taBookcontents.setEditable(false);
+			
+			taBookcontents.setLineWrap(true);
+			taBookcontents.setWrapStyleWord(true);
+			
+			taBookcontents.setBounds(85, 512, 289, 82);
+		}
+		return taBookcontents;
+	}
+	private JLabel getLblNewLabel_1_1_1_1_1_1_1() {
+		if (lblNewLabel_1_1_1_1_1_1_1 == null) {
+			lblNewLabel_1_1_1_1_1_1_1 = new JLabel("줄거리 : ");
+			lblNewLabel_1_1_1_1_1_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNewLabel_1_1_1_1_1_1_1.setFont(new Font("나눔고딕", Font.BOLD, 12));
+			lblNewLabel_1_1_1_1_1_1_1.setBounds(25, 514, 57, 15);
+		}
+		return lblNewLabel_1_1_1_1_1_1_1;
 	}
 }

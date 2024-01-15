@@ -1,11 +1,14 @@
 package com.javalec.purchase;
 
+import java.sql.Date;
+
 public class PurchaseDTO {
 	
 	//	Field
 	
-	int purchasedate, totalprice, purchasecount;
-	String purchasedetails, purchasestatus;
+	int totalprice, purchasecount, totalsum, cartcount;
+	String purchasedetails, purchasestatus, bookname;
+	Date purchasedate;
 	
 	
 	//	constructor
@@ -15,16 +18,17 @@ public class PurchaseDTO {
 	}
 
 
-	public PurchaseDTO(int purchasedate, String purchasedetails, int totalprice, String purchasestatus) {
+	
+	public PurchaseDTO(Date purchasedate, String bookname,  int purchasecount, int totalsum) {
 		super();
 		this.purchasedate = purchasedate;
-		this.purchasedetails = purchasedetails;
-		this.totalprice = totalprice;
-		this.purchasestatus = purchasestatus;
+		this.bookname = bookname;
+		this.purchasecount = purchasecount;
+		this.totalsum = totalsum;
 	}
 
 
-	public PurchaseDTO(int purchasedate, int totalprice, int purchasecount, String purchasedetails,
+	public PurchaseDTO(Date purchasedate, int totalprice, int purchasecount, String purchasedetails,
 			String purchasestatus) {
 		super();
 		this.purchasedate = purchasedate;
@@ -35,14 +39,17 @@ public class PurchaseDTO {
 	}
 
 
-	public int getPurchasedate() {
+
+	public Date getPurchasedate() {
 		return purchasedate;
 	}
 
 
-	public void setPurchasedate(int purchasedate) {
+
+	public void setPurchasedate(Date purchasedate) {
 		this.purchasedate = purchasedate;
 	}
+
 
 
 	public int getTotalprice() {
@@ -50,9 +57,11 @@ public class PurchaseDTO {
 	}
 
 
+
 	public void setTotalprice(int totalprice) {
 		this.totalprice = totalprice;
 	}
+
 
 
 	public int getPurchasecount() {
@@ -60,9 +69,35 @@ public class PurchaseDTO {
 	}
 
 
+
 	public void setPurchasecount(int purchasecount) {
 		this.purchasecount = purchasecount;
 	}
+
+
+
+	public int getTotalsum() {
+		return totalsum;
+	}
+
+
+
+	public void setTotalsum(int totalsum) {
+		this.totalsum = totalsum;
+	}
+
+
+
+	public int getCartcount() {
+		return cartcount;
+	}
+
+
+
+	public void setCartcount(int cartcount) {
+		this.cartcount = cartcount;
+	}
+
 
 
 	public String getPurchasedetails() {
@@ -70,9 +105,11 @@ public class PurchaseDTO {
 	}
 
 
+
 	public void setPurchasedetails(String purchasedetails) {
 		this.purchasedetails = purchasedetails;
 	}
+
 
 
 	public String getPurchasestatus() {
@@ -80,9 +117,24 @@ public class PurchaseDTO {
 	}
 
 
+
 	public void setPurchasestatus(String purchasestatus) {
 		this.purchasestatus = purchasestatus;
 	}
+
+
+
+	public String getBookname() {
+		return bookname;
+	}
+
+
+
+	public void setBookname(String bookname) {
+		this.bookname = bookname;
+	}
+
+
 	
 	
 }

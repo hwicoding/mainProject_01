@@ -10,6 +10,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.javalec.admin.menu.Menu;
+import com.javalec.admin.menu.MenuMain;
 import com.javalec.product.SearchPage;
 import com.javalec.util.ShareVar;
 
@@ -55,7 +57,7 @@ public class Login extends JDialog {
 	 * Create the dialog.
 	 */
 	public Login() {
-		setBounds(100, 100, 400, 760);
+		setBounds(650, 180, 400, 760);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -109,6 +111,12 @@ public class Login extends JDialog {
 				public void keyPressed(KeyEvent e) {
 					if(e.getKeyCode()==KeyEvent.VK_ENTER) {
 						login();
+					}
+				}
+				@Override
+				public void keyTyped(KeyEvent e) {
+					if(e.getKeyCode()==KeyEvent.VK_TAB) {
+						pfPw.requestFocus();
 					}
 				}
 			});
@@ -199,6 +207,12 @@ public class Login extends JDialog {
 					ShareVar.phone=dtolist1.get(0).getUserphone();
 	
 					clearcolumn();
+					
+					MenuMain menuMain = new MenuMain();
+					menuMain.setVisible(true);
+					
+					dispose();
+					
 					//Lobby();
 				} else {
 					JOptionPane.showMessageDialog(null, "로그인 실패");	
@@ -217,6 +231,7 @@ public class Login extends JDialog {
 					ShareVar.phone=dtolist1.get(0).getUserphone();
 					clearcolumn();
 					searchpage();
+					dispose();
 				} else {
 					JOptionPane.showMessageDialog(null, "로그인 실패");	}
 			}else {
@@ -243,6 +258,4 @@ public class Login extends JDialog {
 		mypage.setVisible(true);
 		dispose();
 	}
-	
-
 }
