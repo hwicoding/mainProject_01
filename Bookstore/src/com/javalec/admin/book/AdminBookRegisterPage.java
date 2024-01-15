@@ -624,8 +624,15 @@ public class AdminBookRegisterPage extends JPanel {
 		String bookName = tfBookName.getText();
 		String bookSubName = tfBookSubTitle.getText();
 		String bookContent = tfContent.getText();
-		String tffilePath = tfImagePath.getText();
-
+		System.out.println("tdfsd : "+tfImagePath.getText());
+		
+		String filePath = tfImagePath.getText();
+		int pos = filePath.lastIndexOf(".");
+		String subFileName = filePath.substring(0,pos);
+		
+		int idx = subFileName.lastIndexOf("/");
+		String fileName = subFileName.substring(idx+1);
+		
 		FileInputStream input = null;
 		File file = new File(tfImagePath.getText());
 		try {
@@ -634,7 +641,7 @@ public class AdminBookRegisterPage extends JPanel {
 			e.printStackTrace();
 		}
 
-		AdminBookDao dao = new AdminBookDao(bookName, bookSubName, bookContent, input, tffilePath); // 책 insert
+		AdminBookDao dao = new AdminBookDao(bookName, bookSubName, bookContent, input, fileName); // 책 insert
 		return dao.insertBook();
 	}
 
