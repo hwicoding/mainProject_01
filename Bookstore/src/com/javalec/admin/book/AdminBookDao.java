@@ -30,17 +30,19 @@ public class AdminBookDao {
 	int publishernum;
 	int booknum;
 	String bookstatus;
+	String filename;
 
 	public AdminBookDao() {
 
 	}
 
-	public AdminBookDao(String bookname, String booksubtitle, String bookcontent, FileInputStream file) {
+	public AdminBookDao(String bookname, String booksubtitle, String bookcontent, FileInputStream file, String filename) {
 		super();
 		this.bookname = bookname;
 		this.booksubtitle = booksubtitle;
 		this.bookcontent = bookcontent;
 		this.file = file;
+		this.filename = filename;
 	}
 
 	public AdminBookDao(String publishername) {
@@ -284,8 +286,8 @@ public class AdminBookDao {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url, id, pw);
 
-			String query1 = "insert into book (bookname, booktitle, bookcontents, bookimage, bookstatus ) ";
-			String query2 = " values (?,?,?,?,?)";
+			String query1 = "insert into book (bookname, booktitle, bookcontents, bookimage, bookstatus, bookfilename ) ";
+			String query2 = " values (?,?,?,?,?,?)";
 
 			ps = conn.prepareStatement(query1 + query2);
 			ps.setString(1, bookname);
@@ -293,6 +295,7 @@ public class AdminBookDao {
 			ps.setString(3, bookcontent);
 			ps.setBinaryStream(4, file);
 			ps.setString(5, "판매중");
+			ps.setString(6, filename);
 			ps.executeUpdate();
 
 			conn.close();

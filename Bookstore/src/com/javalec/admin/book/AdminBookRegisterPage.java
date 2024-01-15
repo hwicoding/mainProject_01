@@ -573,13 +573,13 @@ public class AdminBookRegisterPage extends JPanel {
 		int cnt = Integer.parseInt(tfCount.getText());
 		int price = Integer.parseInt(tfPrice.getText());
 		String pubName = tfPubName.getText();
-		String authorName = tfAuthor.getText();
 		
 
 		// 등록하겠냐는 메세지
 		int infoAlert = JOptionPane.showConfirmDialog(this,
 				"<html>책제목 : " + bookName + "\n 출판사 : " + pubName + "\n 수량 : " + cnt + " 개를 \n 등록하시겠습니까?", "알림",
 				JOptionPane.YES_NO_OPTION);
+		
 
 		// 메세지 확인버튼 눌렀을 때
 		if (infoAlert == JOptionPane.YES_OPTION) {
@@ -624,6 +624,7 @@ public class AdminBookRegisterPage extends JPanel {
 		String bookName = tfBookName.getText();
 		String bookSubName = tfBookSubTitle.getText();
 		String bookContent = tfContent.getText();
+		String tffilePath = tfImagePath.getText();
 
 		FileInputStream input = null;
 		File file = new File(tfImagePath.getText());
@@ -633,7 +634,7 @@ public class AdminBookRegisterPage extends JPanel {
 			e.printStackTrace();
 		}
 
-		AdminBookDao dao = new AdminBookDao(bookName, bookSubName, bookContent, input); // 책 insert
+		AdminBookDao dao = new AdminBookDao(bookName, bookSubName, bookContent, input, tffilePath); // 책 insert
 		return dao.insertBook();
 	}
 
