@@ -37,7 +37,9 @@ public class Spalsh extends JFrame {
 		label.setBounds(93, 200, 200, 191);
 		label.setPreferredSize(new Dimension(400,760));
 		label.setBackground(Color.white);
+		setBounds(750, 180, 400, 760);
 		getContentPane().add(label);
+
 		
 		JLabel label1 = new JLabel("화면을 터치해주세요");
 		label1.setForeground(Color.GRAY);

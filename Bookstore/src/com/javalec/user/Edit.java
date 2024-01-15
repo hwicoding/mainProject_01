@@ -85,7 +85,7 @@ public class Edit extends JDialog {
 				}
 			}
 		});
-		setBounds(100, 100, 400, 760);
+		setBounds(750, 180, 400, 760);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

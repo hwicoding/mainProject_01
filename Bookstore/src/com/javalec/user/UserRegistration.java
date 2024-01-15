@@ -77,7 +77,7 @@ public class UserRegistration extends JDialog {
 	 * Create the dialog.
 	 */
 	public UserRegistration() {
-		setBounds(100, 100, 400, 760);
+		setBounds(750, 180, 400, 760);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

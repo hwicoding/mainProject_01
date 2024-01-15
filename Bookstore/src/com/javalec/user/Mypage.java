@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.javalec.cartorder.CartPage;
 import com.javalec.product.SearchPage;
 
 import java.awt.Font;
@@ -59,7 +60,7 @@ public class Mypage extends JDialog {
 			public void windowActivated(WindowEvent e) {
 			}
 		});
-		setBounds(100, 100, 400, 760);
+		setBounds(750, 180, 400, 760);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setForeground(Color.WHITE);
@@ -81,6 +82,7 @@ public class Mypage extends JDialog {
 			btnNewButton = new JButton("장바구니");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					cart();
 				}
 			});
 			btnNewButton.setBackground(new Color(30, 144, 255));
@@ -203,5 +205,9 @@ public class Mypage extends JDialog {
 		SearchPage searchpage = new SearchPage();
 		searchpage.setVisible(true);
 		dispose();
+	}
+	private void cart() {
+		CartPage cart = new CartPage();
+		cart.setVisible(true);
 	}
 }
