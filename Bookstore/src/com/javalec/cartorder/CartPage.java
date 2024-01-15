@@ -652,6 +652,7 @@ public class CartPage extends JDialog {
 	private JTextField getTextField() {
 		if (textField == null) {
 			textField = new JTextField();
+			textField.setEditable(false);
 			textField.setBounds(114, 312, 37, 21);
 			textField.setColumns(10);
 		}
