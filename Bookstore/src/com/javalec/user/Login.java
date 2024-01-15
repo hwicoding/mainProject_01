@@ -10,6 +10,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.javalec.admin.menu.Menu;
+import com.javalec.admin.menu.MenuMain;
 import com.javalec.product.SearchPage;
 import com.javalec.util.ShareVar;
 
@@ -205,6 +207,12 @@ public class Login extends JDialog {
 					ShareVar.phone=dtolist1.get(0).getUserphone();
 	
 					clearcolumn();
+					
+					MenuMain menuMain = new MenuMain();
+					menuMain.setVisible(true);
+					
+					dispose();
+					
 					//Lobby();
 				} else {
 					JOptionPane.showMessageDialog(null, "로그인 실패");	
