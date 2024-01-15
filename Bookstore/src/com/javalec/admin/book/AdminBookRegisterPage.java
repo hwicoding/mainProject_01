@@ -87,6 +87,8 @@ public class AdminBookRegisterPage extends JPanel {
 	private JTextField tfPrice;
 	private JLabel lblNewLabel_2_1_1_2_3;
 	private JLabel lblNewLabel_2_1_1_2_3_1;
+	private JLabel lblNewLabel_2_1_1_2_1_1;
+	private JTextField tfAuthor;
 
 	public AdminBookRegisterPage() {
 		addAncestorListener(new AncestorListener() {
@@ -129,6 +131,8 @@ public class AdminBookRegisterPage extends JPanel {
 		add(getTfPrice());
 		add(getLblNewLabel_2_1_1_2_3());
 		add(getLblNewLabel_2_1_1_2_3_1());
+		add(getLblNewLabel_2_1_1_2_1_1());
+		add(getTfAuthor());
 
 	}
 
@@ -183,7 +187,12 @@ public class AdminBookRegisterPage extends JPanel {
 
 	private JTable getInnerTable() {
 		if (innerTable == null) {
-			innerTable = new JTable();
+			innerTable = new JTable() {
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
+			};
 			innerTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -207,7 +216,7 @@ public class AdminBookRegisterPage extends JPanel {
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
 			lblNewLabel_2 = new JLabel("책 제목 *");
-			lblNewLabel_2.setBounds(340, 380, 61, 16);
+			lblNewLabel_2.setBounds(340, 410, 61, 16);
 		}
 		return lblNewLabel_2;
 	}
@@ -215,7 +224,7 @@ public class AdminBookRegisterPage extends JPanel {
 	private JTextField getTfBookName() {
 		if (tfBookName == null) {
 			tfBookName = new JTextField();
-			tfBookName.setBounds(340, 400, 400, 40);
+			tfBookName.setBounds(340, 430, 400, 40);
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfBookName.setBorder(line);
 			tfBookName.setColumns(10);
@@ -226,7 +235,7 @@ public class AdminBookRegisterPage extends JPanel {
 	private JLabel getLblNewLabel_2_1_1() {
 		if (lblNewLabel_2_1 == null) {
 			lblNewLabel_2_1 = new JLabel("책 부제");
-			lblNewLabel_2_1.setBounds(340, 460, 120, 16);
+			lblNewLabel_2_1.setBounds(340, 480, 120, 16);
 		}
 		return lblNewLabel_2_1;
 	}
@@ -235,7 +244,7 @@ public class AdminBookRegisterPage extends JPanel {
 		if (tfBookSubTitle == null) {
 			tfBookSubTitle = new JTextField();
 			tfBookSubTitle.setColumns(10);
-			tfBookSubTitle.setBounds(340, 480, 400, 40);
+			tfBookSubTitle.setBounds(340, 500, 400, 40);
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfBookSubTitle.setBorder(line);
 		}
@@ -245,7 +254,7 @@ public class AdminBookRegisterPage extends JPanel {
 	private JLabel getLblNewLabel_2_1_1_1() {
 		if (lblNewLabel_2_1_1 == null) {
 			lblNewLabel_2_1_1 = new JLabel("줄거리 (100자 내)*");
-			lblNewLabel_2_1_1.setBounds(340, 538, 120, 16);
+			lblNewLabel_2_1_1.setBounds(340, 550, 120, 16);
 		}
 		return lblNewLabel_2_1_1;
 	}
@@ -256,7 +265,7 @@ public class AdminBookRegisterPage extends JPanel {
 			tfContent.setColumns(10);
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfContent.setBorder(line);
-			tfContent.setBounds(340, 558, 400, 40);
+			tfContent.setBounds(340, 570, 400, 40);
 		}
 		return tfContent;
 	}
@@ -367,7 +376,7 @@ public class AdminBookRegisterPage extends JPanel {
 	private JLabel getLblNewLabel_2_1_1_2_1() {
 		if (lblNewLabel_2_1_1_2_1 == null) {
 			lblNewLabel_2_1_1_2_1 = new JLabel("출판사명 *");
-			lblNewLabel_2_1_1_2_1.setBounds(340, 300, 61, 16);
+			lblNewLabel_2_1_1_2_1.setBounds(340, 280, 61, 16);
 		}
 		return lblNewLabel_2_1_1_2_1;
 	}
@@ -380,7 +389,7 @@ public class AdminBookRegisterPage extends JPanel {
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfPubName.setBorder(line);
 			tfPubName.setBackground(new Color(234, 234, 234));
-			tfPubName.setBounds(340, 320, 400, 40);
+			tfPubName.setBounds(340, 300, 400, 40);
 		}
 		return tfPubName;
 	}
@@ -420,6 +429,26 @@ public class AdminBookRegisterPage extends JPanel {
 		}
 		return lblNewLabel_2_1_1_2_3_1;
 	}
+	
+	private JLabel getLblNewLabel_2_1_1_2_1_1() {
+		if (lblNewLabel_2_1_1_2_1_1 == null) {
+			lblNewLabel_2_1_1_2_1_1 = new JLabel("작가명 *");
+			lblNewLabel_2_1_1_2_1_1.setBounds(340, 345, 61, 16);
+		}
+		return lblNewLabel_2_1_1_2_1_1;
+	}
+	private JTextField getTfAuthor() {
+		if (tfAuthor == null) {
+			tfAuthor = new JTextField();
+			tfAuthor.setEditable(false);
+			tfAuthor.setColumns(10);
+			tfAuthor.setBackground(new Color(234, 234, 234));
+			LineBorder line = new LineBorder(Color.gray, 1, true);
+			tfAuthor.setBorder(line);
+			tfAuthor.setBounds(340, 365, 400, 40);
+		}
+		return tfAuthor;
+	}
 
 	// ------ function --------
 
@@ -456,6 +485,15 @@ public class AdminBookRegisterPage extends JPanel {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
+
+		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
+		c.setHorizontalAlignment(JLabel.CENTER);
+		innerTable.getColumnModel().getColumn(0).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(1).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(4).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(5).setCellRenderer(c);
 
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
@@ -501,8 +539,10 @@ public class AdminBookRegisterPage extends JPanel {
 		int i = innerTable.getSelectedRow();
 
 		String publisherName = (String) innerTable.getValueAt(i, 0);
+		String authorname = (String) innerTable.getValueAt(i, 3);
 
 		tfPubName.setText(publisherName);
+		tfAuthor.setText(authorname);
 	}
 
 	// 이미지 등록 버튼 클릭했을 때
@@ -534,12 +574,12 @@ public class AdminBookRegisterPage extends JPanel {
 		int price = Integer.parseInt(tfPrice.getText());
 		String pubName = tfPubName.getText();
 		
-		
 
 		// 등록하겠냐는 메세지
 		int infoAlert = JOptionPane.showConfirmDialog(this,
 				"<html>책제목 : " + bookName + "\n 출판사 : " + pubName + "\n 수량 : " + cnt + " 개를 \n 등록하시겠습니까?", "알림",
 				JOptionPane.YES_NO_OPTION);
+		
 
 		// 메세지 확인버튼 눌렀을 때
 		if (infoAlert == JOptionPane.YES_OPTION) {
@@ -584,7 +624,15 @@ public class AdminBookRegisterPage extends JPanel {
 		String bookName = tfBookName.getText();
 		String bookSubName = tfBookSubTitle.getText();
 		String bookContent = tfContent.getText();
-
+		System.out.println("tdfsd : "+tfImagePath.getText());
+		
+		String filePath = tfImagePath.getText();
+		int pos = filePath.lastIndexOf(".");
+		String subFileName = filePath.substring(0,pos);
+		
+		int idx = subFileName.lastIndexOf("/");
+		String fileName = subFileName.substring(idx+1);
+		
 		FileInputStream input = null;
 		File file = new File(tfImagePath.getText());
 		try {
@@ -593,7 +641,7 @@ public class AdminBookRegisterPage extends JPanel {
 			e.printStackTrace();
 		}
 
-		AdminBookDao dao = new AdminBookDao(bookName, bookSubName, bookContent, input); // 책 insert
+		AdminBookDao dao = new AdminBookDao(bookName, bookSubName, bookContent, input, fileName); // 책 insert
 		return dao.insertBook();
 	}
 
@@ -618,12 +666,16 @@ public class AdminBookRegisterPage extends JPanel {
 		if (tfPubName.getText().length() <= 0) {
 			JOptionPane.showMessageDialog(this, "출판사명을 위 테이블에서 클릭하세요.");
 			num++;
+			tableInit();
+			searchAction();
 			return num;
 		}
 
 		if (tfImagePath.getText().length() <= 0) {
 			JOptionPane.showMessageDialog(this, "이미지를 선택하세요.");
 			num++;
+			tableInit();
+			searchAction();
 			return num;
 		}
 
@@ -631,6 +683,8 @@ public class AdminBookRegisterPage extends JPanel {
 			JOptionPane.showMessageDialog(this, "책 제목을 작성하세요.");
 			tfBookName.requestFocus();
 			num++;
+			tableInit();
+			searchAction();
 			return num;
 		}
 
@@ -638,6 +692,8 @@ public class AdminBookRegisterPage extends JPanel {
 			JOptionPane.showMessageDialog(this, "책 줄거리 작성하세요.");
 			tfContent.requestFocus();
 			num++;
+			tableInit();
+			searchAction();
 			return num;
 		}
 
@@ -646,6 +702,8 @@ public class AdminBookRegisterPage extends JPanel {
 			tfContent.setText("");
 			tfContent.requestFocus();
 			num++;
+			tableInit();
+			searchAction();
 			return num;
 		}
 
@@ -653,6 +711,8 @@ public class AdminBookRegisterPage extends JPanel {
 			JOptionPane.showMessageDialog(this, "수량을 입력하세요.");
 			tfCount.requestFocus();
 			num++;
+			tableInit();
+			searchAction();
 			return num;
 		}
 
@@ -660,9 +720,12 @@ public class AdminBookRegisterPage extends JPanel {
 			JOptionPane.showMessageDialog(this, "가격을 입력하세요.");
 			tfPrice.requestFocus();
 			num++;
+			tableInit();
+			searchAction();
 			return num;
 		}
 		return num;
 	}
+
 
 }

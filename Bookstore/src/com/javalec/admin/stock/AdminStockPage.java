@@ -47,8 +47,10 @@ public class AdminStockPage extends JPanel {
 				tableInit();
 				searchAction();
 			}
+
 			public void ancestorMoved(AncestorEvent event) {
 			}
+
 			public void ancestorRemoved(AncestorEvent event) {
 			}
 		});
@@ -66,7 +68,7 @@ public class AdminStockPage extends JPanel {
 
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("입고 및 재고 현황");
+			lblNewLabel = new JLabel("입고 현황");
 			lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 			lblNewLabel.setBounds(29, 39, 200, 50);
 		}
@@ -76,7 +78,7 @@ public class AdminStockPage extends JPanel {
 	private JComboBox getCbSearch() {
 		if (cbSearch == null) {
 			cbSearch = new JComboBox();
-			cbSearch.setModel(new DefaultComboBoxModel(new String[] { "책제목", "출판사", "입고일" }));
+			cbSearch.setModel(new DefaultComboBoxModel(new String[] { "책제목", "출판사", "입고일", "책현황" }));
 			cbSearch.setBounds(29, 125, 120, 27);
 		}
 		return cbSearch;
@@ -117,54 +119,63 @@ public class AdminStockPage extends JPanel {
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(29, 180, 740, 480);
 			scrollPane.setViewportView(getInnerTable());
-			
+
 		}
 		return scrollPane;
 	}
-	
+
 	private JTable getInnerTable() {
 		if (innerTable == null) {
-			innerTable = new JTable();
+			innerTable = new JTable() {
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
+			};
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
 		}
 		return innerTable;
 	}
 
-	// ------ function --------
 
-	//테이블 초기화
+	// -------function -----
+	// 테이블 초기화
 	public void tableInit() {
 		outerTable.addColumn("책제목");
+		outerTable.addColumn("부제");
 		outerTable.addColumn("작가");
 		outerTable.addColumn("출판사");
 		outerTable.addColumn("가격(원)");
 		outerTable.addColumn("입고수량(개)");
-		outerTable.addColumn("재고수량(개)");
+		outerTable.addColumn("책현황");
 		outerTable.addColumn("입고일");
-		outerTable.setColumnCount(7);
+		outerTable.setColumnCount(8);
 
 		// outerTable 제목 가운데정렬 과연?
 
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
 		col.setPreferredWidth(200);
-		
+
 		col = innerTable.getColumnModel().getColumn(1);
 		col.setPreferredWidth(100);
-
+		
 		col = innerTable.getColumnModel().getColumn(2);
-		col.setPreferredWidth(120);
+		col.setPreferredWidth(100);
 
 		col = innerTable.getColumnModel().getColumn(3);
-		col.setPreferredWidth(80);
+		col.setPreferredWidth(120);
 
 		col = innerTable.getColumnModel().getColumn(4);
 		col.setPreferredWidth(80);
 
 		col = innerTable.getColumnModel().getColumn(5);
-		col.setPreferredWidth(100);
-		
+		col.setPreferredWidth(80);
+
 		col = innerTable.getColumnModel().getColumn(6);
+		col.setPreferredWidth(80);
+		
+		col = innerTable.getColumnModel().getColumn(7);
 		col.setPreferredWidth(100);
 
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
@@ -172,6 +183,18 @@ public class AdminStockPage extends JPanel {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
+
+		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+		r.setHorizontalAlignment(JLabel.RIGHT);
+		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
+		innerTable.getColumnModel().getColumn(5).setCellRenderer(r);
+
+		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
+		c.setHorizontalAlignment(JLabel.CENTER);
+		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(6).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(7).setCellRenderer(c);
 
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
@@ -186,22 +209,18 @@ public class AdminStockPage extends JPanel {
 		ArrayList<AdminStockStatusDto> dtoList = dao.searchAction();
 
 		int listCnt = dtoList.size();
-		
-		//b.bookname, a.authorname,  pub.publishername, p.pressprice,  p.presscount, (p.presscount - pur.purchasecount), date(p.pressdate)
+
 		for (int i = 0; i < listCnt; i++) {
 
 			// 가격 포맷 ###,### 설정
 			DecimalFormat decFormat = new DecimalFormat("###,###");
 			int tmp3 = dtoList.get(i).getPressPrice();
-			int tmCount = dtoList.get(i).getPressCount();
-			int tmStock = dtoList.get(i).getStockCount();
+			int tmCount = dtoList.get(i).getStockCount();
 			String tmPressPrice = decFormat.format(tmp3);
-			String tmPressCount = decFormat.format(tmCount);
-			String tmStockCount = decFormat.format(tmStock);
+			String tmPressStock = decFormat.format(tmCount);
 
-			// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-			String[] qTxt = {dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(), dtoList.get(i).getPublishername(),
-							tmPressPrice, tmPressCount, tmStockCount, dtoList.get(i).getPressDate() };
+			String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+					dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 			outerTable.addRow(qTxt);
 		}
@@ -211,10 +230,10 @@ public class AdminStockPage extends JPanel {
 	private void searchBtnClicked() {
 		AdminStockStatusDao dao = null;
 		String inputStr = tfSearch.getText();
-		System.out.println("page : "+inputStr);
+		System.out.println("page : " + inputStr);
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<>();
 		int index = cbSearch.getSelectedIndex();
-		System.out.println("index : "+index);
+		System.out.println("index : " + index);
 		switch (index) {
 		case 0:
 			dao = new AdminStockStatusDao();
@@ -223,17 +242,15 @@ public class AdminStockPage extends JPanel {
 			for (int i = 0; i < dtoList.size(); i++) {
 
 				// 가격 포맷 ###,### 설정
+				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
+				int tmCount = dtoList.get(i).getStockCount();
 				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
+				String tmPressStock = decFormat.format(tmCount);
 
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-				String[] qTxt = {dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(), dtoList.get(i).getPublishername(),
-								tmPressPrice, tmPressCount, tmStockCount, dtoList.get(i).getPressDate() };
+				String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
 			}
@@ -245,22 +262,20 @@ public class AdminStockPage extends JPanel {
 			for (int i = 0; i < dtoList.size(); i++) {
 
 				// 가격 포맷 ###,### 설정
+				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
+				int tmCount = dtoList.get(i).getStockCount();
 				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
+				String tmPressStock = decFormat.format(tmCount);
 
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-				String[] qTxt = {dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(), dtoList.get(i).getPublishername(),
-								tmPressPrice, tmPressCount, tmStockCount, dtoList.get(i).getPressDate() };
+				String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
 			}
 			break;
-			
+
 		case 2:
 			dao = new AdminStockStatusDao();
 			dtoList = dao.searchConditionToPressDate(inputStr);
@@ -268,17 +283,35 @@ public class AdminStockPage extends JPanel {
 			for (int i = 0; i < dtoList.size(); i++) {
 
 				// 가격 포맷 ###,### 설정
+				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
+				int tmCount = dtoList.get(i).getStockCount();
 				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
+				String tmPressStock = decFormat.format(tmCount);
 
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-				String[] qTxt = {dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(), dtoList.get(i).getPublishername(),
-								tmPressPrice, tmPressCount, tmStockCount, dtoList.get(i).getPressDate() };
+				String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
+
+				outerTable.addRow(qTxt);
+			}
+			break;
+			
+		case 3:
+			dao = new AdminStockStatusDao();
+			dtoList = dao.searchConditionToBoostatus(inputStr);
+
+			for (int i = 0; i < dtoList.size(); i++) {
+
+				// 가격 포맷 ###,### 설정
+				DecimalFormat decFormat = new DecimalFormat("###,###");
+				int tmp3 = dtoList.get(i).getPressPrice();
+				int tmCount = dtoList.get(i).getStockCount();
+				String tmPressPrice = decFormat.format(tmp3);
+				String tmPressStock = decFormat.format(tmCount);
+
+				String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
 			}
@@ -286,5 +319,4 @@ public class AdminStockPage extends JPanel {
 		}
 	}
 
-	
 }

@@ -1,6 +1,5 @@
 package com.javalec.admin.menu;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -24,29 +23,29 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import com.javalec.admin.book.AdminBookDeletePage;
 import com.javalec.admin.book.AdminBookPage;
 import com.javalec.admin.book.AdminBookRegisterPage;
 import com.javalec.admin.book.AdminBookUpdatePage;
 import com.javalec.admin.publisher.AdminPublishPage;
+import com.javalec.admin.sales.AdminBestSalesPage;
+import com.javalec.admin.sales.AdminSalesPage;
 import com.javalec.admin.stock.AdminStockPage;
 import com.javalec.admin.stock.AdminStockReqPage;
 import com.javalec.admin.stock.AdminStockStatusDao;
 import com.javalec.admin.stock.AdminStockStatusDto;
+import com.javalec.admin.stock.AdminStockStatusPage;
 import com.javalec.admin.stock.DefaultForm;
+import com.javalec.user.Login;
 
 import javax.swing.JLabel;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JLayeredPane;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -72,6 +71,7 @@ public class MenuMain extends JFrame {
 	private JScrollPane scrollPane;
 	private JTable innerTable;
 	private final DefaultTableModel outerTable = new DefaultTableModel();
+	private JLabel lblQuit;
 
 	/**
 	 * Launch the application.
@@ -105,7 +105,7 @@ public class MenuMain extends JFrame {
 		setUndecorated(true);
 		tableInit();
 		searchAction();
-
+		
 		dropMenu.setEvent(new MenuEvent() {
 
 			@Override
@@ -116,6 +116,9 @@ public class MenuMain extends JFrame {
 
 				} else if (index == 0 && subIndex == 2) {
 					showForm(new AdminStockReqPage());
+
+				//} else if (index == 0 && subIndex == 3) {
+				//	showForm(new AdminStockStatusPage());
 
 				} else if (index == 1 && subIndex == 0) {
 					showForm(new AdminPublishPage());
@@ -128,6 +131,15 @@ public class MenuMain extends JFrame {
 
 				} else if (index == 2 && subIndex == 3) {
 					showForm(new AdminBookUpdatePage());
+
+				} else if (index == 2 && subIndex == 4) {
+					showForm(new AdminBookDeletePage());
+					
+				} else if (index == 3 && subIndex == 1) {
+					showForm(new AdminSalesPage());
+
+				} else if (index == 3 && subIndex == 2) {
+					showForm(new AdminBestSalesPage());
 
 				} else {
 					showForm(new DefaultForm("Form : " + index + " " + subIndex));
@@ -184,12 +196,11 @@ public class MenuMain extends JFrame {
 			lblLogout.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					//Login page new Login();
-					//page.setVisible(true);
+					btnLogoutClick();
 				}
 			});
 			lblLogout.setBackground(new Color(253, 253, 253));
-			lblLogout.setBounds(950, 0, 48, 64);
+			lblLogout.setBounds(900, 0, 48, 64);
 			lblLogout.setFont(new Font("Marker Felt", Font.BOLD, 18));
 			ImageIcon icon = new ImageIcon(Header.class.getResource("/com/javalec/image/logoutIcon.png"));
 			Image img = icon.getImage();
@@ -214,6 +225,27 @@ public class MenuMain extends JFrame {
 		}
 		return body;
 	}
+	
+	private JLabel getLblQuit() {
+		if (lblQuit == null) {
+			lblQuit = new JLabel("");
+			lblQuit.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					btnQuitClick();
+				}
+			});
+			lblQuit.setBounds(950, 7, 50, 50);
+			lblQuit.setBackground(new Color(253, 253, 253));
+			ImageIcon icon = new ImageIcon(Header.class.getResource("/com/javalec/image/quit.png"));
+			Image img = icon.getImage();
+			Image changeImg = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+			ImageIcon changeIcon = new ImageIcon(changeImg);
+			lblQuit.setIcon(changeIcon);
+		}
+		return lblQuit;
+	}
+
 
 	private JLayeredPane getLayeredPane_1() {
 		if (layeredPane == null) {
@@ -224,6 +256,7 @@ public class MenuMain extends JFrame {
 			layeredPane.setBackground(new Color(253, 253, 253));
 			layeredPane.setBorder(BorderFactory.createLineBorder(Color.black));
 			layeredPane.add(getLblInfo());
+			layeredPane.add(getLblQuit());
 		}
 		return layeredPane;
 	}
@@ -232,14 +265,14 @@ public class MenuMain extends JFrame {
 		if (lblInfo == null) {
 			lblInfo = new JLabel("관리자님 환영합니다!");
 			lblInfo.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-			lblInfo.setBounds(850, 25, 200, 16);
+			lblInfo.setBounds(800, 25, 200, 16);
 		}
 		return lblInfo;
 	}
 
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("입고 및 재고 현황");
+			lblNewLabel = new JLabel("입고 현황");
 			lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 			lblNewLabel.setBounds(29, 39, 200, 50);
 		}
@@ -249,7 +282,7 @@ public class MenuMain extends JFrame {
 	private JComboBox getCbSearch() {
 		if (cbSearch == null) {
 			cbSearch = new JComboBox();
-			cbSearch.setModel(new DefaultComboBoxModel(new String[] { "책제목", "출판사", "입고일" }));
+			cbSearch.setModel(new DefaultComboBoxModel(new String[] { "책제목", "출판사", "입고일", "책현황" }));
 			cbSearch.setBounds(29, 125, 120, 27);
 		}
 		return cbSearch;
@@ -296,181 +329,209 @@ public class MenuMain extends JFrame {
 
 	private JTable getInnerTable() {
 		if (innerTable == null) {
-			innerTable = new JTable();
+			innerTable = new JTable() {
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
+			};
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
+			
 		}
 		return innerTable;
 	}
-
+	
+	
 	// -------function -----
-	// 테이블 초기화
-	public void tableInit() {
-		outerTable.addColumn("책제목");
-		outerTable.addColumn("작가");
-		outerTable.addColumn("출판사");
-		outerTable.addColumn("가격(원)");
-		outerTable.addColumn("입고수량(개)");
-		outerTable.addColumn("재고수량(개)");
-		outerTable.addColumn("입고일");
-		outerTable.setColumnCount(7);
+	// -------function -----
+		// 테이블 초기화
+		public void tableInit() {
+			outerTable.addColumn("책제목");
+			outerTable.addColumn("부제");
+			outerTable.addColumn("작가");
+			outerTable.addColumn("출판사");
+			outerTable.addColumn("가격(원)");
+			outerTable.addColumn("입고수량(개)");
+			outerTable.addColumn("책현황");
+			outerTable.addColumn("입고일");
+			outerTable.setColumnCount(8);
 
-		// outerTable 제목 가운데정렬 과연?
+			// outerTable 제목 가운데정렬 과연?
 
-		TableColumn col = innerTable.getColumnModel().getColumn(0);
-		col.setPreferredWidth(200);
+			TableColumn col = innerTable.getColumnModel().getColumn(0);
+			col.setPreferredWidth(200);
 
-		col = innerTable.getColumnModel().getColumn(1);
-		col.setPreferredWidth(100);
+			col = innerTable.getColumnModel().getColumn(1);
+			col.setPreferredWidth(100);
+			
+			col = innerTable.getColumnModel().getColumn(2);
+			col.setPreferredWidth(100);
 
-		col = innerTable.getColumnModel().getColumn(2);
-		col.setPreferredWidth(120);
+			col = innerTable.getColumnModel().getColumn(3);
+			col.setPreferredWidth(120);
 
-		col = innerTable.getColumnModel().getColumn(3);
-		col.setPreferredWidth(80);
+			col = innerTable.getColumnModel().getColumn(4);
+			col.setPreferredWidth(80);
 
-		col = innerTable.getColumnModel().getColumn(4);
-		col.setPreferredWidth(80);
+			col = innerTable.getColumnModel().getColumn(5);
+			col.setPreferredWidth(80);
 
-		col = innerTable.getColumnModel().getColumn(5);
-		col.setPreferredWidth(100);
+			col = innerTable.getColumnModel().getColumn(6);
+			col.setPreferredWidth(80);
+			
+			col = innerTable.getColumnModel().getColumn(7);
+			col.setPreferredWidth(100);
 
-		col = innerTable.getColumnModel().getColumn(6);
-		col.setPreferredWidth(100);
+			innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
 
-		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
+			DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
+			renderer.setHorizontalAlignment(SwingConstants.CENTER);
+			innerTable.getTableHeader().setDefaultRenderer(renderer);
 
-		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
-		renderer.setHorizontalAlignment(SwingConstants.CENTER);
-		innerTable.getTableHeader().setDefaultRenderer(renderer);
-		
-		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
-		r.setHorizontalAlignment(JLabel.RIGHT);
-		innerTable.getColumnModel().getColumn(3).setCellRenderer(r);
-		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
-		innerTable.getColumnModel().getColumn(5).setCellRenderer(r);
-		
-		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
-		c.setHorizontalAlignment(JLabel.CENTER);
-		innerTable.getColumnModel().getColumn(1).setCellRenderer(c);
-		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
-		innerTable.getColumnModel().getColumn(6).setCellRenderer(c);
-		
-		// Table 내용 지우기
-		int i = outerTable.getRowCount();
-		for (int j = 0; j < i; j++) {
-			outerTable.removeRow(0);
+			DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+			r.setHorizontalAlignment(JLabel.RIGHT);
+			innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
+			innerTable.getColumnModel().getColumn(5).setCellRenderer(r);
+
+			DefaultTableCellRenderer c = new DefaultTableCellRenderer();
+			c.setHorizontalAlignment(JLabel.CENTER);
+			innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+			innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
+			innerTable.getColumnModel().getColumn(6).setCellRenderer(c);
+			innerTable.getColumnModel().getColumn(7).setCellRenderer(c);
+
+			// Table 내용 지우기
+			int i = outerTable.getRowCount();
+			for (int j = 0; j < i; j++) {
+				outerTable.removeRow(0);
+			}
 		}
-	}
 
-	// 테이블 조회 메소드
-	private void searchAction() {
-		AdminStockStatusDao dao = new AdminStockStatusDao();
-		ArrayList<AdminStockStatusDto> dtoList = dao.searchAction();
+		// 테이블 조회 메소드
+		private void searchAction() {
+			AdminStockStatusDao dao = new AdminStockStatusDao();
+			ArrayList<AdminStockStatusDto> dtoList = dao.searchAction();
 
-		int listCnt = dtoList.size();
+			int listCnt = dtoList.size();
 
-		// b.bookname, a.authorname, pub.publishername, p.pressprice, p.presscount,
-		// (p.presscount - pur.purchasecount), date(p.pressdate)
-		for (int i = 0; i < listCnt; i++) {
-
-			// 가격 포맷 ###,### 설정
-			DecimalFormat decFormat = new DecimalFormat("###,###");
-			int tmp3 = dtoList.get(i).getPressPrice();
-			int tmCount = dtoList.get(i).getPressCount();
-			int tmStock = dtoList.get(i).getStockCount();
-			String tmPressPrice = decFormat.format(tmp3);
-			String tmPressCount = decFormat.format(tmCount);
-			String tmStockCount = decFormat.format(tmStock);
-
-			// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-			String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-					dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-					dtoList.get(i).getPressDate() };
-
-			outerTable.addRow(qTxt);
-		}
-	}
-
-	// 검색
-	private void searchBtnClicked() {
-		AdminStockStatusDao dao = null;
-		String inputStr = tfSearch.getText();
-		System.out.println("page : " + inputStr);
-		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<>();
-		int index = cbSearch.getSelectedIndex();
-		System.out.println("index : " + index);
-		switch (index) {
-		case 0:
-			dao = new AdminStockStatusDao();
-			dtoList = dao.searchConditionToBookName(inputStr);
-
-			for (int i = 0; i < dtoList.size(); i++) {
+			for (int i = 0; i < listCnt; i++) {
 
 				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
+				int tmCount = dtoList.get(i).getStockCount();
 				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
+				String tmPressStock = decFormat.format(tmCount);
 
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-						dtoList.get(i).getPressDate() };
+				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
 			}
-			break;
-		case 1:
-			dao = new AdminStockStatusDao();
-			dtoList = dao.searchConditionToPublisher(inputStr);
-
-			for (int i = 0; i < dtoList.size(); i++) {
-
-				// 가격 포맷 ###,### 설정
-				DecimalFormat decFormat = new DecimalFormat("###,###");
-				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
-				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
-
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-						dtoList.get(i).getPressDate() };
-
-				outerTable.addRow(qTxt);
-			}
-			break;
-
-		case 2:
-			dao = new AdminStockStatusDao();
-			dtoList = dao.searchConditionToPressDate(inputStr);
-
-			for (int i = 0; i < dtoList.size(); i++) {
-
-				// 가격 포맷 ###,### 설정
-				DecimalFormat decFormat = new DecimalFormat("###,###");
-				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
-				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
-
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-						dtoList.get(i).getPressDate() };
-
-				outerTable.addRow(qTxt);
-			}
-			break;
 		}
+
+		// 검색
+		private void searchBtnClicked() {
+			AdminStockStatusDao dao = null;
+			String inputStr = tfSearch.getText();
+			System.out.println("page : " + inputStr);
+			ArrayList<AdminStockStatusDto> dtoList = new ArrayList<>();
+			int index = cbSearch.getSelectedIndex();
+			System.out.println("index : " + index);
+			switch (index) {
+			case 0:
+				dao = new AdminStockStatusDao();
+				dtoList = dao.searchConditionToBookName(inputStr);
+
+				for (int i = 0; i < dtoList.size(); i++) {
+
+					// 가격 포맷 ###,### 설정
+					// 가격 포맷 ###,### 설정
+					DecimalFormat decFormat = new DecimalFormat("###,###");
+					int tmp3 = dtoList.get(i).getPressPrice();
+					int tmCount = dtoList.get(i).getStockCount();
+					String tmPressPrice = decFormat.format(tmp3);
+					String tmPressStock = decFormat.format(tmCount);
+
+					String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+							dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
+
+					outerTable.addRow(qTxt);
+				}
+				break;
+			case 1:
+				dao = new AdminStockStatusDao();
+				dtoList = dao.searchConditionToPublisher(inputStr);
+
+				for (int i = 0; i < dtoList.size(); i++) {
+
+					// 가격 포맷 ###,### 설정
+					// 가격 포맷 ###,### 설정
+					DecimalFormat decFormat = new DecimalFormat("###,###");
+					int tmp3 = dtoList.get(i).getPressPrice();
+					int tmCount = dtoList.get(i).getStockCount();
+					String tmPressPrice = decFormat.format(tmp3);
+					String tmPressStock = decFormat.format(tmCount);
+
+					String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+							dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
+
+					outerTable.addRow(qTxt);
+				}
+				break;
+
+			case 2:
+				dao = new AdminStockStatusDao();
+				dtoList = dao.searchConditionToPressDate(inputStr);
+
+				for (int i = 0; i < dtoList.size(); i++) {
+
+					// 가격 포맷 ###,### 설정
+					// 가격 포맷 ###,### 설정
+					DecimalFormat decFormat = new DecimalFormat("###,###");
+					int tmp3 = dtoList.get(i).getPressPrice();
+					int tmCount = dtoList.get(i).getStockCount();
+					String tmPressPrice = decFormat.format(tmp3);
+					String tmPressStock = decFormat.format(tmCount);
+
+					String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+							dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
+
+					outerTable.addRow(qTxt);
+				}
+				break;
+				
+			case 3:
+				dao = new AdminStockStatusDao();
+				dtoList = dao.searchConditionToBoostatus(inputStr);
+
+				for (int i = 0; i < dtoList.size(); i++) {
+
+					// 가격 포맷 ###,### 설정
+					DecimalFormat decFormat = new DecimalFormat("###,###");
+					int tmp3 = dtoList.get(i).getPressPrice();
+					int tmCount = dtoList.get(i).getStockCount();
+					String tmPressPrice = decFormat.format(tmp3);
+					String tmPressStock = decFormat.format(tmCount);
+
+					String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+							dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
+
+					outerTable.addRow(qTxt);
+				}
+				break;
+			}
+		}
+		
+	private void btnLogoutClick() {
+		this.dispose();
+		Login page = new Login();
+		page.setVisible(true);
 	}
+	
+	private void btnQuitClick() {
+		this.dispose();
+	}
+	
 }

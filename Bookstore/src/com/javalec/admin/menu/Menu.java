@@ -21,9 +21,9 @@ public class Menu extends JComponent {
 
 	private MenuEvent event;
 	private MigLayout layout;
-	private String[][] menuItems = new String[][] { { "입고 관리", "입고 및 재고현황", "입고 요청" }, { "출판사 현황" },
+	private String[][] menuItems = new String[][] { { "입고 관리", "입고 현황", "입고 요청" }, { "출판사 현황" },
 			{ "책 관리", "책 현황", "책 등록", "책 수정", "책 삭제" },
-			{ "현황 보기", "매출현황", "인기 책 TOP 5", "저조 책 TOP 5", "주문 많은 고객 TOP3" } };
+			{ "현황 보기", "매출현황", "인기 책 TOP 5"} };
 
 	public Menu() {
 		init();

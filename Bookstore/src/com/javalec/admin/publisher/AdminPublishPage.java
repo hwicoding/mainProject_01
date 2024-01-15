@@ -126,7 +126,12 @@ public class AdminPublishPage extends JPanel {
 
 	private JTable getInnerTable() {
 		if (innerTable == null) {
-			innerTable = new JTable();
+			innerTable = new JTable() {
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
+			};
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
 		}
@@ -170,6 +175,15 @@ public class AdminPublishPage extends JPanel {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
+		
+		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
+		c.setHorizontalAlignment(JLabel.CENTER);
+		innerTable.getColumnModel().getColumn(0).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(1).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(4).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(5).setCellRenderer(c);
 
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();

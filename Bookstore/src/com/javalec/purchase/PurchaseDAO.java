@@ -1,6 +1,7 @@
 package com.javalec.purchase;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -52,7 +53,7 @@ public class PurchaseDAO {
 		   ArrayList<PurchaseDTO> dtoList = new ArrayList<PurchaseDTO>();
 	   
 		   // purchasedate, purchasedetails, totalprice를 가져오기
-		   String where1 = "select purchasedate, bookname, cartcount, (pressprice*cartcount) as totalsum ";
+		   String where1 = "select purchasedate, bookname, purchasecount, pressprice ";
 		   String where2 = "from purchase, press, book, cart ";
 		   String where3 = "where purchase.booknum = book.booknum and press.booknum = book.booknum and cart.booknum = book.booknum ";
 		   
@@ -65,12 +66,12 @@ public class PurchaseDAO {
 				
 				while(rs.next()) {
 					
-					int wkPurchasedate = rs.getInt(1);
+					Date wkPurchasedate = rs.getDate(1);
 					String wkBookname = rs.getString(2);
-					int wkCartcount = rs.getInt(3);
+					int wkPurchasecount = rs.getInt(3);
 					int wkTotalsum = rs.getInt(4);
 					
-					PurchaseDTO dto = new PurchaseDTO(wkPurchasedate, wkBookname, wkCartcount, wkTotalsum);
+					PurchaseDTO dto = new PurchaseDTO(wkPurchasedate, wkBookname, wkPurchasecount, wkTotalsum);
 					dtoList.add(dto);
 				
 				

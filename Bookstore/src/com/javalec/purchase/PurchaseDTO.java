@@ -1,11 +1,14 @@
 package com.javalec.purchase;
 
+import java.sql.Date;
+
 public class PurchaseDTO {
 	
 	//	Field
 	
-	int purchasedate, totalprice, purchasecount, totalsum, cartcount;
+	int totalprice, purchasecount, totalsum, cartcount;
 	String purchasedetails, purchasestatus, bookname;
+	Date purchasedate;
 	
 	
 	//	constructor
@@ -16,16 +19,16 @@ public class PurchaseDTO {
 
 
 	
-	public PurchaseDTO(int purchasedate, String bookname, int cartcount, int totalsum) {
+	public PurchaseDTO(Date purchasedate, String bookname,  int purchasecount, int totalsum) {
 		super();
 		this.purchasedate = purchasedate;
 		this.bookname = bookname;
-		this.cartcount = cartcount;
+		this.purchasecount = purchasecount;
 		this.totalsum = totalsum;
 	}
 
 
-	public PurchaseDTO(int purchasedate, int totalprice, int purchasecount, String purchasedetails,
+	public PurchaseDTO(Date purchasedate, int totalprice, int purchasecount, String purchasedetails,
 			String purchasestatus) {
 		super();
 		this.purchasedate = purchasedate;
@@ -37,13 +40,13 @@ public class PurchaseDTO {
 
 
 
-	public int getPurchasedate() {
+	public Date getPurchasedate() {
 		return purchasedate;
 	}
 
 
 
-	public void setPurchasedate(int purchasedate) {
+	public void setPurchasedate(Date purchasedate) {
 		this.purchasedate = purchasedate;
 	}
 

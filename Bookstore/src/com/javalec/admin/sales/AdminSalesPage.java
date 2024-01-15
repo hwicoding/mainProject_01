@@ -1,15 +1,18 @@
-package com.javalec.admin.book;
+package com.javalec.admin.sales;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -25,6 +28,11 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import com.javalec.admin.menu.Header;
+import com.javalec.admin.publisher.AdminPublishDao;
+import com.javalec.admin.publisher.AdminPublishDto;
+import com.javalec.admin.stock.AdminStockStatusDao;
+import com.javalec.admin.stock.AdminStockStatusDto;
+import com.javalec.util.ShareVar;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -32,20 +40,37 @@ import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.event.AncestorListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.event.AncestorEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
-public class AdminBookPage extends JPanel {
+public class AdminSalesPage extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel lblNewLabel;
-	private JComboBox cbSearch;
 	private JTextField tfSearch;
 	private JButton btnSearch;
 	private JScrollPane scrollPane;
 	private JTable innerTable;
 	private final DefaultTableModel outerTable = new DefaultTableModel();
+	private JLabel lblNewLabel_1;
 
-	public AdminBookPage() {
+	public AdminSalesPage() {
 		addAncestorListener(new AncestorListener() {
 			public void ancestorAdded(AncestorEvent event) {
 				tableInit();
@@ -63,35 +88,26 @@ public class AdminBookPage extends JPanel {
 		setBackground(new Color(253, 253, 253));
 		setLayout(null);
 		add(getLblNewLabel());
-		add(getCbSearch());
 		add(getTfSearch());
 		add(getBtnSearch());
 		add(getScrollPane());
+		add(getLblNewLabel_1());
 
 	}
 
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("책 현황");
+			lblNewLabel = new JLabel("매출 현황");
 			lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 			lblNewLabel.setBounds(29, 39, 200, 50);
 		}
 		return lblNewLabel;
 	}
 
-	private JComboBox getCbSearch() {
-		if (cbSearch == null) {
-			cbSearch = new JComboBox();
-			cbSearch.setModel(new DefaultComboBoxModel(new String[] { "책제목", "작가명", "출판사명" }));
-			cbSearch.setBounds(29, 125, 120, 27);
-		}
-		return cbSearch;
-	}
-
 	private JTextField getTfSearch() {
 		if (tfSearch == null) {
 			tfSearch = new JTextField();
-			tfSearch.setBounds(155, 122, 180, 30);
+			tfSearch.setBounds(80, 122, 180, 30);
 			tfSearch.setColumns(10);
 			LineBorder line = new LineBorder(Color.black, 2, true);
 			tfSearch.setBorder(line);
@@ -113,7 +129,7 @@ public class AdminBookPage extends JPanel {
 			Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 			ImageIcon changeIcon = new ImageIcon(changeImg);
 			btnSearch.setIcon(changeIcon);
-			btnSearch.setBounds(342, 116, 40, 40);
+			btnSearch.setBounds(270, 116, 40, 40);
 		}
 		return btnSearch;
 	}
@@ -121,7 +137,7 @@ public class AdminBookPage extends JPanel {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(29, 180, 740, 480);
+			scrollPane.setBounds(29, 170, 740, 480);
 			scrollPane.setViewportView(getInnerTable());
 
 		}
@@ -142,52 +158,46 @@ public class AdminBookPage extends JPanel {
 		return innerTable;
 	}
 
+	private JLabel getLblNewLabel_1() {
+		if (lblNewLabel_1 == null) {
+			lblNewLabel_1 = new JLabel("날짜 : ");
+			lblNewLabel_1.setBounds(29, 129, 100, 16);
+		}
+		return lblNewLabel_1;
+	}
+
 	// ------ function --------
 
 	// 테이블 초기화
 	public void tableInit() {
-		outerTable.addColumn("책제목");
-		outerTable.addColumn("부제목");
-		outerTable.addColumn("작가명");
-		outerTable.addColumn("출판사명");
-		outerTable.addColumn("가격(원)");
-		outerTable.addColumn("책현황");
-		outerTable.setColumnCount(6);
+		outerTable.addColumn("날짜");
+		outerTable.addColumn("총매출액(원)");
+		outerTable.addColumn("총수량(개)");
+		outerTable.setColumnCount(3);
 
-		// outerTable 제목 가운데정렬 과연?
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
-		col.setPreferredWidth(150);
-		
+		col.setPreferredWidth(100);
+
 		col = innerTable.getColumnModel().getColumn(1);
 		col.setPreferredWidth(100);
 
 		col = innerTable.getColumnModel().getColumn(2);
-		col.setPreferredWidth(90);
-
-		col = innerTable.getColumnModel().getColumn(3);
-		col.setPreferredWidth(110);
-
-		col = innerTable.getColumnModel().getColumn(4);
 		col.setPreferredWidth(80);
-		
-		col = innerTable.getColumnModel().getColumn(5);
-		col.setPreferredWidth(120);
 
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
 
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
-		
+
 		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
 		r.setHorizontalAlignment(JLabel.RIGHT);
-		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
+		innerTable.getColumnModel().getColumn(1).setCellRenderer(r);
+		innerTable.getColumnModel().getColumn(2).setCellRenderer(r);
 
 		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
 		c.setHorizontalAlignment(JLabel.CENTER);
-		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
-		innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
-		innerTable.getColumnModel().getColumn(5).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(0).setCellRenderer(c);
 
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
@@ -198,80 +208,44 @@ public class AdminBookPage extends JPanel {
 
 	// 테이블 조회 메소드
 	private void searchAction() {
-		AdminBookDao dao = new AdminBookDao();
-		ArrayList<AdminBookDto> dtoList = dao.searchAction();
+		AdminSalesDao dao = new AdminSalesDao();
+		ArrayList<AdminSalesDto> dtoList = dao.searchAction();
 
 		for (int i = 0; i < dtoList.size(); i++) {
 
+			// 가격 포맷 ###,### 설정
 			DecimalFormat decFormat = new DecimalFormat("###,###");
-			int tmp3 = dtoList.get(i).getPresspirce();
-			String tmPressPrice = decFormat.format(tmp3);
+			int tmPrice = dtoList.get(i).getTotalPrice();
+			int tmCount = dtoList.get(i).getTotalCount();
+			String tmPressPrice = decFormat.format(tmPrice);
+			String tmPressCount = decFormat.format(tmCount);
 
-			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
-					dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
+			String[] qTxt = { dtoList.get(i).getDate(), tmPressPrice, tmPressCount };
 
 			outerTable.addRow(qTxt);
 		}
 	}
 
-	// 검색 - "책제목", "작가명", "출판사명
+	// 날짜 검색
 	private void searchBtnClicked() {
-		AdminBookDao dao = null;
-		String inputStr = tfSearch.getText();
-		ArrayList<AdminBookDto> dtoList = new ArrayList<>();
-		int index = cbSearch.getSelectedIndex();
+		String str = tfSearch.getText();
 
-		switch (index) {
-		case 0:	//책제목
-			dao = new AdminBookDao();
-			dtoList = dao.searchConditionToBookName(inputStr);
+		AdminSalesDao dao = new AdminSalesDao();
+		ArrayList<AdminSalesDto> dtoList = dao.searchDate(str);
 
-			for (int i = 0; i < dtoList.size(); i++) {
+		for (int i = 0; i < dtoList.size(); i++) {
 
-				DecimalFormat decFormat = new DecimalFormat("###,###");
-				int tmp3 = dtoList.get(i).getPresspirce();
-				String tmPressPrice = decFormat.format(tmp3);
+			// 가격 포맷 ###,### 설정
+			DecimalFormat decFormat = new DecimalFormat("###,###");
+			int tmPrice = dtoList.get(i).getTotalPrice();
+			int tmCount = dtoList.get(i).getTotalCount();
+			String tmPressPrice = decFormat.format(tmPrice);
+			String tmPressCount = decFormat.format(tmCount);
 
-				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
+			String[] qTxt = { dtoList.get(i).getDate(), tmPressPrice, tmPressCount };
 
-				outerTable.addRow(qTxt);
-			}
-			break;
-
-		case 1: // 작가명
-			dao = new AdminBookDao();
-			dtoList = dao.searchConditionToAuthor(inputStr);
-
-			for (int i = 0; i < dtoList.size(); i++) {
-
-				DecimalFormat decFormat = new DecimalFormat("###,###");
-				int tmp3 = dtoList.get(i).getPresspirce();
-				String tmPressPrice = decFormat.format(tmp3);
-
-				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
-
-				outerTable.addRow(qTxt);
-			}
-			break;
-		case 2:
-			// 출판사명
-			dao = new AdminBookDao();
-			dtoList = dao.searchConditionToPublisher(inputStr);
-
-			for (int i = 0; i < dtoList.size(); i++) {
-				DecimalFormat decFormat = new DecimalFormat("###,###");
-				int tmp3 = dtoList.get(i).getPresspirce();
-				String tmPressPrice = decFormat.format(tmp3);
-
-				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
-
-				outerTable.addRow(qTxt);
-			}
-			break;
+			outerTable.addRow(qTxt);
 		}
-	}
 
+	}
 }

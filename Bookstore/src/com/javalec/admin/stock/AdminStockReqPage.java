@@ -44,6 +44,7 @@ import javax.swing.event.AncestorListener;
 import javax.swing.event.AncestorEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.UIManager;
 
 public class AdminStockReqPage extends JPanel {
 
@@ -62,6 +63,10 @@ public class AdminStockReqPage extends JPanel {
 	private JLabel lblNewLabel_1_1_1;
 	private JTextField tfOrderCount;
 	private JButton btnRequest;
+	private JLabel lblNewLabel_1_2;
+	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel_1_2_1;
+	private JTextField tfSubtitle;
 
 	public AdminStockReqPage() {
 		addAncestorListener(new AncestorListener() {
@@ -92,6 +97,10 @@ public class AdminStockReqPage extends JPanel {
 		add(getLblNewLabel_1_1_1());
 		add(getTfOrderCount());
 		add(getBtnRequest());
+		add(getLblNewLabel_1_2());
+		add(getLblNewLabel_2());
+		add(getLblNewLabel_1_2_1());
+		add(getTfSubtitle());
 
 	}
 
@@ -99,7 +108,7 @@ public class AdminStockReqPage extends JPanel {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("입고 요청");
 			lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
-			lblNewLabel.setBounds(29, 39, 200, 50);
+			lblNewLabel.setBounds(29, 34, 83, 55);
 		}
 		return lblNewLabel;
 	}
@@ -155,7 +164,12 @@ public class AdminStockReqPage extends JPanel {
 
 	private JTable getInnerTable() {
 		if (innerTable == null) {
-			innerTable = new JTable();
+			innerTable = new JTable() {
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
+			};
 			innerTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -170,8 +184,9 @@ public class AdminStockReqPage extends JPanel {
 
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
-			lblNewLabel_1 = new JLabel("책제목(입력불가)");
-			lblNewLabel_1.setBounds(29, 424, 120, 16);
+			lblNewLabel_1 = new JLabel("* 판매종료된 책은 입고요청 불가합니다.");
+			lblNewLabel_1.setBounds(124, 54, 210, 16);
+			lblNewLabel_1.setForeground((new Color(255, 51, 51)));
 		}
 		return lblNewLabel_1;
 	}
@@ -184,7 +199,7 @@ public class AdminStockReqPage extends JPanel {
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfBookName.setBorder(line);
 			tfBookName.setColumns(10);
-			tfBookName.setBounds(26, 443, 600, 45);
+			tfBookName.setBounds(26, 415, 600, 45);
 		}
 		return tfBookName;
 	}
@@ -197,7 +212,7 @@ public class AdminStockReqPage extends JPanel {
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfPublisherName.setBorder(line);
 			tfPublisherName.setColumns(10);
-			tfPublisherName.setBounds(26, 527, 600, 45);
+			tfPublisherName.setBounds(26, 560, 600, 45);
 		}
 		return tfPublisherName;
 	}
@@ -205,7 +220,7 @@ public class AdminStockReqPage extends JPanel {
 	private JLabel getLblNewLabel_1_1() {
 		if (lblNewLabel_1_1 == null) {
 			lblNewLabel_1_1 = new JLabel("출판사(입력불가)");
-			lblNewLabel_1_1.setBounds(29, 508, 120, 16);
+			lblNewLabel_1_1.setBounds(29, 545, 120, 16);
 		}
 		return lblNewLabel_1_1;
 	}
@@ -213,7 +228,7 @@ public class AdminStockReqPage extends JPanel {
 	private JLabel getLblNewLabel_1_1_1() {
 		if (lblNewLabel_1_1_1 == null) {
 			lblNewLabel_1_1_1 = new JLabel("입고 수량 *");
-			lblNewLabel_1_1_1.setBounds(29, 592, 120, 16);
+			lblNewLabel_1_1_1.setBounds(29, 610, 120, 16);
 		}
 		return lblNewLabel_1_1_1;
 	}
@@ -236,7 +251,7 @@ public class AdminStockReqPage extends JPanel {
 				}
 			});
 			tfOrderCount.setColumns(10);
-			tfOrderCount.setBounds(26, 611, 600, 45);
+			tfOrderCount.setBounds(26, 625, 600, 45);
 			LineBorder line = new LineBorder(Color.gray, 1, true);
 			tfOrderCount.setBorder(line);
 		}
@@ -258,10 +273,46 @@ public class AdminStockReqPage extends JPanel {
 			btnRequest.setOpaque(true);
 			btnRequest.setForeground(new Color(253, 253, 253));
 			btnRequest.setBorderPainted(false);
-			
-			
+
 		}
 		return btnRequest;
+	}
+
+	private JLabel getLblNewLabel_1_2() {
+		if (lblNewLabel_1_2 == null) {
+			lblNewLabel_1_2 = new JLabel("책제목(입력불가)");
+			lblNewLabel_1_2.setBounds(29, 400, 120, 16);
+		}
+		return lblNewLabel_1_2;
+	}
+	private JLabel getLblNewLabel_2() {
+		if (lblNewLabel_2 == null) {
+			lblNewLabel_2 = new JLabel("개");
+			lblNewLabel_2.setBounds(638, 640, 61, 20);
+		}
+		return lblNewLabel_2;
+	}
+	
+	private JLabel getLblNewLabel_1_2_1() {
+		if (lblNewLabel_1_2_1 == null) {
+			lblNewLabel_1_2_1 = new JLabel("부제목(입력불가)");
+			lblNewLabel_1_2_1.setBounds(29, 471, 120, 16);
+		}
+		return lblNewLabel_1_2_1;
+	}
+	private JTextField getTfSubtitle() {
+		if (tfSubtitle == null) {
+			tfSubtitle = new JTextField();
+			tfSubtitle.setEditable(false);
+			tfSubtitle.setColumns(10);
+			tfSubtitle.setBackground(UIManager.getColor("TabbedPane.selectedTabTitlePressedColor"));
+			tfSubtitle.setBounds(26, 486, 600, 45);
+
+			LineBorder line = new LineBorder(Color.gray, 1, true);
+
+			tfSubtitle.setBorder(line);
+		}
+		return tfSubtitle;
 	}
 
 	// ------ function --------
@@ -269,13 +320,14 @@ public class AdminStockReqPage extends JPanel {
 	// 테이블 초기화
 	public void tableInit() {
 		outerTable.addColumn("책제목");
+		outerTable.addColumn("부제");
 		outerTable.addColumn("작가");
 		outerTable.addColumn("출판사");
 		outerTable.addColumn("가격(원)");
 		outerTable.addColumn("입고수량(개)");
-		outerTable.addColumn("재고수량(개)");
+		outerTable.addColumn("책현황");
 		outerTable.addColumn("입고일");
-		outerTable.setColumnCount(7);
+		outerTable.setColumnCount(8);
 
 		// outerTable 제목 가운데정렬 과연?
 
@@ -284,20 +336,23 @@ public class AdminStockReqPage extends JPanel {
 
 		col = innerTable.getColumnModel().getColumn(1);
 		col.setPreferredWidth(100);
-
+		
 		col = innerTable.getColumnModel().getColumn(2);
-		col.setPreferredWidth(120);
+		col.setPreferredWidth(100);
 
 		col = innerTable.getColumnModel().getColumn(3);
-		col.setPreferredWidth(80);
+		col.setPreferredWidth(120);
 
 		col = innerTable.getColumnModel().getColumn(4);
 		col.setPreferredWidth(80);
 
 		col = innerTable.getColumnModel().getColumn(5);
-		col.setPreferredWidth(100);
+		col.setPreferredWidth(80);
 
 		col = innerTable.getColumnModel().getColumn(6);
+		col.setPreferredWidth(80);
+		
+		col = innerTable.getColumnModel().getColumn(7);
 		col.setPreferredWidth(100);
 
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
@@ -305,6 +360,18 @@ public class AdminStockReqPage extends JPanel {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
+
+		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+		r.setHorizontalAlignment(JLabel.RIGHT);
+		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
+		innerTable.getColumnModel().getColumn(5).setCellRenderer(r);
+
+		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
+		c.setHorizontalAlignment(JLabel.CENTER);
+		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(6).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(7).setCellRenderer(c);
 
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
@@ -325,16 +392,12 @@ public class AdminStockReqPage extends JPanel {
 			// 가격 포맷 ###,### 설정
 			DecimalFormat decFormat = new DecimalFormat("###,###");
 			int tmp3 = dtoList.get(i).getPressPrice();
-			int tmCount = dtoList.get(i).getPressCount();
-			int tmStock = dtoList.get(i).getStockCount();
+			int tmCount = dtoList.get(i).getStockCount();
 			String tmPressPrice = decFormat.format(tmp3);
-			String tmPressCount = decFormat.format(tmCount);
-			String tmStockCount = decFormat.format(tmStock);
+			String tmPressStock = decFormat.format(tmCount);
 
-			// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-			String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-					dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-					dtoList.get(i).getPressDate() };
+			String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+					dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 			outerTable.addRow(qTxt);
 		}
@@ -343,12 +406,14 @@ public class AdminStockReqPage extends JPanel {
 	// 테이블의 셀 클릭했을 때
 	private void cellClicked() {
 		int i = innerTable.getSelectedRow();
-
+		
 		String bookName = (String) innerTable.getValueAt(i, 0);
-		String publisherName = (String) innerTable.getValueAt(i, 2);
+		String publisherName = (String) innerTable.getValueAt(i, 3);
+		String bookSubTitle = (String)innerTable.getValueAt(i, 1);
 
 		tfBookName.setText(bookName);
 		tfPublisherName.setText(publisherName);
+		tfSubtitle.setText(bookSubTitle);
 	}
 
 	// 검색
@@ -369,18 +434,15 @@ public class AdminStockReqPage extends JPanel {
 				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
+				int tmCount = dtoList.get(i).getStockCount();
 				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
+				String tmPressStock = decFormat.format(tmCount);
 
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-						dtoList.get(i).getPressDate() };
+				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
+
 			}
 			break;
 		case 1:
@@ -392,16 +454,12 @@ public class AdminStockReqPage extends JPanel {
 				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
-				int tmCount = dtoList.get(i).getPressCount();
-				int tmStock = dtoList.get(i).getStockCount();
+				int tmCount = dtoList.get(i).getStockCount();
 				String tmPressPrice = decFormat.format(tmp3);
-				String tmPressCount = decFormat.format(tmCount);
-				String tmStockCount = decFormat.format(tmStock);
+				String tmPressStock = decFormat.format(tmCount);
 
-				// tmPressCount 하나는 재고 갯수로 바꿔줘야한다.
-				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice, tmPressCount, tmStockCount,
-						dtoList.get(i).getPressDate() };
+				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
 			}
@@ -413,10 +471,17 @@ public class AdminStockReqPage extends JPanel {
 
 		String bookname = tfBookName.getText();
 		String publisher = tfPublisherName.getText();
+		int i = innerTable.getSelectedRow();
 
 		// 책 제목이나 출판사가 빈칸일 때
 		if (tfBookName.getText().length() <= 0 || tfPublisherName.getText().length() <= 0) {
 			JOptionPane.showMessageDialog(this, "위 테이블에서 책제목을 클릭하세요.");
+			return;
+		}
+		
+		//책 현황이 판매종료일 때
+		if(innerTable.getValueAt(i, 6).equals("판매종료")) {
+			JOptionPane.showMessageDialog(this, "<html>판매종료된 책은 입고요청 할 수 없습니다! \n [책 관리] > [책 수정] 에서 책 현황 변경 후에 입고요청하세요.");
 			return;
 		}
 
@@ -445,6 +510,7 @@ public class AdminStockReqPage extends JPanel {
 					tfBookName.setText("");
 					tfPublisherName.setText("");
 					tfOrderCount.setText("");
+					tfSubtitle.setText("");
 					tfSearch.setText("");
 				} else {
 					JOptionPane.showMessageDialog(this, "입력한 내용을 확인해주세요.");
@@ -455,6 +521,7 @@ public class AdminStockReqPage extends JPanel {
 				tableInit();
 				searchAction();
 				tfBookName.setText("");
+				tfSubtitle.setText("");
 				tfPublisherName.setText("");
 				tfOrderCount.setText("");
 				tfSearch.setText("");
@@ -463,5 +530,5 @@ public class AdminStockReqPage extends JPanel {
 		}
 
 	}
-
+	
 }
