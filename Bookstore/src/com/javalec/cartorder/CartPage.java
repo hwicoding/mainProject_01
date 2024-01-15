@@ -71,6 +71,7 @@ public class CartPage extends JDialog {
 	private final DefaultTableModel outertable = new DefaultTableModel();
 	ArrayList<CartorderDTO> dtolist = null;
 	private JTextField textField;
+	private JLabel lblTotalprice_1;
 	
 	/**
 	 * Launch the application.
@@ -128,6 +129,7 @@ public class CartPage extends JDialog {
 		contentPanel.add(getTfTotalmoney());
 		contentPanel.add(getBtnOrder());
 		contentPanel.add(getTextField());
+		contentPanel.add(getLblTotalprice_1());
 	}
 	ImageIcon imageSetSize(ImageIcon icon, int i, int j) {
 		Image ximg = icon.getImage();
@@ -172,49 +174,49 @@ public class CartPage extends JDialog {
 	private JLabel getLblPublishername() {
 		if (lblPublishername == null) {
 			lblPublishername = new JLabel("출판사 ");
-			lblPublishername.setBounds(34, 308, 50, 15);
+			lblPublishername.setBounds(34, 305, 50, 21);
 		}
 		return lblPublishername;
 	}
 	private JLabel getLblBookname() {
 		if (lblBookname == null) {
 			lblBookname = new JLabel("책 제목");
-			lblBookname.setBounds(34, 344, 50, 15);
+			lblBookname.setBounds(34, 340, 50, 21);
 		}
 		return lblBookname;
 	}
 	private JLabel getLblAuthorname() {
 		if (lblAuthorname == null) {
 			lblAuthorname = new JLabel("작가");
-			lblAuthorname.setBounds(34, 417, 50, 15);
+			lblAuthorname.setBounds(34, 410, 50, 21);
 		}
 		return lblAuthorname;
 	}
 	private JLabel getLblBooktitle() {
 		if (lblBooktitle == null) {
 			lblBooktitle = new JLabel("책 부제");
-			lblBooktitle.setBounds(34, 381, 50, 15);
+			lblBooktitle.setBounds(34, 375, 50, 21);
 		}
 		return lblBooktitle;
 	}
 	private JLabel getLblGenre() {
 		if (lblGenre == null) {
 			lblGenre = new JLabel("장르");
-			lblGenre.setBounds(34, 456, 50, 15);
+			lblGenre.setBounds(34, 445, 50, 21);
 		}
 		return lblGenre;
 	}
 	private JLabel getLblCount() {
 		if (lblCount == null) {
 			lblCount = new JLabel("수량");
-			lblCount.setBounds(34, 497, 50, 15);
+			lblCount.setBounds(34, 480, 50, 21);
 		}
 		return lblCount;
 	}
 	private JLabel getLblTotalprice() {
 		if (lblTotalprice == null) {
 			lblTotalprice = new JLabel("총 가격");
-			lblTotalprice.setBounds(34, 537, 50, 15);
+			lblTotalprice.setBounds(34, 515, 50, 21);
 		}
 		return lblTotalprice;
 	}
@@ -232,7 +234,7 @@ public class CartPage extends JDialog {
 			tfBookname = new JTextField();
 			tfBookname.setEditable(false);
 			tfBookname.setColumns(10);
-			tfBookname.setBounds(114, 341, 191, 21);
+			tfBookname.setBounds(114, 340, 191, 21);
 		}
 		return tfBookname;
 	}
@@ -241,7 +243,7 @@ public class CartPage extends JDialog {
 			tfBooktitle = new JTextField();
 			tfBooktitle.setEditable(false);
 			tfBooktitle.setColumns(10);
-			tfBooktitle.setBounds(114, 378, 191, 21);
+			tfBooktitle.setBounds(114, 375, 191, 21);
 		}
 		return tfBooktitle;
 	}
@@ -250,7 +252,7 @@ public class CartPage extends JDialog {
 			tfAuthorname = new JTextField();
 			tfAuthorname.setEditable(false);
 			tfAuthorname.setColumns(10);
-			tfAuthorname.setBounds(114, 417, 119, 21);
+			tfAuthorname.setBounds(114, 410, 119, 21);
 		}
 		return tfAuthorname;
 	}
@@ -259,7 +261,7 @@ public class CartPage extends JDialog {
 			tfGenre = new JTextField();
 			tfGenre.setEditable(false);
 			tfGenre.setColumns(10);
-			tfGenre.setBounds(114, 453, 139, 21);
+			tfGenre.setBounds(114, 445, 139, 21);
 		}
 		return tfGenre;
 	}
@@ -280,6 +282,8 @@ public class CartPage extends JDialog {
 							int result = b*d;
 							tfTotalmoney.setText(Integer.toString(result));
 							tfCartcount.setEnabled(false);
+							
+							
 							
 							
 							
@@ -314,7 +318,7 @@ public class CartPage extends JDialog {
 				}
 			});
 			tfCartcount.setColumns(10);
-			tfCartcount.setBounds(114, 494, 55, 21);
+			tfCartcount.setBounds(114, 480, 55, 21);
 		}
 		return tfCartcount;
 	}
@@ -323,7 +327,7 @@ public class CartPage extends JDialog {
 			tfTotalmoney = new JTextField();
 			tfTotalmoney.setEditable(false);
 			tfTotalmoney.setColumns(10);
-			tfTotalmoney.setBounds(114, 534, 119, 21);
+			tfTotalmoney.setBounds(114, 515, 119, 21);
 		}
 		return tfTotalmoney;
 	}
@@ -497,6 +501,9 @@ public class CartPage extends JDialog {
 
 		// 주문하기 버튼 클릭했을 때, (주문내역 테이블로 호출, 장바구니 테이블 delete 처리)
 	
+	
+		
+		
 		private void orderpage() {
 			int a = Integer.parseInt(tfCartcount.getText());
 			int b  = Integer.parseInt(textField.getText());
@@ -506,13 +513,13 @@ public class CartPage extends JDialog {
 			boolean result = dao.insertAction();
 			
 			if(result==true) {
-				JOptionPane.showMessageDialog(null, "...");
+				JOptionPane.showMessageDialog(null, "주문이 완료되었습니다.");
 				dispose();
 				SearchPage search = new SearchPage();
 				search.setVisible(true);
 				
 			}else {
-				JOptionPane.showMessageDialog(null, "실패");}
+				JOptionPane.showMessageDialog(null, "잘못된 부분이 없는지 확인하십시오");}
 			
 			
 		// Orderpage로 정보 보내기
@@ -532,10 +539,18 @@ public class CartPage extends JDialog {
 	private JTextField getTextField() {
 		if (textField == null) {
 			textField = new JTextField();
-			textField.setBounds(114, 565, 96, 21);
+			textField.setEditable(false);
+			textField.setBounds(114, 550, 96, 21);
 			textField.setColumns(10);
 		}
 		return textField;
+	}
+	private JLabel getLblTotalprice_1() {
+		if (lblTotalprice_1 == null) {
+			lblTotalprice_1 = new JLabel("도서 번호");
+			lblTotalprice_1.setBounds(34, 550, 50, 21);
+		}
+		return lblTotalprice_1;
 	}
 }
 
