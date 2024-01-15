@@ -143,13 +143,14 @@ public class AdminStockPage extends JPanel {
 	// 테이블 초기화
 	public void tableInit() {
 		outerTable.addColumn("책제목");
+		outerTable.addColumn("부제");
 		outerTable.addColumn("작가");
 		outerTable.addColumn("출판사");
 		outerTable.addColumn("가격(원)");
 		outerTable.addColumn("입고수량(개)");
 		outerTable.addColumn("책현황");
 		outerTable.addColumn("입고일");
-		outerTable.setColumnCount(7);
+		outerTable.setColumnCount(8);
 
 		// outerTable 제목 가운데정렬 과연?
 
@@ -158,20 +159,23 @@ public class AdminStockPage extends JPanel {
 
 		col = innerTable.getColumnModel().getColumn(1);
 		col.setPreferredWidth(100);
-
+		
 		col = innerTable.getColumnModel().getColumn(2);
-		col.setPreferredWidth(120);
+		col.setPreferredWidth(100);
 
 		col = innerTable.getColumnModel().getColumn(3);
-		col.setPreferredWidth(80);
+		col.setPreferredWidth(120);
 
 		col = innerTable.getColumnModel().getColumn(4);
 		col.setPreferredWidth(80);
 
 		col = innerTable.getColumnModel().getColumn(5);
 		col.setPreferredWidth(80);
-		
+
 		col = innerTable.getColumnModel().getColumn(6);
+		col.setPreferredWidth(80);
+		
+		col = innerTable.getColumnModel().getColumn(7);
 		col.setPreferredWidth(100);
 
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
@@ -182,15 +186,15 @@ public class AdminStockPage extends JPanel {
 
 		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
 		r.setHorizontalAlignment(JLabel.RIGHT);
-		innerTable.getColumnModel().getColumn(3).setCellRenderer(r);
 		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
+		innerTable.getColumnModel().getColumn(5).setCellRenderer(r);
 
 		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
 		c.setHorizontalAlignment(JLabel.CENTER);
-		innerTable.getColumnModel().getColumn(1).setCellRenderer(c);
 		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
-		innerTable.getColumnModel().getColumn(5).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
 		innerTable.getColumnModel().getColumn(6).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(7).setCellRenderer(c);
 
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
@@ -215,7 +219,7 @@ public class AdminStockPage extends JPanel {
 			String tmPressPrice = decFormat.format(tmp3);
 			String tmPressStock = decFormat.format(tmCount);
 
-			String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
+			String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
 					dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 			outerTable.addRow(qTxt);
@@ -245,7 +249,7 @@ public class AdminStockPage extends JPanel {
 				String tmPressPrice = decFormat.format(tmp3);
 				String tmPressStock = decFormat.format(tmCount);
 
-				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
+				String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
 						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
@@ -265,7 +269,7 @@ public class AdminStockPage extends JPanel {
 				String tmPressPrice = decFormat.format(tmp3);
 				String tmPressStock = decFormat.format(tmCount);
 
-				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
+				String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
 						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
@@ -286,7 +290,7 @@ public class AdminStockPage extends JPanel {
 				String tmPressPrice = decFormat.format(tmp3);
 				String tmPressStock = decFormat.format(tmCount);
 
-				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
+				String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
 						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);
@@ -300,14 +304,13 @@ public class AdminStockPage extends JPanel {
 			for (int i = 0; i < dtoList.size(); i++) {
 
 				// 가격 포맷 ###,### 설정
-				// 가격 포맷 ###,### 설정
 				DecimalFormat decFormat = new DecimalFormat("###,###");
 				int tmp3 = dtoList.get(i).getPressPrice();
 				int tmCount = dtoList.get(i).getStockCount();
 				String tmPressPrice = decFormat.format(tmp3);
 				String tmPressStock = decFormat.format(tmCount);
 
-				String[] qTxt = { dtoList.get(i).getBookName(), dtoList.get(i).getAuthorname(),
+				String[] qTxt = { dtoList.get(i).getBookName(),  dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
 						dtoList.get(i).getPublishername(), tmPressPrice, tmPressStock, dtoList.get(i).getBookstatus() ,dtoList.get(i).getPressDate() };
 
 				outerTable.addRow(qTxt);

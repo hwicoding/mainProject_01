@@ -17,6 +17,7 @@ public class AdminStockStatusDto {
 	String authorname;
 	String publishername;
 	String bookstatus;
+	String booktitle;
 
 	public AdminStockStatusDto(String publishername) {
 		super();
@@ -30,7 +31,7 @@ public class AdminStockStatusDto {
 	}
 
 	public AdminStockStatusDto(String bookName, String authorname, String publishername, int pressPrice, int stockCount,
-			String bookstatus, String pressDate) {
+			String bookstatus, String pressDate, String booktitle) {
 		super();
 		this.bookName = bookName;
 		this.authorname = authorname;
@@ -39,6 +40,7 @@ public class AdminStockStatusDto {
 		this.stockCount = stockCount;
 		this.bookstatus = bookstatus;
 		this.pressDate = pressDate;
+		this.booktitle = booktitle;
 	}
 
 	public String getAuthorname() {
@@ -165,6 +167,14 @@ public class AdminStockStatusDto {
 
 	public void setPressCount(int pressCount) {
 		this.pressCount = pressCount;
+	}
+
+	public String getBooktitle() {
+		return booktitle;
+	}
+
+	public void setBooktitle(String booktitle) {
+		this.booktitle = booktitle;
 	}
 
 }

@@ -61,7 +61,7 @@ public class AdminStockStatusDao {
 	public ArrayList<AdminStockStatusDto> searchAction() {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
 
-		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) ";
+		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) , b.booktitle ";
 		String query2 = "from book b inner join press p on p.booknum = b.booknum inner join publisher pub on p.publishernum = pub.publishernum ";
 		String query3 = " inner join bookstore.write w on w.publishernum = pub.publishernum inner join author a on a.authornum = w.authornum order by bookstatus desc";
 
@@ -80,9 +80,10 @@ public class AdminStockStatusDao {
 				int wkPressCount = rs.getInt(5);
 				String wkBookStatus = rs.getString(6);
 				String wkPressDate = rs.getString(7);
+				String wkBookTitle = rs.getString(8);
 
 				AdminStockStatusDto dto = new AdminStockStatusDto(wkBookName, wkAuthorName, wkPublisherName,
-						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate);
+						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate, wkBookTitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -97,16 +98,15 @@ public class AdminStockStatusDao {
 	public ArrayList<AdminStockStatusDto> searchConditionToBookName(String str) {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
 
-		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice, p.presscount,  b.bookstatus, date(p.pressdate) from press p, book b, publisher pub, bookstore.write w, author a, purchase pur ";
-		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and a.authornum = w.authornum ";
-		String query3 = " and pur.booknum = b.booknum  and b.bookname like '%" + str + "%'  order by bookstatus desc";
+		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) , b.booktitle from book b inner join press p on p.booknum = b.booknum inner join publisher pub on p.publishernum = pub.publishernum "; 
+		String query2 = " inner join bookstore.write w on w.publishernum = pub.publishernum inner join author a on a.authornum = w.authornum and b.bookname like '%" + str + "%' order by bookstatus desc ";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url, id, pw);
 			Statement stmt = conn.createStatement();
 
-			ResultSet rs = stmt.executeQuery(query1 + query2 + query3);
+			ResultSet rs = stmt.executeQuery(query1 + query2);
 
 			while (rs.next()) {
 				String wkBookName = rs.getString(1);
@@ -116,9 +116,10 @@ public class AdminStockStatusDao {
 				int wkPressCount = rs.getInt(5);
 				String wkBookStatus = rs.getString(6);
 				String wkPressDate = rs.getString(7);
+				String wkBookTitle = rs.getString(8);
 
 				AdminStockStatusDto dto = new AdminStockStatusDto(wkBookName, wkAuthorName, wkPublisherName,
-						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate);
+						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate, wkBookTitle);
 				dtoList.add(dto);
 
 			}
@@ -133,17 +134,15 @@ public class AdminStockStatusDao {
 	public ArrayList<AdminStockStatusDto> searchConditionToPublisher(String str) {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
 
-		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice, p.presscount,  b.bookstatus, date(p.pressdate) from press p, book b, publisher pub, bookstore.write w, author a, purchase pur ";
-		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and a.authornum = w.authornum ";
-		String query3 = " and pur.booknum = b.booknum and pub.publishername like '%" + str
-				+ "%'  order by bookstatus desc";
+		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) , b.booktitle from book b inner join press p on p.booknum = b.booknum inner join publisher pub on p.publishernum = pub.publishernum "; 
+		String query2 = " inner join bookstore.write w on w.publishernum = pub.publishernum inner join author a on a.authornum = w.authornum and pub.publishername like '%" + str + "%' order by bookstatus desc ";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url, id, pw);
 			Statement stmt = conn.createStatement();
 
-			ResultSet rs = stmt.executeQuery(query1 + query2 + query3);
+			ResultSet rs = stmt.executeQuery(query1 + query2);
 
 			while (rs.next()) {
 				String wkBookName = rs.getString(1);
@@ -153,9 +152,10 @@ public class AdminStockStatusDao {
 				int wkPressCount = rs.getInt(5);
 				String wkBookStatus = rs.getString(6);
 				String wkPressDate = rs.getString(7);
+				String wkBookTitle = rs.getString(8);
 
 				AdminStockStatusDto dto = new AdminStockStatusDto(wkBookName, wkAuthorName, wkPublisherName,
-						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate);
+						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate, wkBookTitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -169,16 +169,15 @@ public class AdminStockStatusDao {
 	public ArrayList<AdminStockStatusDto> searchConditionToPressDate(String str) {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
 
-		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice, p.presscount, b.bookstatus,  date(p.pressdate) from press p, book b, publisher pub, bookstore.write w, author a, purchase pur ";
-		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and a.authornum = w.authornum ";
-		String query3 = " and pur.booknum = b.booknum and p.pressdate like '%" + str + "%'  order by bookstatus desc";
-
+		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) , b.booktitle from book b inner join press p on p.booknum = b.booknum inner join publisher pub on p.publishernum = pub.publishernum "; 
+		String query2 = " inner join bookstore.write w on w.publishernum = pub.publishernum inner join author a on a.authornum = w.authornum and p.pressdate like '%" + str + "%' order by bookstatus desc ";
+		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url, id, pw);
 			Statement stmt = conn.createStatement();
 
-			ResultSet rs = stmt.executeQuery(query1 + query2 + query3);
+			ResultSet rs = stmt.executeQuery(query1 + query2);
 
 			while (rs.next()) {
 				String wkBookName = rs.getString(1);
@@ -188,9 +187,10 @@ public class AdminStockStatusDao {
 				int wkPressCount = rs.getInt(5);
 				String wkBookStatus = rs.getString(6);
 				String wkPressDate = rs.getString(7);
+				String wkBookTitle = rs.getString(8);
 
 				AdminStockStatusDto dto = new AdminStockStatusDto(wkBookName, wkAuthorName, wkPublisherName,
-						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate);
+						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate, wkBookTitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -200,20 +200,19 @@ public class AdminStockStatusDao {
 		return dtoList;
 	}
 
-	// 입고 현황_입고일로 검색
+	// 입고 현황_책현황로 검색
 	public ArrayList<AdminStockStatusDto> searchConditionToBoostatus(String str) {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
 
-		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice, p.presscount, b.bookstatus,  date(p.pressdate) from press p, book b, publisher pub, bookstore.write w, author a, purchase pur ";
-		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and a.authornum = w.authornum ";
-		String query3 = " and pur.booknum = b.booknum and b.bookstatus like '%" + str + "%'  order by bookstatus desc";
+		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) , b.booktitle from book b inner join press p on p.booknum = b.booknum inner join publisher pub on p.publishernum = pub.publishernum "; 
+		String query2 = " inner join bookstore.write w on w.publishernum = pub.publishernum inner join author a on a.authornum = w.authornum and b.bookstatus like '%" + str + "%' order by bookstatus desc ";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url, id, pw);
 			Statement stmt = conn.createStatement();
 
-			ResultSet rs = stmt.executeQuery(query1 + query2 + query3);
+			ResultSet rs = stmt.executeQuery(query1 + query2);
 
 			while (rs.next()) {
 				String wkBookName = rs.getString(1);
@@ -223,9 +222,10 @@ public class AdminStockStatusDao {
 				int wkPressCount = rs.getInt(5);
 				String wkBookStatus = rs.getString(6);
 				String wkPressDate = rs.getString(7);
+				String wkBookTitle = rs.getString(8);
 
 				AdminStockStatusDto dto = new AdminStockStatusDto(wkBookName, wkAuthorName, wkPublisherName,
-						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate);
+						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate, wkBookTitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -309,37 +309,11 @@ public class AdminStockStatusDao {
 		return true;
 	}
 
-//	//재고 수량 가져오기
-//	public ArrayList<AdminStockStatusDto> getStockCOunt() {
-//		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
-//
-//		String query = "select b.bookname, p.presscount - pur.purchasecount  from purchase pur, book b, press p where pur.booknum = b.booknum and b.booknum = p.booknum";
-//
-//		try {
-//			Class.forName("com.mysql.cj.jdbc.Driver");
-//			Connection conn = DriverManager.getConnection(url, id, pw);
-//			Statement stmt = conn.createStatement();
-//
-//			ResultSet rs = stmt.executeQuery(query);
-//
-//			while (rs.next()) {
-//				String wkPublisherName = rs.getString(1);
-//				int wkStockCount = rs.getInt(2);
-//
-//				AdminStockStatusDto dto = new AdminStockStatusDto(wkPublisherName, wkStockCount);
-//				dtoList.add(dto);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return dtoList;
-//	}
-
 	// 재고 현황_ 테이블 조회 메소드
 	public ArrayList<AdminStockStatusDto> searchStockAction() {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
 
-		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  (p.presscount - pur.purchasecount),	b.bookstatus, date(p.pressdate) from book b inner join press p on p.booknum = b.booknum ";
+		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  (p.presscount - pur.purchasecount),	b.bookstatus, date(p.pressdate), b.booktitle from book b inner join press p on p.booknum = b.booknum ";
 		String query2 = " inner join publisher pub on p.publishernum = pub.publishernum inner join bookstore.write w on w.publishernum = pub.publishernum ";
 		String query3 = " inner join author a on a.authornum = w.authornum inner join purchase pur on pur.booknum = b.booknum order by bookstatus desc ";
 
@@ -355,12 +329,13 @@ public class AdminStockStatusDao {
 				String wkAuthorName = rs.getString(2);
 				String wkPublisherName = rs.getString(3);
 				int wkPressPrice = rs.getInt(4);
-				int wkStockCount = rs.getInt(5);
+				int wkPressCount = rs.getInt(5);
 				String wkBookStatus = rs.getString(6);
 				String wkPressDate = rs.getString(7);
+				String wkBookTitle = rs.getString(8);
 
 				AdminStockStatusDto dto = new AdminStockStatusDto(wkBookName, wkAuthorName, wkPublisherName,
-						wkPressPrice, wkStockCount, wkBookStatus, wkPressDate);
+						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate, wkBookTitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -374,29 +349,29 @@ public class AdminStockStatusDao {
 	public ArrayList<AdminStockStatusDto> searchBookName(String str) {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
 
-		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  (p.presscount - pur.purchasecount),	b.bookstatus, date(p.pressdate) from book b inner join press p on p.booknum = b.booknum ";
-		String query2 = " inner join publisher pub on p.publishernum = pub.publishernum inner join bookstore.write w on w.publishernum = pub.publishernum ";
-		String query3 = " inner join author a on a.authornum = w.authornum inner join purchase pur on pur.booknum = b.booknum and b.bookname like '%"
-				+ str + "%' order by bookstatus desc ";
+		String query1 ="select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) , b.booktitle from book b inner join press p on p.booknum = b.booknum inner join publisher pub on p.publishernum = pub.publishernum "; 
+		String query2 =" inner join bookstore.write w on w.publishernum = pub.publishernum inner join author a on a.authornum = w.authornum and b.bookname like '%"+str+"%' order by bookstatus desc";
+
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url, id, pw);
 			Statement stmt = conn.createStatement();
 
-			ResultSet rs = stmt.executeQuery(query1 + query2 + query3);
+			ResultSet rs = stmt.executeQuery(query1 + query2);
 
 			while (rs.next()) {
 				String wkBookName = rs.getString(1);
 				String wkAuthorName = rs.getString(2);
 				String wkPublisherName = rs.getString(3);
 				int wkPressPrice = rs.getInt(4);
-				int wkStockCount = rs.getInt(5);
+				int wkPressCount = rs.getInt(5);
 				String wkBookStatus = rs.getString(6);
 				String wkPressDate = rs.getString(7);
+				String wkBookTitle = rs.getString(8);
 
 				AdminStockStatusDto dto = new AdminStockStatusDto(wkBookName, wkAuthorName, wkPublisherName,
-						wkPressPrice, wkStockCount, wkBookStatus, wkPressDate);
+						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate, wkBookTitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -410,29 +385,29 @@ public class AdminStockStatusDao {
 	public ArrayList<AdminStockStatusDto> searchPublisher(String str) {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
 
-		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  (p.presscount - pur.purchasecount),	b.bookstatus, date(p.pressdate) from book b inner join press p on p.booknum = b.booknum ";
-		String query2 = " inner join publisher pub on p.publishernum = pub.publishernum inner join bookstore.write w on w.publishernum = pub.publishernum ";
-		String query3 = " inner join author a on a.authornum = w.authornum inner join purchase pur on pur.booknum = b.booknum and pub.publishername like '%"
-				+ str + "%' order by bookstatus desc ";
+		String query1 ="select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) , b.booktitle from book b inner join press p on p.booknum = b.booknum inner join publisher pub on p.publishernum = pub.publishernum "; 
+		String query2 =" inner join bookstore.write w on w.publishernum = pub.publishernum inner join author a on a.authornum = w.authornum and pub.publishername like '%"+str+"%' order by bookstatus desc";
+
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url, id, pw);
 			Statement stmt = conn.createStatement();
 
-			ResultSet rs = stmt.executeQuery(query1 + query2 + query3);
+			ResultSet rs = stmt.executeQuery(query1 + query2 );
 
 			while (rs.next()) {
 				String wkBookName = rs.getString(1);
 				String wkAuthorName = rs.getString(2);
 				String wkPublisherName = rs.getString(3);
 				int wkPressPrice = rs.getInt(4);
-				int wkStockCount = rs.getInt(5);
+				int wkPressCount = rs.getInt(5);
 				String wkBookStatus = rs.getString(6);
 				String wkPressDate = rs.getString(7);
+				String wkBookTitle = rs.getString(8);
 
 				AdminStockStatusDto dto = new AdminStockStatusDto(wkBookName, wkAuthorName, wkPublisherName,
-						wkPressPrice, wkStockCount, wkBookStatus, wkPressDate);
+						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate, wkBookTitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -446,29 +421,29 @@ public class AdminStockStatusDao {
 	public ArrayList<AdminStockStatusDto> searchPressDate(String str) {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
 
-		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  (p.presscount - pur.purchasecount),	b.bookstatus, date(p.pressdate) from book b inner join press p on p.booknum = b.booknum ";
-		String query2 = " inner join publisher pub on p.publishernum = pub.publishernum inner join bookstore.write w on w.publishernum = pub.publishernum ";
-		String query3 = " inner join author a on a.authornum = w.authornum inner join purchase pur on pur.booknum = b.booknum and p.pressdate like '%"
-				+ str + "%' order by bookstatus desc ";
+		String query1 ="select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) , b.booktitle from book b inner join press p on p.booknum = b.booknum inner join publisher pub on p.publishernum = pub.publishernum "; 
+		String query2 =" inner join bookstore.write w on w.publishernum = pub.publishernum inner join author a on a.authornum = w.authornum and date(p.pressdate) like '%"+str+"%' order by bookstatus desc";
+
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url, id, pw);
 			Statement stmt = conn.createStatement();
 
-			ResultSet rs = stmt.executeQuery(query1 + query2 + query3);
+			ResultSet rs = stmt.executeQuery(query1 + query2 );
 
 			while (rs.next()) {
 				String wkBookName = rs.getString(1);
 				String wkAuthorName = rs.getString(2);
 				String wkPublisherName = rs.getString(3);
 				int wkPressPrice = rs.getInt(4);
-				int wkStockCount = rs.getInt(5);
+				int wkPressCount = rs.getInt(5);
 				String wkBookStatus = rs.getString(6);
 				String wkPressDate = rs.getString(7);
+				String wkBookTitle = rs.getString(8);
 
 				AdminStockStatusDto dto = new AdminStockStatusDto(wkBookName, wkAuthorName, wkPublisherName,
-						wkPressPrice, wkStockCount, wkBookStatus, wkPressDate);
+						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate, wkBookTitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -482,29 +457,28 @@ public class AdminStockStatusDao {
 	public ArrayList<AdminStockStatusDto> searchBookStatus(String str) {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
 
-		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  (p.presscount - pur.purchasecount),	b.bookstatus, date(p.pressdate) from book b inner join press p on p.booknum = b.booknum ";
-		String query2 = " inner join publisher pub on p.publishernum = pub.publishernum inner join bookstore.write w on w.publishernum = pub.publishernum ";
-		String query3 = " inner join author a on a.authornum = w.authornum inner join purchase pur on pur.booknum = b.booknum and b.bookstatus like '%"
-				+ str + "%' order by bookstatus desc ";
-
+		String query1 ="select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) , b.booktitle from book b inner join press p on p.booknum = b.booknum inner join publisher pub on p.publishernum = pub.publishernum "; 
+		String query2 =" inner join bookstore.write w on w.publishernum = pub.publishernum inner join author a on a.authornum = w.authornum and b.bookstatus like '%"+str+"%' order by bookstatus desc";
+		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url, id, pw);
 			Statement stmt = conn.createStatement();
 
-			ResultSet rs = stmt.executeQuery(query1 + query2 + query3);
+			ResultSet rs = stmt.executeQuery(query1 + query2);
 
 			while (rs.next()) {
 				String wkBookName = rs.getString(1);
 				String wkAuthorName = rs.getString(2);
 				String wkPublisherName = rs.getString(3);
 				int wkPressPrice = rs.getInt(4);
-				int wkStockCount = rs.getInt(5);
+				int wkPressCount = rs.getInt(5);
 				String wkBookStatus = rs.getString(6);
 				String wkPressDate = rs.getString(7);
+				String wkBookTitle = rs.getString(8);
 
 				AdminStockStatusDto dto = new AdminStockStatusDto(wkBookName, wkAuthorName, wkPublisherName,
-						wkPressPrice, wkStockCount, wkBookStatus, wkPressDate);
+						wkPressPrice, wkPressCount, wkBookStatus, wkPressDate, wkBookTitle);
 				dtoList.add(dto);
 			}
 			conn.close();
