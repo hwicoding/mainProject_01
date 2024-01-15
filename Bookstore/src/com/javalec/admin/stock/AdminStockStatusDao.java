@@ -289,7 +289,6 @@ public class AdminStockStatusDao {
 
 	// 불러온 bookNum과 publisherNum을 가지고 order table에 insert하기
 	public boolean requestOrderInsert() {
-		int num = 0;
 		PreparedStatement ps = null;
 		String query = "insert into bookstore.order (ordercount, orderrequsetdate, booknum, publishernum ) values ("
 				+ ordercount + ", sysdate() ," + booknum + "," + publishernum + "); ";
@@ -348,9 +347,10 @@ public class AdminStockStatusDao {
 	// 재고 현황_ 책제목 검색
 	public ArrayList<AdminStockStatusDto> searchBookName(String str) {
 		ArrayList<AdminStockStatusDto> dtoList = new ArrayList<AdminStockStatusDto>();
-
-		String query1 ="select b.bookname, a.authorname, pub.publishername, p.pressprice,  p.presscount, b.bookstatus, date(p.pressdate) , b.booktitle from book b inner join press p on p.booknum = b.booknum inner join publisher pub on p.publishernum = pub.publishernum "; 
-		String query2 =" inner join bookstore.write w on w.publishernum = pub.publishernum inner join author a on a.authornum = w.authornum and b.bookname like '%"+str+"%' order by bookstatus desc";
+		
+		String query1 = "select b.bookname, a.authorname, pub.publishername, p.pressprice,  (p.presscount - pur.purchasecount),	b.bookstatus, date(p.pressdate), b.booktitle from book b inner join press p on p.booknum = b.booknum ";
+		String query2 = " inner join publisher pub on p.publishernum = pub.publishernum inner join bookstore.write w on w.publishernum = pub.publishernum ";
+		String query3 = " inner join author a on a.authornum = w.authornum inner join purchase pur on pur.booknum = b.booknum and b.bookname like '%"+str+"%' order by bookstatus desc ";
 
 
 		try {
@@ -358,7 +358,7 @@ public class AdminStockStatusDao {
 			Connection conn = DriverManager.getConnection(url, id, pw);
 			Statement stmt = conn.createStatement();
 
-			ResultSet rs = stmt.executeQuery(query1 + query2);
+			ResultSet rs = stmt.executeQuery(query1 + query2 + query3);
 
 			while (rs.next()) {
 				String wkBookName = rs.getString(1);

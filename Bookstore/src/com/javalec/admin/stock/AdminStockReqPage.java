@@ -480,7 +480,7 @@ public class AdminStockReqPage extends JPanel {
 		}
 		
 		//책 현황이 판매종료일 때
-		if(innerTable.getValueAt(i, 5).equals("판매종료")) {
+		if(innerTable.getValueAt(i, 6).equals("판매종료")) {
 			JOptionPane.showMessageDialog(this, "<html>판매종료된 책은 입고요청 할 수 없습니다! \n [책 관리] > [책 수정] 에서 책 현황 변경 후에 입고요청하세요.");
 			return;
 		}
@@ -510,6 +510,7 @@ public class AdminStockReqPage extends JPanel {
 					tfBookName.setText("");
 					tfPublisherName.setText("");
 					tfOrderCount.setText("");
+					tfSubtitle.setText("");
 					tfSearch.setText("");
 				} else {
 					JOptionPane.showMessageDialog(this, "입력한 내용을 확인해주세요.");
@@ -520,6 +521,7 @@ public class AdminStockReqPage extends JPanel {
 				tableInit();
 				searchAction();
 				tfBookName.setText("");
+				tfSubtitle.setText("");
 				tfPublisherName.setText("");
 				tfOrderCount.setText("");
 				tfSearch.setText("");

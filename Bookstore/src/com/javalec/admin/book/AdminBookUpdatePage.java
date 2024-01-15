@@ -212,7 +212,7 @@ public class AdminBookUpdatePage extends JPanel {
 
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
-			lblNewLabel_2 = new JLabel("책 제목");
+			lblNewLabel_2 = new JLabel("책 제목 *");
 			lblNewLabel_2.setBounds(340, 300, 61, 16);
 		}
 		return lblNewLabel_2;
@@ -250,7 +250,7 @@ public class AdminBookUpdatePage extends JPanel {
 
 	private JLabel getLblNewLabel_2_1_1_1() {
 		if (lblNewLabel_2_1_1 == null) {
-			lblNewLabel_2_1_1 = new JLabel("줄거리 (100자 내)");
+			lblNewLabel_2_1_1 = new JLabel("줄거리 (100자 내) *");
 			lblNewLabel_2_1_1.setBounds(340, 460, 120, 16);
 		}
 		return lblNewLabel_2_1_1;
@@ -339,7 +339,7 @@ public class AdminBookUpdatePage extends JPanel {
 
 	private JLabel getLblNewLabel_2_1_1_2() {
 		if (lblNewLabel_2_1_1_2 == null) {
-			lblNewLabel_2_1_1_2 = new JLabel("수량");
+			lblNewLabel_2_1_1_2 = new JLabel("수량 *");
 			lblNewLabel_2_1_1_2.setBounds(340, 538, 61, 16);
 		}
 		return lblNewLabel_2_1_1_2;
@@ -372,7 +372,7 @@ public class AdminBookUpdatePage extends JPanel {
 
 	private JLabel getLblNewLabel_2_1_1_2_2() {
 		if (lblNewLabel_2_1_1_2_2 == null) {
-			lblNewLabel_2_1_1_2_2 = new JLabel("가격");
+			lblNewLabel_2_1_1_2_2 = new JLabel("가격 *");
 			lblNewLabel_2_1_1_2_2.setBounds(560, 538, 61, 16);
 		}
 		return lblNewLabel_2_1_1_2_2;
@@ -428,45 +428,46 @@ public class AdminBookUpdatePage extends JPanel {
 	// 테이블 초기화
 	public void tableInit() {
 		outerTable.addColumn("책제목");
-		outerTable.addColumn("책부제목");
+		outerTable.addColumn("부제목");
+		outerTable.addColumn("작가명");
 		outerTable.addColumn("출판사명");
-		outerTable.addColumn("수량(개)");
 		outerTable.addColumn("가격(원)");
 		outerTable.addColumn("책현황");
 		outerTable.setColumnCount(6);
 
+		// outerTable 제목 가운데정렬 과연?
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
-		col.setPreferredWidth(250);
-
+		col.setPreferredWidth(200);
+		
 		col = innerTable.getColumnModel().getColumn(1);
 		col.setPreferredWidth(100);
 
 		col = innerTable.getColumnModel().getColumn(2);
-		col.setPreferredWidth(120);
+		col.setPreferredWidth(90);
 
 		col = innerTable.getColumnModel().getColumn(3);
-		col.setPreferredWidth(80);
+		col.setPreferredWidth(110);
 
 		col = innerTable.getColumnModel().getColumn(4);
 		col.setPreferredWidth(80);
-
+		
 		col = innerTable.getColumnModel().getColumn(5);
-		col.setPreferredWidth(80);
+		col.setPreferredWidth(120);
 
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
 
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) innerTable.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		innerTable.getTableHeader().setDefaultRenderer(renderer);
-
+		
 		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
 		r.setHorizontalAlignment(JLabel.RIGHT);
-		innerTable.getColumnModel().getColumn(3).setCellRenderer(r);
 		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
 
 		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
 		c.setHorizontalAlignment(JLabel.CENTER);
 		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
 		innerTable.getColumnModel().getColumn(5).setCellRenderer(c);
 
 		// Table 내용 지우기
@@ -479,19 +480,16 @@ public class AdminBookUpdatePage extends JPanel {
 	// 테이블 조회 메소드
 	private void searchBook() {
 		AdminBookDao dao = new AdminBookDao();
-		ArrayList<AdminBookDto> dtoList = dao.searchBook();
+		ArrayList<AdminBookDto> dtoList = dao.searchAction();
 
 		for (int i = 0; i < dtoList.size(); i++) {
 
-			// 가격 포맷 ###,### 설정
 			DecimalFormat decFormat = new DecimalFormat("###,###");
-			int tmPrice = dtoList.get(i).getPresspirce();
-			int tmCount = dtoList.get(i).getPresscount();
-			String tmPressPrice = decFormat.format(tmPrice);
-			String tmPressCount = decFormat.format(tmCount);
+			int tmp3 = dtoList.get(i).getPresspirce();
+			String tmPressPrice = decFormat.format(tmp3);
 
-			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(),
-					dtoList.get(i).getPublishername(), tmPressCount, tmPressPrice, dtoList.get(i).getBookstatus() };
+			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+					dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
 
 			outerTable.addRow(qTxt);
 		}
@@ -504,19 +502,17 @@ public class AdminBookUpdatePage extends JPanel {
 		ArrayList<AdminBookDto> dtoList = new ArrayList<>();
 
 		dao = new AdminBookDao();
-		dtoList = dao.searchConditionToBook(inputStr);
+		dtoList = dao.searchConditionToBookName(inputStr);
 
 		for (int i = 0; i < dtoList.size(); i++) {
 
 			// 가격 포맷 ###,### 설정
 			DecimalFormat decFormat = new DecimalFormat("###,###");
-			int tmPrice = dtoList.get(i).getPresspirce();
-			int tmCount = dtoList.get(i).getPresscount();
-			String tmPressPrice = decFormat.format(tmPrice);
-			String tmPressCount = decFormat.format(tmCount);
+			int tmp3 = dtoList.get(i).getPresspirce();
+			String tmPressPrice = decFormat.format(tmp3);
 
-			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(),
-					dtoList.get(i).getPublishername(), tmPressCount, tmPressPrice, dtoList.get(i).getBookstatus() };
+			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+					dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
 
 			outerTable.addRow(qTxt);
 		}
@@ -531,7 +527,7 @@ public class AdminBookUpdatePage extends JPanel {
 		int price = Integer.parseInt(bookPrice.replaceAll(",", ""));
 
 		AdminBookDao dao = new AdminBookDao(bookName, price);
-		int bookNum = dao.bookSeqNum();
+		int bookNum = dao.bookSeqNumUp();
 
 		if (bookNum > 0) {
 			AdminBookDto dto = dao.tableClick();

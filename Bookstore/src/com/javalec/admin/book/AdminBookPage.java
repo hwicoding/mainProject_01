@@ -147,26 +147,30 @@ public class AdminBookPage extends JPanel {
 	// 테이블 초기화
 	public void tableInit() {
 		outerTable.addColumn("책제목");
+		outerTable.addColumn("부제목");
 		outerTable.addColumn("작가명");
 		outerTable.addColumn("출판사명");
 		outerTable.addColumn("가격(원)");
 		outerTable.addColumn("책현황");
-		outerTable.setColumnCount(5);
+		outerTable.setColumnCount(6);
 
 		// outerTable 제목 가운데정렬 과연?
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
-		col.setPreferredWidth(300);
-
+		col.setPreferredWidth(150);
+		
 		col = innerTable.getColumnModel().getColumn(1);
-		col.setPreferredWidth(90);
+		col.setPreferredWidth(100);
 
 		col = innerTable.getColumnModel().getColumn(2);
-		col.setPreferredWidth(110);
+		col.setPreferredWidth(90);
 
 		col = innerTable.getColumnModel().getColumn(3);
+		col.setPreferredWidth(110);
+
+		col = innerTable.getColumnModel().getColumn(4);
 		col.setPreferredWidth(80);
 		
-		col = innerTable.getColumnModel().getColumn(4);
+		col = innerTable.getColumnModel().getColumn(5);
 		col.setPreferredWidth(120);
 
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
@@ -177,13 +181,13 @@ public class AdminBookPage extends JPanel {
 		
 		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
 		r.setHorizontalAlignment(JLabel.RIGHT);
-		innerTable.getColumnModel().getColumn(3).setCellRenderer(r);
+		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
 
 		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
 		c.setHorizontalAlignment(JLabel.CENTER);
-		innerTable.getColumnModel().getColumn(1).setCellRenderer(c);
 		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
-		innerTable.getColumnModel().getColumn(4).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(5).setCellRenderer(c);
 
 		// Table 내용 지우기
 		int i = outerTable.getRowCount();
@@ -203,7 +207,7 @@ public class AdminBookPage extends JPanel {
 			int tmp3 = dtoList.get(i).getPresspirce();
 			String tmPressPrice = decFormat.format(tmp3);
 
-			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getAuthorname(),
+			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
 					dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
 
 			outerTable.addRow(qTxt);
@@ -228,8 +232,8 @@ public class AdminBookPage extends JPanel {
 				int tmp3 = dtoList.get(i).getPresspirce();
 				String tmPressPrice = decFormat.format(tmp3);
 
-				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice , dtoList.get(i).getBookstatus() };
+				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
 
 				outerTable.addRow(qTxt);
 			}
@@ -245,8 +249,8 @@ public class AdminBookPage extends JPanel {
 				int tmp3 = dtoList.get(i).getPresspirce();
 				String tmPressPrice = decFormat.format(tmp3);
 
-				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice , dtoList.get(i).getBookstatus() };
+				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
 
 				outerTable.addRow(qTxt);
 			}
@@ -261,8 +265,8 @@ public class AdminBookPage extends JPanel {
 				int tmp3 = dtoList.get(i).getPresspirce();
 				String tmPressPrice = decFormat.format(tmp3);
 
-				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getAuthorname(),
-						dtoList.get(i).getPublishername(), tmPressPrice , dtoList.get(i).getBookstatus() };
+				String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(), dtoList.get(i).getAuthorname(),
+						dtoList.get(i).getPublishername(), tmPressPrice, dtoList.get(i).getBookstatus() };
 
 				outerTable.addRow(qTxt);
 			}

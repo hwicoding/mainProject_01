@@ -22,13 +22,14 @@ public class AdminBookDto {
 	}
 	
 
-	public AdminBookDto(String bookname, String authorname, String publishername, int presspirce, String bookstatus) {
+	public AdminBookDto(String bookname, String authorname, String publishername, int presspirce, String bookstatus, String booktitle) {
 		super();
 		this.bookname = bookname;
 		this.authorname = authorname;
 		this.publishername = publishername;
 		this.presspirce = presspirce;
 		this.bookstatus = bookstatus;
+		this.booktitle = booktitle;
 	}
 
 

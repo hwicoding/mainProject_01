@@ -56,6 +56,13 @@ public class AdminBookDao {
 		this.booknum = booknum;
 	}
 
+	public AdminBookDao(String bookname, String booksubtitle, int pressprice) {
+		super();
+		this.bookname = bookname;
+		this.booksubtitle = booksubtitle;
+		this.pressprice = pressprice;
+	}
+	
 	public AdminBookDao(String bookname, int pressprice) {
 		super();
 		this.bookname = bookname;
@@ -93,7 +100,7 @@ public class AdminBookDao {
 	public ArrayList<AdminBookDto> searchAction() {
 		ArrayList<AdminBookDto> dtoList = new ArrayList<AdminBookDto>();
 
-		String query1 = "select b.bookname, a.authorname, publishername, pressprice , b.bookstatus from book b, author a, publisher pub, press p, bookstore.write w ";
+		String query1 = "select b.bookname,  a.authorname, publishername, pressprice , b.bookstatus , b.booktitle from book b, author a, publisher pub, press p, bookstore.write w ";
 		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and w.authornum = a.authornum order by bookstatus desc";
 
 		try {
@@ -109,9 +116,10 @@ public class AdminBookDao {
 				String wkPublisherName = rs.getString(3);
 				int wkPressPrice = rs.getInt(4);
 				String wkBookStatus = rs.getString(5);
+				String wkBookSubtitle = rs.getString(6);
 
 				AdminBookDto dto = new AdminBookDto(wkBookName, wkAuthorName, wkPublisherName, wkPressPrice,
-						wkBookStatus);
+						wkBookStatus, wkBookSubtitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -125,9 +133,8 @@ public class AdminBookDao {
 	public ArrayList<AdminBookDto> searchConditionToBookName(String str) {
 		ArrayList<AdminBookDto> dtoList = new ArrayList<AdminBookDto>();
 
-		String query1 = "select b.bookname, a.authorname, publishername, pressprice , b.bookstatus from book b, author a, publisher pub, press p, bookstore.write w ";
-		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and w.authornum = a.authornum and b.bookname like '%"
-				+ str + "%'";
+		String query1 = "select b.bookname,  a.authorname, publishername, pressprice , b.bookstatus , b.booktitle from book b, author a, publisher pub, press p, bookstore.write w ";
+		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and w.authornum = a.authornum and b.bookname like '%"+str+"%' order by bookstatus desc";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -142,9 +149,10 @@ public class AdminBookDao {
 				String wkPublisherName = rs.getString(3);
 				int wkPressPrice = rs.getInt(4);
 				String wkBookStatus = rs.getString(5);
+				String wkBookSubtitle = rs.getString(6);
 
 				AdminBookDto dto = new AdminBookDto(wkBookName, wkAuthorName, wkPublisherName, wkPressPrice,
-						wkBookStatus);
+						wkBookStatus, wkBookSubtitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -158,7 +166,7 @@ public class AdminBookDao {
 	public ArrayList<AdminBookDto> searchConditionToAuthor(String str) {
 		ArrayList<AdminBookDto> dtoList = new ArrayList<AdminBookDto>();
 
-		String query1 = "select b.bookname, a.authorname, publishername, pressprice , b.bookstatus from book b, author a, publisher pub, press p, bookstore.write w ";
+		String query1 = "select b.bookname, a.authorname, publishername, pressprice , b.bookstatus , b.booktitle from book b, author a, publisher pub, press p, bookstore.write w ";
 		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and w.authornum = a.authornum and a.authorname like '%"
 				+ str + "%'";
 
@@ -175,9 +183,10 @@ public class AdminBookDao {
 				String wkPublisherName = rs.getString(3);
 				int wkPressPrice = rs.getInt(4);
 				String wkBookStatus = rs.getString(5);
+				String wkBookSubtitle = rs.getString(6);
 
 				AdminBookDto dto = new AdminBookDto(wkBookName, wkAuthorName, wkPublisherName, wkPressPrice,
-						wkBookStatus);
+						wkBookStatus, wkBookSubtitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -191,7 +200,7 @@ public class AdminBookDao {
 	public ArrayList<AdminBookDto> searchConditionToPublisher(String str) {
 		ArrayList<AdminBookDto> dtoList = new ArrayList<AdminBookDto>();
 
-		String query1 = "select b.bookname, a.authorname, publishername, pressprice, b.bookstatus  from book b, author a, publisher pub, press p, bookstore.write w ";
+		String query1 = "select b.bookname, a.authorname, publishername, pressprice, b.bookstatus , b.booktitle from book b, author a, publisher pub, press p, bookstore.write w ";
 		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and w.authornum = a.authornum and pub.publishername like '%"
 				+ str + "%'";
 
@@ -208,9 +217,10 @@ public class AdminBookDao {
 				String wkPublisherName = rs.getString(3);
 				int wkPressPrice = rs.getInt(4);
 				String wkBookStatus = rs.getString(5);
+				String wkBookSubtitle = rs.getString(6);
 
 				AdminBookDto dto = new AdminBookDto(wkBookName, wkAuthorName, wkPublisherName, wkPressPrice,
-						wkBookStatus);
+						wkBookStatus, wkBookSubtitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -328,7 +338,7 @@ public class AdminBookDao {
 
 		ArrayList<AdminBookDto> dtoList = new ArrayList<AdminBookDto>();
 
-		String query1 = "select bookname, booktitle, pub.publishername, presscount, pressprice, bookstatus from book b, press p, publisher pub where b.booknum = p.booknum and pub.publishernum = p.publishernum order by bookstatus desc";
+		String query1 = "select bookname, booktitle, pub.publishername, presscount, pressprice, bookstatus , b.booktitle from book b, press p, publisher pub where b.booknum = p.booknum and pub.publishernum = p.publishernum order by bookstatus desc";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -339,14 +349,14 @@ public class AdminBookDao {
 
 			while (rs.next()) {
 				String wkBookName = rs.getString(1);
-				String wkBookTitle = rs.getString(2);
-				String wkPubName = rs.getString(3);
-				int wkPressCount = rs.getInt(4);
-				int wkPressPrice = rs.getInt(5);
-				String wkBookStatus = rs.getString(6);
+				String wkAuthorName = rs.getString(2);
+				String wkPublisherName = rs.getString(3);
+				int wkPressPrice = rs.getInt(4);
+				String wkBookStatus = rs.getString(5);
+				String wkBookSubtitle = rs.getString(6);
 
-				AdminBookDto dto = new AdminBookDto(wkBookName, wkBookTitle, wkPubName, wkPressCount, wkPressPrice,
-						wkBookStatus);
+				AdminBookDto dto = new AdminBookDto(wkBookName, wkAuthorName, wkPublisherName, wkPressPrice,
+						wkBookStatus, wkBookSubtitle);
 				dtoList.add(dto);
 			}
 			conn.close();
@@ -357,37 +367,36 @@ public class AdminBookDao {
 	}
 
 	// 책제목으로 검색
-	public ArrayList<AdminBookDto> searchConditionToBook(String str) {
-		ArrayList<AdminBookDto> dtoList = new ArrayList<AdminBookDto>();
-
-		String query1 = "select bookname, booktitle, pub.publishername, presscount, pressprice, bookstatus from book b, press p, publisher pub where b.booknum = p.booknum and pub.publishernum = p.publishernum  order by bookstatus desc";
-		String query2 = " and b.bookname like '%" + str + "%'";
-
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = DriverManager.getConnection(url, id, pw);
-			Statement stmt = conn.createStatement();
-
-			ResultSet rs = stmt.executeQuery(query1 + query2);
-
-			while (rs.next()) {
-				String wkBookName = rs.getString(1);
-				String wkBookTitle = rs.getString(2);
-				String wkPubName = rs.getString(3);
-				int wkPressCount = rs.getInt(4);
-				int wkPressPrice = rs.getInt(5);
-				String wkBookStatus = rs.getString(6);
-
-				AdminBookDto dto = new AdminBookDto(wkBookName, wkBookTitle, wkPubName, wkPressCount, wkPressPrice,
-						wkBookStatus);
-				dtoList.add(dto);
-			}
-			conn.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dtoList;
-	}
+//	public ArrayList<AdminBookDto> searchConditionToBook(String str) {
+//		ArrayList<AdminBookDto> dtoList = new ArrayList<AdminBookDto>();
+//
+//		String query1 = "select bookname, booktitle, pub.publishername, presscount, pressprice, bookstatus , b.booktitle from book b, press p, publisher pub where b.booknum = p.booknum and pub.publishernum = p.publishernum and bookname like '%"+str+"%'order by bookstatus desc";
+//
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//			Connection conn = DriverManager.getConnection(url, id, pw);
+//			Statement stmt = conn.createStatement();
+//
+//			ResultSet rs = stmt.executeQuery(query1);
+//
+//			while (rs.next()) {
+//				String wkBookName = rs.getString(1);
+//				String wkAuthorName = rs.getString(2);
+//				String wkPublisherName = rs.getString(3);
+//				int wkPressPrice = rs.getInt(4);
+//				String wkBookStatus = rs.getString(5);
+//				String wkBookSubtitle = rs.getString(6);
+//
+//				AdminBookDto dto = new AdminBookDto(wkBookName, wkAuthorName, wkPublisherName, wkPressPrice,
+//						wkBookStatus, wkBookSubtitle);
+//				dtoList.add(dto);
+//			}
+//			conn.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return dtoList;
+//	}
 
 	// 책 수정_ 테이블 클릭 했을 때
 	public AdminBookDto tableClick() {
@@ -430,10 +439,33 @@ public class AdminBookDao {
 	}
 
 	// bookNum 가져오기
+	
+	public int bookSeqNumUp() {
+		int num = 0;
+		String query1 = "select b.booknum from book b, press p where b.booknum = p.booknum and bookname='" + bookname
+				+ "'  and pressprice ='" + pressprice + "'";
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(url, id, pw);
+			Statement stmt = conn.createStatement();
+
+			ResultSet rs = stmt.executeQuery(query1);
+
+			if (rs.next()) {
+				num = rs.getInt(1);
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return num;
+	}
+	
 	public int bookSeqNum() {
 		int num = 0;
 		String query1 = "select b.booknum from book b, press p where b.booknum = p.booknum and bookname='" + bookname
-				+ "' and pressprice ='" + pressprice + "'";
+				+ "' and booktitle = '"+booksubtitle+"' and pressprice ='" + pressprice + "'";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

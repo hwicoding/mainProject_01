@@ -148,7 +148,7 @@ public class AdminStockStatusPage extends JPanel {
 		outerTable.addColumn("작가");
 		outerTable.addColumn("출판사");
 		outerTable.addColumn("가격(원)");
-		outerTable.addColumn("입고수량(개)");
+		outerTable.addColumn("재고수량(개)");
 		outerTable.addColumn("책현황");
 		outerTable.addColumn("입고일");
 		outerTable.setColumnCount(8);
@@ -207,7 +207,7 @@ public class AdminStockStatusPage extends JPanel {
 	// 테이블 조회 메소드
 	private void searchAction() {
 		AdminStockStatusDao dao = new AdminStockStatusDao();
-		ArrayList<AdminStockStatusDto> dtoList = dao.searchAction();
+		ArrayList<AdminStockStatusDto> dtoList = dao.searchStockAction();
 
 		int listCnt = dtoList.size();
 

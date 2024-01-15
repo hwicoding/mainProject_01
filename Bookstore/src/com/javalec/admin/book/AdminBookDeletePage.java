@@ -379,32 +379,34 @@ public class AdminBookDeletePage extends JPanel {
 	// ------ function --------
 
 	// 테이블 초기화
+	// 테이블 초기화
 	public void tableInit() {
 		outerTable.addColumn("책제목");
-		outerTable.addColumn("책부제목");
+		outerTable.addColumn("부제목");
+		outerTable.addColumn("작가명");
 		outerTable.addColumn("출판사명");
-		outerTable.addColumn("수량(개)");
 		outerTable.addColumn("가격(원)");
 		outerTable.addColumn("책현황");
 		outerTable.setColumnCount(6);
 
+		// outerTable 제목 가운데정렬 과연?
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
-		col.setPreferredWidth(250);
+		col.setPreferredWidth(200);
 
 		col = innerTable.getColumnModel().getColumn(1);
 		col.setPreferredWidth(100);
 
 		col = innerTable.getColumnModel().getColumn(2);
-		col.setPreferredWidth(120);
+		col.setPreferredWidth(90);
 
 		col = innerTable.getColumnModel().getColumn(3);
-		col.setPreferredWidth(80);
+		col.setPreferredWidth(110);
 
 		col = innerTable.getColumnModel().getColumn(4);
 		col.setPreferredWidth(80);
 
 		col = innerTable.getColumnModel().getColumn(5);
-		col.setPreferredWidth(80);
+		col.setPreferredWidth(120);
 
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
 
@@ -414,12 +416,12 @@ public class AdminBookDeletePage extends JPanel {
 
 		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
 		r.setHorizontalAlignment(JLabel.RIGHT);
-		innerTable.getColumnModel().getColumn(3).setCellRenderer(r);
 		innerTable.getColumnModel().getColumn(4).setCellRenderer(r);
 
 		DefaultTableCellRenderer c = new DefaultTableCellRenderer();
 		c.setHorizontalAlignment(JLabel.CENTER);
 		innerTable.getColumnModel().getColumn(2).setCellRenderer(c);
+		innerTable.getColumnModel().getColumn(3).setCellRenderer(c);
 		innerTable.getColumnModel().getColumn(5).setCellRenderer(c);
 
 		// Table 내용 지우기
@@ -432,19 +434,17 @@ public class AdminBookDeletePage extends JPanel {
 	// 테이블 조회 메소드
 	private void searchBook() {
 		AdminBookDao dao = new AdminBookDao();
-		ArrayList<AdminBookDto> dtoList = dao.searchBook();
+		ArrayList<AdminBookDto> dtoList = dao.searchAction();
 
 		for (int i = 0; i < dtoList.size(); i++) {
 
-			// 가격 포맷 ###,### 설정
 			DecimalFormat decFormat = new DecimalFormat("###,###");
-			int tmPrice = dtoList.get(i).getPresspirce();
-			int tmCount = dtoList.get(i).getPresscount();
-			String tmPressPrice = decFormat.format(tmPrice);
-			String tmPressCount = decFormat.format(tmCount);
+			int tmp3 = dtoList.get(i).getPresspirce();
+			String tmPressPrice = decFormat.format(tmp3);
 
 			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(),
-					dtoList.get(i).getPublishername(), tmPressCount, tmPressPrice, dtoList.get(i).getBookstatus() };
+					dtoList.get(i).getAuthorname(), dtoList.get(i).getPublishername(), tmPressPrice,
+					dtoList.get(i).getBookstatus() };
 
 			outerTable.addRow(qTxt);
 		}
@@ -457,19 +457,18 @@ public class AdminBookDeletePage extends JPanel {
 		ArrayList<AdminBookDto> dtoList = new ArrayList<>();
 
 		dao = new AdminBookDao();
-		dtoList = dao.searchConditionToBook(inputStr);
+		dtoList = dao.searchConditionToBookName(inputStr);
 
 		for (int i = 0; i < dtoList.size(); i++) {
 
 			// 가격 포맷 ###,### 설정
 			DecimalFormat decFormat = new DecimalFormat("###,###");
-			int tmPrice = dtoList.get(i).getPresspirce();
-			int tmCount = dtoList.get(i).getPresscount();
-			String tmPressPrice = decFormat.format(tmPrice);
-			String tmPressCount = decFormat.format(tmCount);
+			int tmp3 = dtoList.get(i).getPresspirce();
+			String tmPressPrice = decFormat.format(tmp3);
 
 			String[] qTxt = { dtoList.get(i).getBookname(), dtoList.get(i).getBooktitle(),
-					dtoList.get(i).getPublishername(), tmPressCount, tmPressPrice, dtoList.get(i).getBookstatus() };
+					dtoList.get(i).getAuthorname(), dtoList.get(i).getPublishername(), tmPressPrice,
+					dtoList.get(i).getBookstatus() };
 
 			outerTable.addRow(qTxt);
 		}
@@ -480,10 +479,11 @@ public class AdminBookDeletePage extends JPanel {
 		int i = innerTable.getSelectedRow();
 
 		String bookName = (String) innerTable.getValueAt(i, 0);
+		String subtitle = (String) innerTable.getValueAt(i, 1);
 		String bookPrice = (String) innerTable.getValueAt(i, 4);
 		int price = Integer.parseInt(bookPrice.replaceAll(",", ""));
 
-		AdminBookDao dao = new AdminBookDao(bookName, price);
+		AdminBookDao dao = new AdminBookDao(bookName, subtitle, price);
 		int bookNum = dao.bookSeqNum();
 
 		if (bookNum > 0) {
@@ -518,14 +518,13 @@ public class AdminBookDeletePage extends JPanel {
 	private void deleteBtnClicked() {
 		String bookName = tfBookName.getText();
 
-		int infoAlert = JOptionPane.showConfirmDialog(this,
-		"<html>책제목 : [" + bookName + "]을 삭제하시겠습니까?", "알림",
-		JOptionPane.YES_NO_OPTION);
-		
-		if(infoAlert == JOptionPane.YES_OPTION) {
-			AdminBookDao dao =new AdminBookDao();
+		int infoAlert = JOptionPane.showConfirmDialog(this, "<html>책제목 : [" + bookName + "]을 삭제하시겠습니까?", "알림",
+				JOptionPane.YES_NO_OPTION);
+
+		if (infoAlert == JOptionPane.YES_OPTION) {
+			AdminBookDao dao = new AdminBookDao();
 			boolean check = dao.deleteBookInfo(bookName);
-			if(check == true) {
+			if (check == true) {
 				JOptionPane.showMessageDialog(this, "<html>책제목 : [" + bookName + "]이 삭제되었습니다.");
 				tableInit();
 				searchBook();
@@ -535,7 +534,7 @@ public class AdminBookDeletePage extends JPanel {
 				tfCount.setText("");
 				tfPrice.setText("");
 				lblImage.setIcon(null);
-				
+
 			} else {
 				JOptionPane.showMessageDialog(this, "오류가 발생했습니다.");
 			}
@@ -547,8 +546,7 @@ public class AdminBookDeletePage extends JPanel {
 			tfPrice.setText("");
 			lblImage.setIcon(null);
 		}
-		
-		
+
 	}
 
 }
