@@ -54,7 +54,6 @@ public class SearchPage extends JDialog {
 	private JLabel lblBack;
 	private JLabel lblHome;
 	private JLabel lblMypage;
-	private JTextField tfSearch;
 	private JPanel groupSearch;
 	private JLabel lblSearchbtn;
 	private JScrollPane scrollPane;
@@ -70,6 +69,8 @@ public class SearchPage extends JDialog {
 	private JRadioButton rbname;
 	private JRadioButton rbpopular;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JLabel lblSearchtyping;
+	private JTextField tfSearch;
 
 
 
@@ -99,7 +100,7 @@ public class SearchPage extends JDialog {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				tableInit();
-				searchAction();
+				searchNameAction();
 			}
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -139,7 +140,7 @@ public class SearchPage extends JDialog {
 					 }
 				}
 			});
-			lblCart.setIcon(new ImageIcon(SearchPage.class.getResource("/com/javalec/image/cart_icon.png")));
+//			lblCart.setIcon(new ImageIcon(SearchPage.class.getResource("/com/javalec/image/cart_icon.png")));
 			lblCart.setHorizontalAlignment(SwingConstants.CENTER);
 			lblCart.setBounds(307, 20, 52, 32);
 		}
@@ -180,28 +181,28 @@ public class SearchPage extends JDialog {
 			groupSearch.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 			groupSearch.setBounds(24, 71, 333, 32);
 			groupSearch.setLayout(null);
-			groupSearch.add(getTfSearch());
 			groupSearch.add(getLblSearchbtn());
+			groupSearch.add(getLblSearchtyping());
+			groupSearch.add(getTfSearch());
 		}
 		return groupSearch;
 	}
 	
+	private JLabel getLblSearchtyping() {
+		if (lblSearchtyping == null) {
+			lblSearchtyping = new JLabel("");
+			lblSearchtyping.setBounds(1, 6, 295, 28);
+		}
+		return lblSearchtyping;
+	}
 	private JTextField getTfSearch() {
 		if (tfSearch == null) {
 			tfSearch = new JTextField();
-			tfSearch.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					tfSearch.setText("");
-					tfSearch.setForeground(new Color(0, 0, 0));
-				}
-			});
-			tfSearch.setForeground(new Color(128, 128, 128));
+			tfSearch.setForeground(Color.GRAY);
 			tfSearch.setFont(new Font("나눔고딕", Font.PLAIN, 14));
+			tfSearch.setColumns(10);
 			tfSearch.setBorder(new LineBorder(new Color(255,255,255), 1, true));
 			tfSearch.setBounds(1, 1, 295, 30);
-			tfSearch.setText(" 제목을 입력하세요.");
-			tfSearch.setColumns(10);
 		}
 		return tfSearch;
 	}
@@ -212,8 +213,17 @@ public class SearchPage extends JDialog {
 			lblSearchbtn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					
 					tableInit();
-					searchCondition();
+					if(rbname.isSelected()) {
+						tableInit();
+						searchNameCondition();
+					}
+					
+					if(rbpopular.isSelected()) {
+						tableInit();
+						searchPopularCondition();
+					}
 				}
 			});
 			lblSearchbtn.setHorizontalAlignment(SwingConstants.CENTER);
@@ -225,6 +235,38 @@ public class SearchPage extends JDialog {
 		}
 		return lblSearchbtn;
 	}
+	
+//	Radio button
+	private JRadioButton getRbname() {
+		if (rbname == null) {
+			rbname = new JRadioButton("가나다순");
+			rbname.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					tableInit();
+					searchNameAction();
+				}
+			});
+			buttonGroup.add(rbname);
+			rbname.setSelected(true);
+			rbname.setBounds(24, 121, 85, 23);
+		}
+		return rbname;
+	}
+	private JRadioButton getRbpopular() {
+		if (rbpopular == null) {
+			rbpopular = new JRadioButton("인기순");
+			rbpopular.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					tableInit();
+					searchPopularAction();
+				}
+			});
+			buttonGroup.add(rbpopular);
+			rbpopular.setBounds(113, 121, 73, 23);
+		}
+		return rbpopular;
+	}
+	
 	
 //	 목록창
 	private JScrollPane getScrollPane() {
@@ -336,6 +378,9 @@ public class SearchPage extends JDialog {
 		}
 		return lblMypage;
 	}
+	
+	
+	
 
 	
 //	--- Function ---
@@ -389,9 +434,9 @@ public class SearchPage extends JDialog {
 	}
 	
 //	검색	
-	private void searchAction() {
+	private void searchPopularAction() {
 		ProductDAO dao = new ProductDAO();
-		dtoList = dao.selecList();
+		dtoList = dao.searchPopular();
 
 		int listCount = dtoList.size();
 
@@ -416,11 +461,58 @@ public class SearchPage extends JDialog {
 		}
 	}
 	
-//	텍스트 입력으로 검색 시
-	private void searchCondition() {
+	private void searchNameAction() {
+		ProductDAO dao = new ProductDAO();
+		dtoList = dao.searchName();
+
+		int listCount = dtoList.size();
+
+		for(int index = 0; index < listCount; index++) {
+			
+//			ProductDTO dto = dtoList.get(i);
+			
+//			ImageIcon icon = new ImageIcon("./" +dtoList.get(index).getBookfilename());
+//			icon = imageSetSize(icon, 50, 100);
+			
+//			String[] contents = {dtoList.get(index).getBookname(),dtoList.get(index).getAuthorname()};
+			
+			String[] contents = {dtoList.get(index).getBookname(),dtoList.get(index).getBooktitle(), 
+					                      dtoList.get(index).getAuthorname(), dtoList.get(index).getPublishername()};
+			
+			Object[] qTxt1 = {String.format("%s : %s", contents[0], contents[1]), String.format("%,8d", dtoList.get(index).getPressprice())+"원",
+					                  String.format("%s", contents[2]), String.format("%s", contents[3])};	
+			
+			
+			outerTable.addRow(qTxt1);
+			
+		}
+	}
+	
+//	텍스트 입력으로 가나다순 검색 시
+	private void searchNameCondition() {
 		ProductDAO dao = new ProductDAO();
 		String str = tfSearch.getText().trim();
-		dtoList = dao.searchCondition(str);
+		dtoList = dao.searchNameCondition(str);
+		
+		int listCount = dtoList.size();
+
+		for(int index = 0; index < listCount; index++) {
+					
+			String[] contents = {dtoList.get(index).getBookname(),dtoList.get(index).getBooktitle(), 
+					                      dtoList.get(index).getAuthorname(), dtoList.get(index).getPublishername()};
+			
+			Object[] qTxt1 = {String.format("%s : %s", contents[0], contents[1]), String.format("%,8d", dtoList.get(index).getPressprice())+"원",
+					                  String.format("%s", contents[2]), String.format("%s", contents[3])};	
+			
+			outerTable.addRow(qTxt1);
+		}
+	};
+	
+//	텍스트 입력으로 인기순 검색 시
+	private void searchPopularCondition() {
+		ProductDAO dao = new ProductDAO();
+		String str = tfSearch.getText().trim();
+		dtoList = dao.searchPopularCondition(str);
 		
 		int listCount = dtoList.size();
 
@@ -487,29 +579,5 @@ public class SearchPage extends JDialog {
 			file.delete();	
 		}
 	}
-	private JRadioButton getRbname() {
-		if (rbname == null) {
-			rbname = new JRadioButton("가나다순");
-			rbname.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-			buttonGroup.add(rbname);
-			rbname.setSelected(true);
-			rbname.setBounds(24, 121, 85, 23);
-		}
-		return rbname;
-	}
-	private JRadioButton getRbpopular() {
-		if (rbpopular == null) {
-			rbpopular = new JRadioButton("인기순");
-			rbpopular.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-			buttonGroup.add(rbpopular);
-			rbpopular.setBounds(113, 121, 73, 23);
-		}
-		return rbpopular;
-	}
+
 }
