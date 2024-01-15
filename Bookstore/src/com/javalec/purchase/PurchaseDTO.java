@@ -4,8 +4,8 @@ public class PurchaseDTO {
 	
 	//	Field
 	
-	int purchasedate, totalprice, purchasecount;
-	String purchasedetails, purchasestatus;
+	int purchasedate, totalprice, purchasecount, totalsum, cartcount;
+	String purchasedetails, purchasestatus, bookname;
 	
 	
 	//	constructor
@@ -15,12 +15,13 @@ public class PurchaseDTO {
 	}
 
 
-	public PurchaseDTO(int purchasedate, String purchasedetails, int totalprice, String purchasestatus) {
+	
+	public PurchaseDTO(int purchasedate, String bookname, int cartcount, int totalsum) {
 		super();
 		this.purchasedate = purchasedate;
-		this.purchasedetails = purchasedetails;
-		this.totalprice = totalprice;
-		this.purchasestatus = purchasestatus;
+		this.bookname = bookname;
+		this.cartcount = cartcount;
+		this.totalsum = totalsum;
 	}
 
 
@@ -35,9 +36,11 @@ public class PurchaseDTO {
 	}
 
 
+
 	public int getPurchasedate() {
 		return purchasedate;
 	}
+
 
 
 	public void setPurchasedate(int purchasedate) {
@@ -45,9 +48,11 @@ public class PurchaseDTO {
 	}
 
 
+
 	public int getTotalprice() {
 		return totalprice;
 	}
+
 
 
 	public void setTotalprice(int totalprice) {
@@ -55,9 +60,11 @@ public class PurchaseDTO {
 	}
 
 
+
 	public int getPurchasecount() {
 		return purchasecount;
 	}
+
 
 
 	public void setPurchasecount(int purchasecount) {
@@ -65,9 +72,35 @@ public class PurchaseDTO {
 	}
 
 
+
+	public int getTotalsum() {
+		return totalsum;
+	}
+
+
+
+	public void setTotalsum(int totalsum) {
+		this.totalsum = totalsum;
+	}
+
+
+
+	public int getCartcount() {
+		return cartcount;
+	}
+
+
+
+	public void setCartcount(int cartcount) {
+		this.cartcount = cartcount;
+	}
+
+
+
 	public String getPurchasedetails() {
 		return purchasedetails;
 	}
+
 
 
 	public void setPurchasedetails(String purchasedetails) {
@@ -75,14 +108,30 @@ public class PurchaseDTO {
 	}
 
 
+
 	public String getPurchasestatus() {
 		return purchasestatus;
 	}
 
 
+
 	public void setPurchasestatus(String purchasestatus) {
 		this.purchasestatus = purchasestatus;
 	}
+
+
+
+	public String getBookname() {
+		return bookname;
+	}
+
+
+
+	public void setBookname(String bookname) {
+		this.bookname = bookname;
+	}
+
+
 	
 	
 }
