@@ -127,7 +127,7 @@ public class AdminBookDao {
 
 		String query1 = "select b.bookname, a.authorname, publishername, pressprice , b.bookstatus from book b, author a, publisher pub, press p, bookstore.write w ";
 		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and w.authornum = a.authornum and b.bookname like '%"
-				+ str + "%' and b.bookstatus = '판매중'";
+				+ str + "%'";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -160,7 +160,7 @@ public class AdminBookDao {
 
 		String query1 = "select b.bookname, a.authorname, publishername, pressprice , b.bookstatus from book b, author a, publisher pub, press p, bookstore.write w ";
 		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and w.authornum = a.authornum and a.authorname like '%"
-				+ str + "%' and b.bookstatus = '판매중'";
+				+ str + "%'";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -193,7 +193,7 @@ public class AdminBookDao {
 
 		String query1 = "select b.bookname, a.authorname, publishername, pressprice, b.bookstatus  from book b, author a, publisher pub, press p, bookstore.write w ";
 		String query2 = " where b.booknum = p.booknum and pub.publishernum = p.publishernum and w.publishernum = pub.publishernum and w.authornum = a.authornum and pub.publishername like '%"
-				+ str + "%' and b.bookstatus = '판매중'";
+				+ str + "%'";
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
