@@ -64,7 +64,7 @@ public class CartorderDAO {
 		   // bookname, price를 불러와야
 		   String where1 = "select cartnum, bookname, pressprice ";
 		   String where2 = "from book, press, cart ";
-		   String where3 = "where press.booknum = book.booknum and cart.booknum = book.booknum ";
+		   String where3 = "where press.booknum = book.booknum and cart.booknum = book.booknum and userid='"+userid+"'";
 		   
 		   try {
 				Class.forName("com.mysql.cj.jdbc.Driver");

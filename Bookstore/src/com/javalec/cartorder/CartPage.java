@@ -374,7 +374,7 @@ public class CartPage extends JDialog {
 			btnOrder = new JButton("주문하기");
 			btnOrder.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					orderpage();
+					order();
 				}
 			});
 			btnOrder.setBounds(253, 603, 91, 23);
@@ -617,6 +617,16 @@ public class CartPage extends JDialog {
 
 		// 주문하기 버튼 클릭했을 때, (주문내역 테이블로 호출, 장바구니 테이블 delete 처리)
 	
+		
+		private void order() {
+			if(tfCartcount.isEditable()) {
+				JOptionPane.showMessageDialog(null, "수량을 입력후 enter를 눌러주세요.");
+			}else {
+				orderpage();
+			}
+		}
+		
+		
 		private void orderpage() {
 			int a = Integer.parseInt(tfCartcount.getText());
 			int b  = Integer.parseInt(textField.getText());

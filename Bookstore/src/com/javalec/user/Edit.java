@@ -469,7 +469,7 @@ public class Edit extends JDialog {
 			lblNewLabel_11_1.setText("");
 			lblNewLabel_13.setText("");
 			JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
-			dispose();
+			mypage();
 		}else {
 			JOptionPane.showMessageDialog(null, "잘못된 부분이 없는지 확인하세요.");
 			//System.out.println(email);
@@ -605,5 +605,11 @@ public class Edit extends JDialog {
 			lblNewLabel_13.setBounds(85, 555, 280, 20);
 		}
 		return lblNewLabel_13;
+	}
+	
+	private void mypage() {
+		Mypage my  =  new Mypage();
+		my.setVisible(true);
+		dispose();
 	}
 }
